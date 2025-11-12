@@ -12,7 +12,7 @@
 	<artifactId>koinonia-daily</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>koinonia-daily</name>
-	<description>Backend API for the christian devotional application built for centralizing transcriptions and enhancing search for specific teachings and meetings of Koinonia by Apostle Joshua Selman</description>
+	<description>Backend API for the christian devotional application built for centralizing transcriptions and enhancing search for specific teachings, songs and meetings of Koinonia by Apostle Joshua Selman</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -30,6 +30,23 @@
 		<java.version>25</java.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.13.0</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.13.0</version>
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -76,6 +93,17 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.38.2</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>ses</artifactId>
+			<version>2.38.2</version>
 		</dependency>
 	</dependencies>
 

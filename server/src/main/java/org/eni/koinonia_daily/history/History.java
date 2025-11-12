@@ -13,9 +13,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -45,10 +45,20 @@ public class History {
   @JoinColumn(name = "teachingId", nullable = false)
   private Teaching teaching;
 
+  @Column(nullable = false)
+  private boolean isMarkedRead;
+
   @CreationTimestamp
   @Column(updatable = false)
   private LocalDateTime createdAt;
 
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+
+  @PrePersist
+  private void prePersist() {
+    if (this.isMarkedRead) {
+      this.isMarkedRead = false;
+    }
+  }
 }
