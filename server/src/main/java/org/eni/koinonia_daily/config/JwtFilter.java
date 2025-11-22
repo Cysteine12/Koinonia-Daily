@@ -2,7 +2,7 @@ package org.eni.koinonia_daily.config;
 
 import java.io.IOException;
 
-import org.eni.koinonia_daily.auth.JwtService;
+import org.eni.koinonia_daily.modules.auth.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,10 +1,9 @@
 package org.eni.koinonia_daily.utils;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import java.util.NoSuchElementException;
 
-public class NotFoundException extends ResponseStatusException {
+public class NotFoundException extends NoSuchElementException {
   public NotFoundException(String message) {
-    super(HttpStatus.NOT_FOUND, message);
+    super(message);
   }
 }

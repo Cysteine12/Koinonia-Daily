@@ -1,6 +1,6 @@
 package org.eni.koinonia_daily.config;
 
-import org.eni.koinonia_daily.auth.JpaUserDetailsService;
+import org.eni.koinonia_daily.modules.auth.JpaUserDetailsService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
