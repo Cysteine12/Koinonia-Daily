@@ -1,4 +1,4 @@
-package org.eni.koinonia_daily.utils;
+package org.eni.koinonia_daily.exceptions;
 
 import java.time.LocalDateTime;
 

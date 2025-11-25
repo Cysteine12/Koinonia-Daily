@@ -2,7 +2,7 @@ package org.eni.koinonia_daily.modules.teaching;
 
 import java.util.List;
 
-import org.eni.koinonia_daily.utils.NotFoundException;
+import org.eni.koinonia_daily.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
