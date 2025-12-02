@@ -25,11 +25,9 @@ public class AuthController {
 
   @PostMapping("/register")
   public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest payload) {
-    authService.register(payload);
+    RegisterResponse res = authService.register(payload);
 
-    return ResponseEntity.ok(RegisterResponse.builder()
-            .message("Regitration successful. OTP has been sent to your email for verification.")
-            .build());
+    return ResponseEntity.ok(res);
   }
 
   @PostMapping("/login")

@@ -1,4 +1,4 @@
-package org.eni.koinonia_daily.modules.user;
+package org.eni.koinonia_daily.modules.token;
 
 import java.time.LocalDateTime;
 
@@ -7,44 +7,42 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
+@Table(
+  name = "tokens",
+  uniqueConstraints = @UniqueConstraint(
+    name = "email_type",
+    columnNames = {"email", "type"}
+  )
+)
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class User {
+public class Token {
+  
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
   @Column(nullable = false, length = 50)
-  private String firstName;
-
-  @Column(nullable = false, length = 50)
-  private String lastName;
-
-  @Column(nullable = false, length = 50, unique = true)
   private String email;
 
+  @Column(nullable = false, length = 50)
+  private String value;
+
+  @Column(nullable = false, length = 50)
+  private TokenType type;
+
   @Column(nullable = false)
-  private String password;
-
-  @Column(nullable = false, length = 10, columnDefinition = "default 'USER'")
-  @Enumerated(EnumType.STRING)
-  private UserRole role;
-
-  @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-  private boolean isVerified = false;
+  private LocalDateTime expiresAt;
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -52,12 +50,4 @@ public class User {
 
   @UpdateTimestamp
   private LocalDateTime updatedAt;
-
-  @PrePersist
-  public void prePersist() {
-    if (this.role == null) {
-      this.role = UserRole.USER;
-    }
-
-  }
 }

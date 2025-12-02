@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+  <body>
+    <div
+      style="
+        margin: 20px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px 10px;
+        box-shadow: 0px 4px 10px gray;
+      "
+    >
+      <h3 th:text="'Hello ' + ${firstName} + ','"></h3>
+      <div>
+        There's one quick step you need to complete for creating an account.
+        Let's make sure this is the right email address for you - please confirm
+        that this is the right address to use for your new account. Kindly use
+        this OTP to get started on <span th:text="${APP_NAME}"></span>:
+        <br /><br />
+        <span
+          style="
+            margin: auto;
+            background: #fff;
+            color: #000;
+            padding: 6px 10px;
+            font-size: 30px;
+            border-radius: 3px;
+            font-weight: bold;
+          "
+        >
+          <span th:text="${otp}"></span>
+        </span>
+        <br /><br />
+        This OTP expires after 15 minutes. Only enter this code on our official
+        website. Don't share it with anyone. We'll never ask for it outside our
+        official website.
+      </div>
+      <br />
+      Warm Regards,
+      <br />
+      <span th:text="${APP_NAME}"></span> Team.
+    </div>
+  </body>
+</html>
