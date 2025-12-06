@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+  <body>
+    <div
+      style="
+        margin: 20px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px 10px;
+        box-shadow: 0px 4px 10px gray;
+      "
+    >
+      <h3 th:text="'Hey ' + ${firstName} + ','"></h3>
+      <div>
+        Welcome to <span th:text="${APP_NAME}"></span>. It's great to meet you!
+        <span th:text="${APP_NAME}"></span> is your trusted companion and guide
+        for your daily study and devotional based on Koinonia Global teachings.
+        <br /><br />
+        Your email has been confirmed and we are glad to have you with us.
+        <br /><br />
+        Here are some of our services:
+        <ul>
+          <li>✔ Round-the-Clock Availability & Tracks</li>
+          <li>
+            ✔ Rich transcript of many and recent Koinonia Global teachings
+          </li>
+          <li>✔ Enhanced search for topics and related teachings</li>
+          <li>✔ Personalized recommendations of teachings</li>
+          <li>✔ Organized categories of teaching concepts</li>
+        </ul>
+        <br /><br />
+        To know more about our services:
+        <a
+          href="gbengabuilds.space"
+          style="
+            text-align: center;
+            background: #4f5ddb;
+            color: #fff;
+            padding: 6px 10px;
+            font-size: 16px;
+            border-radius: 3px;
+          "
+        >
+          Explore
+        </a>
+      </div>
+      <br />
+      Warm Regards,
+      <br />
+      <span th:text="${APP_NAME}"></span> Team.
+    </div>
+  </body>
+</html>

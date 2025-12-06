@@ -11,7 +11,7 @@ public class TokenUtil {
 
     char[] combinations = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
-    for(int i=0; i <= 6; i++) {
+    for(int i=0; i <= 5; i++) {
       int randomIndex = random.nextInt(10);
       sb.append(combinations[randomIndex]);
     }

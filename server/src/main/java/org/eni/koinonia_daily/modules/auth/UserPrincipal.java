@@ -21,6 +21,7 @@ public class UserPrincipal implements UserDetails {
   private final String lastName;
   private final String email;
   private final UserRole role;
+  private final boolean isVerified;
   private final LocalDateTime createdAt;
   private final LocalDateTime updatedAt;
 
@@ -33,6 +34,7 @@ public class UserPrincipal implements UserDetails {
     this.lastName = user.getLastName();
     this.email = user.getEmail();
     this.role = user.getRole();
+    this.isVerified = user.isVerified();
     this.createdAt = user.getCreatedAt();
     this.updatedAt = user.getUpdatedAt();
   }

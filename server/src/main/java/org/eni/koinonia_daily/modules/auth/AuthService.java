@@ -2,14 +2,20 @@ package org.eni.koinonia_daily.modules.auth;
 
 import java.time.LocalDateTime;
 
+import org.eni.koinonia_daily.exceptions.NotFoundException;
+import org.eni.koinonia_daily.modules.auth.dto.ForgotPasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.LoginRequest;
 import org.eni.koinonia_daily.modules.auth.dto.LoginResponse;
 import org.eni.koinonia_daily.modules.auth.dto.RegisterRequest;
 import org.eni.koinonia_daily.modules.auth.dto.RegisterResponse;
+import org.eni.koinonia_daily.modules.auth.dto.RequestOtpDto;
+import org.eni.koinonia_daily.modules.auth.dto.ResetPasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.UserProfileDto;
+import org.eni.koinonia_daily.modules.auth.dto.VerifyEmailDto;
 import org.eni.koinonia_daily.modules.token.TokenService;
 import org.eni.koinonia_daily.modules.token.TokenType;
 import org.eni.koinonia_daily.services.EmailService;
+import org.eni.koinonia_daily.utils.ResponseDto;
 import org.eni.koinonia_daily.modules.user.User;
 import org.eni.koinonia_daily.modules.user.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -75,6 +81,7 @@ public class AuthService {
   }
 
   public UserProfileDto profile(UserPrincipal user) {
+
     return UserProfileDto.builder()
             .id(user.getId())
             .firstName(user.getFirstName())
@@ -82,6 +89,71 @@ public class AuthService {
             .email(user.getEmail())
             .role(user.getRole())
             .createdAt(user.getCreatedAt())
+            .build();
+  }
+
+	public ResponseDto verifyEmail(VerifyEmailDto payload) {
+
+		User user = userRepository.findByEmail(payload.getEmail())
+                  .orElseThrow(() -> new NotFoundException("User not found"));
+    
+    tokenService.verifyEmailOtp(user, payload.getOtp());
+
+    user.setVerified(true);
+    userRepository.save(user);
+
+    emailService.sendWelcomeEmail(user.getEmail(), user.getFirstName());
+
+    return ResponseDto.builder()
+            .message("OTP verified successfully")
+            .build();
+	}
+
+	public ResponseDto requestOtp(RequestOtpDto payload) {
+    
+		User user = userRepository.findByEmail(payload.getEmail())
+                  .orElseThrow(() -> new NotFoundException("User not found"));
+
+    String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
+
+    emailService.sendEmailVerificationRequestMail(user.getEmail(), user.getFirstName(), otp);
+
+    return ResponseDto.builder()
+            .message("OTP has been sent to your email")
+            .build();
+	}
+
+  public ResponseDto forgotPassword(ForgotPasswordDto payload) {
+    
+    User user = userRepository.findByEmail(payload.getEmail())
+                  .orElseThrow(() -> new NotFoundException("User not found"));
+
+    String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.CHANGE_PASSWORD);
+
+    emailService.sendForgotPasswordMail(user.getEmail(), otp);
+
+    return ResponseDto.builder()
+            .message("OTP has been sent to your email")
+            .build();
+  }
+
+  public ResponseDto resetPassword(ResetPasswordDto payload) {
+    
+    tokenService.verifyPasswordOtp(payload.getEmail(), payload.getOtp());
+
+    String newPassword = passwordEncoder.encode(payload.getPassword());
+
+    User newUser = userRepository.findByEmail(payload.getEmail())
+                                .map(user -> {
+                                  user.setPassword(newPassword);
+                                  return userRepository.save(user);
+                                })
+                                .orElseThrow(() -> new NotFoundException("User not found"));
+
+    emailService.sendPasswordChangedMail(newUser.getEmail(), newUser.getFirstName());
+                
+    return ResponseDto.builder()
+            .message("Password reset successfully")
             .build();
   }
 }

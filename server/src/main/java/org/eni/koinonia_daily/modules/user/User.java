@@ -39,10 +39,11 @@ public class User {
   @Column(nullable = false)
   private String password;
 
-  @Column(nullable = false, length = 10, columnDefinition = "default 'USER'")
+  @Column(nullable = false, length = 10)
   @Enumerated(EnumType.STRING)
   private UserRole role;
 
+  @Builder.Default
   @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
   private boolean isVerified = false;
 

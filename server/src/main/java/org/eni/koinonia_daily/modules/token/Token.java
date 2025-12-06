@@ -7,6 +7,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,10 +37,11 @@ public class Token {
   @Column(nullable = false, length = 50)
   private String email;
 
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, length = 255)
   private String value;
 
-  @Column(nullable = false, length = 50)
+  @Column(name = "'type'", nullable = false, length = 20)
+  @Enumerated(EnumType.STRING)
   private TokenType type;
 
   @Column(nullable = false)
