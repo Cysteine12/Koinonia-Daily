@@ -3,7 +3,6 @@ package org.eni.koinonia_daily.modules.token;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import org.eni.koinonia_daily.exceptions.NotFoundException;
 import org.eni.koinonia_daily.modules.user.User;
 import org.eni.koinonia_daily.services.EmailService;
 import org.springframework.stereotype.Service;
@@ -50,14 +49,14 @@ public class TokenService {
                     user.getEmail(), 
                     TokenType.VERIFY_EMAIL, 
                     otp)
-                    .orElseThrow(() -> new NotFoundException("Invalid OTP"));
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid OTP"));
 
     if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
       String newOtp = generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
 
       emailService.sendEmailVerificationRequestMail(user.getEmail(), user.getFirstName(), newOtp);
 
-      throw new NotFoundException("OTP expired. A new one has been sent.");
+      throw new IllegalArgumentException("OTP expired. A new one has been sent.");
     }
     tokenRepository.deleteById(token.getId());
   }
@@ -68,14 +67,14 @@ public class TokenService {
                     email, 
                     TokenType.CHANGE_PASSWORD, 
                     otp)
-                    .orElseThrow(() -> new NotFoundException("Invalid OTP"));
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid OTP"));
 
     if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
       String newOtp = generateAndSaveOtp(email, TokenType.VERIFY_EMAIL);
 
       emailService.sendForgotPasswordMail(email, newOtp);
 
-      throw new NotFoundException("OTP expired. A new one has been sent.");
+      throw new IllegalArgumentException("OTP expired. A new one has been sent.");
     }
     tokenRepository.deleteById(token.getId());
   }

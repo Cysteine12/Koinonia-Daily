@@ -1,5 +1,6 @@
 package org.eni.koinonia_daily.modules.auth;
 
+import org.eni.koinonia_daily.modules.auth.dto.ChangePasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.ForgotPasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.LoginRequest;
 import org.eni.koinonia_daily.modules.auth.dto.LoginResponse;
@@ -75,5 +76,22 @@ public class AuthController {
     ResponseDto res = authService.resetPassword(payload);
 
     return ResponseEntity.ok(res);
+  }
+
+  @PostMapping("/change-password")
+  public ResponseEntity<ResponseDto> changePassword(@AuthenticationPrincipal UserPrincipal user, @RequestBody @Valid ChangePasswordDto payload) {
+    ResponseDto res = authService.changePassword(user, payload);
+
+    return ResponseEntity.ok(res);
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<ResponseDto> logout() {
+    
+    return ResponseEntity.ok(
+      ResponseDto.builder()
+        .message("Logout successful")
+        .build()
+    );
   }
 }

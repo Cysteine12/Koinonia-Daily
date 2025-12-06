@@ -3,6 +3,7 @@ package org.eni.koinonia_daily.modules.auth;
 import java.time.LocalDateTime;
 
 import org.eni.koinonia_daily.exceptions.NotFoundException;
+import org.eni.koinonia_daily.modules.auth.dto.ChangePasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.ForgotPasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.LoginRequest;
 import org.eni.koinonia_daily.modules.auth.dto.LoginResponse;
@@ -24,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -144,16 +146,36 @@ public class AuthService {
     String newPassword = passwordEncoder.encode(payload.getPassword());
 
     User newUser = userRepository.findByEmail(payload.getEmail())
-                                .map(user -> {
-                                  user.setPassword(newPassword);
-                                  return userRepository.save(user);
-                                })
-                                .orElseThrow(() -> new NotFoundException("User not found"));
+                    .map(user -> {
+                      user.setPassword(newPassword);
+                      return userRepository.save(user);
+                    })
+                    .orElseThrow(() -> new NotFoundException("User not found"));
 
     emailService.sendPasswordChangedMail(newUser.getEmail(), newUser.getFirstName());
                 
     return ResponseDto.builder()
             .message("Password reset successfully")
+            .build();
+  }
+
+  public ResponseDto changePassword(UserPrincipal user, ChangePasswordDto payload) {
+
+    User currentUser = userRepository.findById(user.getId())
+                        .orElseThrow(() -> new NotFoundException("User not found"));
+
+    boolean isMatch = passwordEncoder.matches(payload.getCurrentPassword(), currentUser.getPassword());
+    if (isMatch) throw new IllegalArgumentException("Incorrect password");
+
+    String newPassword = passwordEncoder.encode(payload.getNewPassword());
+    currentUser.setPassword(newPassword);;
+
+    userRepository.save(currentUser);
+
+    emailService.sendPasswordChangedMail(currentUser.getEmail(), currentUser.getFirstName());
+    
+    return ResponseDto.builder()
+            .message("Password changed successfully")
             .build();
   }
 }
