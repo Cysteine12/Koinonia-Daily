@@ -71,7 +71,7 @@ public class TokenService {
                     .orElseThrow(() -> new ValidationException("Invalid OTP"));
 
     if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
-      String newOtp = generateAndSaveOtp(email, TokenType.VERIFY_EMAIL);
+      String newOtp = generateAndSaveOtp(email, TokenType.CHANGE_PASSWORD);
 
       emailService.sendForgotPasswordMail(email, newOtp);
 
