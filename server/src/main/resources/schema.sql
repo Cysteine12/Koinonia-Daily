@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS test_table (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
--- DROP TABLE IF EXISTS tokens;
 -- DROP TABLE IF EXISTS histories;
 -- DROP TABLE IF EXISTS bookmarks;
+-- DROP TABLE IF EXISTS tokens;
 -- DROP TABLE IF EXISTS users;

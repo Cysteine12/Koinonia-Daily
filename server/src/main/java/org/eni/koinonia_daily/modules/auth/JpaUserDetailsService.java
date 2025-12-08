@@ -19,6 +19,6 @@ public class JpaUserDetailsService implements UserDetailsService {
     return userRepository
             .findByEmail(username)
             .map(UserPrincipal::new)
-            .orElseThrow(() -> new UsernameNotFoundException("Invalid credientials"));
+            .orElseThrow(() -> new UsernameNotFoundException("Invalid credentials"));
   }  
 }

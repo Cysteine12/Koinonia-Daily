@@ -3,6 +3,7 @@ package org.eni.koinonia_daily.modules.auth;
 import java.time.LocalDateTime;
 
 import org.eni.koinonia_daily.exceptions.NotFoundException;
+import org.eni.koinonia_daily.exceptions.ValidationException;
 import org.eni.koinonia_daily.modules.auth.dto.ChangePasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.ForgotPasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.LoginRequest;
@@ -25,7 +26,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -44,7 +44,7 @@ public class AuthService {
   public RegisterResponse register(RegisterRequest payload) {
 
     if (userRepository.existsByEmail(payload.getEmail()))  {
-      throw new IllegalArgumentException("This email already exists");
+      throw new ValidationException("This email already exists");
     }
 
     User user = User.builder()
@@ -98,6 +98,10 @@ public class AuthService {
 
 		User user = userRepository.findByEmail(payload.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
+      
+    if (user.isVerified()) {
+      throw new ValidationException("User is already verified");
+    }
     
     tokenService.verifyEmailOtp(user, payload.getOtp());
 
@@ -115,6 +119,10 @@ public class AuthService {
     
 		User user = userRepository.findByEmail(payload.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
+        
+    if (user.isVerified()) {
+      throw new ValidationException("User is already verified");
+    }
 
     String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
 
@@ -165,7 +173,7 @@ public class AuthService {
                         .orElseThrow(() -> new NotFoundException("User not found"));
 
     boolean isMatch = passwordEncoder.matches(payload.getCurrentPassword(), currentUser.getPassword());
-    if (isMatch) throw new IllegalArgumentException("Incorrect password");
+    if (!isMatch) throw new ValidationException("Incorrect password");
 
     String newPassword = passwordEncoder.encode(payload.getNewPassword());
     currentUser.setPassword(newPassword);;
