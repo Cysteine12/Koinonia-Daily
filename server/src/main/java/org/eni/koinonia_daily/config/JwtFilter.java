@@ -1,6 +1,7 @@
 package org.eni.koinonia_daily.config;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.eni.koinonia_daily.modules.auth.JwtService;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -56,14 +59,7 @@ public class JwtFilter extends OncePerRequestFilter {
       SecurityContextHolder.clearContext();
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       response.setContentType("application/json");
-      response.getWriter().write("""
-          {
-            "success": false,
-            "message": \""""
-                + ex.getMessage() +
-                """
-          "}
-          """);
+      new ObjectMapper().writeValue(response.getWriter(), Map.of("success", false, "message", ex.getMessage()));
       return;
     }
 
