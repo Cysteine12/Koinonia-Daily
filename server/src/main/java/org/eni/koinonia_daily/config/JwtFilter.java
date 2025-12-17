@@ -60,7 +60,7 @@ public class JwtFilter extends OncePerRequestFilter {
           {
             "success": false,
             "message": \""""
-                + ex.getMessage().substring(0, 11) +
+                + ex.getMessage() +
                 """
           "}
           """);
