@@ -26,7 +26,7 @@ public class JwtService {
     this.key = Keys.hmacShaKeyFor(secret.getBytes());
   }
 
-  public String generateToken(String email, int expiryInMs, TokenType type) {
+  public String generateToken(String email, long expiryInMs, TokenType type) {
     
     Map<String, Object> claims = new HashMap<>();
     claims.put(TOKEN_TYPE_KEY, type.name());

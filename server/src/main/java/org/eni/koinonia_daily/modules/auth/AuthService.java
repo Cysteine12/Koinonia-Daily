@@ -1,5 +1,6 @@
 package org.eni.koinonia_daily.modules.auth;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import org.eni.koinonia_daily.exceptions.NotFoundException;
@@ -9,6 +10,8 @@ import org.eni.koinonia_daily.modules.auth.dto.ChangePasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.ForgotPasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.LoginRequest;
 import org.eni.koinonia_daily.modules.auth.dto.LoginResponse;
+import org.eni.koinonia_daily.modules.auth.dto.RefreshTokenRequest;
+import org.eni.koinonia_daily.modules.auth.dto.RefreshTokenResponse;
 import org.eni.koinonia_daily.modules.auth.dto.RegisterRequest;
 import org.eni.koinonia_daily.modules.auth.dto.RequestOtpDto;
 import org.eni.koinonia_daily.modules.auth.dto.ResetPasswordDto;
@@ -37,8 +40,8 @@ public class AuthService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final EmailService emailService;
-  private final int ACCESS_TOKEN_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000;
-  private final int REFRESH_TOKEN_EXPIRATION_MS = 31 * 24 * 60 * 60 * 1000;
+  private static final long ACCESS_TOKEN_EXPIRATION_MS = Duration.ofDays(7).toMillis();
+  private static final long REFRESH_TOKEN_EXPIRATION_MS = Duration.ofDays(31).toMillis();
 
   public void register(RegisterRequest payload) {
 
@@ -165,7 +168,7 @@ public class AuthService {
                         .orElseThrow(() -> new NotFoundException("User not found"));
 
     boolean isMatch = passwordEncoder.matches(payload.getCurrentPassword(), currentUser.getPassword());
-    if (!isMatch) throw new ValidationException("Incorrect password");
+    if (!isMatch) throw new UnauthorizedException("Incorrect password");
 
     String newPassword = passwordEncoder.encode(payload.getNewPassword());
     currentUser.setPassword(newPassword);
@@ -175,5 +178,22 @@ public class AuthService {
     emailService.sendPasswordChangedMail(currentUser.getEmail(), currentUser.getFirstName());
     
     return;
+  }
+
+  public RefreshTokenResponse refreshToken(RefreshTokenRequest payload) {
+
+    String email = jwtService.validateAndExtractSubject(payload.getRefreshToken(), TokenType.REFRESH_TOKEN);
+
+    tokenService.verifyRefreshToken(email, payload.getRefreshToken());
+
+    String accessToken = jwtService.generateToken(email, ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN);
+    String refreshToken = jwtService.generateToken(email, REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN);
+
+    tokenService.create(email, refreshToken, TokenType.REFRESH_TOKEN, LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRATION_MS / 1000));
+
+    return RefreshTokenResponse.builder()
+            .accessToken(accessToken)
+            .refreshToken(refreshToken)
+            .build();
   }
 }

@@ -3,6 +3,7 @@ package org.eni.koinonia_daily.modules.token;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.eni.koinonia_daily.exceptions.ValidationException;
 import org.eni.koinonia_daily.modules.user.User;
 import org.eni.koinonia_daily.services.EmailService;
@@ -77,6 +78,18 @@ public class TokenService {
 
       throw new ValidationException("OTP expired. A new one has been sent.");
     }
+    tokenRepository.deleteById(token.getId());
+  }
+
+  public void verifyRefreshToken(String email, String refreshToken) {
+    
+    Token token = tokenRepository.findByEmailAndType(email, TokenType.REFRESH_TOKEN)
+                    .orElseThrow(() -> new UnauthorizedException("Invalid token"));
+        
+    if (!token.getValue().equals(refreshToken)) {
+      throw new UnauthorizedException("Invalid token");
+    }
+
     tokenRepository.deleteById(token.getId());
   }
 }
