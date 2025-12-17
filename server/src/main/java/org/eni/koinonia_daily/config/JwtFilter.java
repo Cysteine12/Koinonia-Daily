@@ -2,7 +2,9 @@ package org.eni.koinonia_daily.config;
 
 import java.io.IOException;
 
+import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.eni.koinonia_daily.modules.auth.JwtService;
+import org.eni.koinonia_daily.modules.token.TokenType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,25 +32,39 @@ public class JwtFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     
     String header = request.getHeader("Authorization");
-    String token = null;
-    String username = null;
 
-    if (header != null && header.startsWith("Bearer ")) {
-      token = header.substring(7);
-      username = jwtService.getEmailFromToken(token);
+    if (header == null || !header.startsWith("Bearer ")) {
+      filterChain.doFilter(request, response);
+      return;
     }
+
+    String token = header.substring(7);
     
+    try {
+      String subject = jwtService.validateAndExtractSubject(token, TokenType.ACCESS_TOKEN);
 
-    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+      UserDetails userDetails = userDetailsService.loadUserByUsername(subject);
 
-      if (jwtService.validateToken(token, userDetails.getUsername())) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+      UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-      }
+      authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+      
+      SecurityContextHolder.getContext().setAuthentication(authToken);
+
+    } catch (JwtException | UnauthorizedException ex) {
+      
+      SecurityContextHolder.clearContext();
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      response.setContentType("application/json");
+      response.getWriter().write("""
+          {
+            "success": false,
+            "message": \""""
+                + ex.getMessage().substring(0, 11) +
+                """
+          "}
+          """);
+      return;
     }
 
     filterChain.doFilter(request, response);

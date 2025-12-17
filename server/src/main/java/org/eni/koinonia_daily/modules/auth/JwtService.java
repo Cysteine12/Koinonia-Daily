@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.crypto.SecretKey;
 
+import org.eni.koinonia_daily.exceptions.UnauthorizedException;
+import org.eni.koinonia_daily.modules.token.TokenType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +20,16 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
   private final Key key;
+  private final String TOKEN_TYPE_KEY = "token_type";
 
   public JwtService(@Value("${jwt.secret}") String secret) {
     this.key = Keys.hmacShaKeyFor(secret.getBytes());
   }
 
-  public String generateToken(String email, int expiryInMs) {
+  public String generateToken(String email, int expiryInMs, TokenType type) {
     
     Map<String, Object> claims = new HashMap<>();
+    claims.put(TOKEN_TYPE_KEY, type.name());
     Date now = new Date();
     Date expiry = new Date(now.getTime() + expiryInMs);
 
@@ -48,15 +52,19 @@ public class JwtService {
             .getPayload();
   }
 
-  public String getEmailFromToken(String token) {
-    return parseClaims(token).getSubject();
-  }
-
-  public boolean validateToken(String token, String email) {
-
+  public String validateAndExtractSubject(String token, TokenType type) {
     Claims claims = parseClaims(token);
 
-    return claims.getSubject().equals(email) && 
-            claims.getExpiration().after(new Date());
+    if (claims.getExpiration().before(new Date())) {
+      throw new UnauthorizedException("Expired token");
+    }
+
+    String tokenType = claims.get(TOKEN_TYPE_KEY, String.class);
+
+    if (!tokenType.equals(type.name())) {
+      throw new UnauthorizedException("Invalid token");
+    }
+
+    return claims.getSubject();
   }
 }

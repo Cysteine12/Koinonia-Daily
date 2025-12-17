@@ -4,12 +4,11 @@ import java.time.LocalDateTime;
 
 import org.eni.koinonia_daily.modules.user.UserRole;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-@Getter @AllArgsConstructor
+@Getter
 public class UserProfileDto {
 
   private Long id;
@@ -23,4 +22,6 @@ public class UserProfileDto {
   private UserRole role;
 
   private LocalDateTime createdAt;
+
+  private LocalDateTime updatedAt;
 }
