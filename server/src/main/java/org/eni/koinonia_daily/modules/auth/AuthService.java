@@ -67,9 +67,8 @@ public class AuthService {
     Authentication auth = authenticationManager
                             .authenticate(new UsernamePasswordAuthenticationToken(payload.getEmail(), payload.getPassword()));
 
-    User user = userRepository.findByEmail(auth.getName())
-                  .orElseThrow(() -> new NotFoundException("User not found"));
-    if (!user.isVerified()) throw new UnauthorizedException("Email verification required");
+    UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+    if (!principal.isVerified()) throw new UnauthorizedException("Email verification required");
     
     String accessToken = jwtService.generateToken(auth.getName(), ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN);
     String refreshToken = jwtService.generateToken(auth.getName(), REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN);

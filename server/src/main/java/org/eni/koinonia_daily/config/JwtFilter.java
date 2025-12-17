@@ -1,11 +1,13 @@
 package org.eni.koinonia_daily.config;
 
 import java.io.IOException;
-import java.util.Map;
+import java.time.LocalDateTime;
 
 import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.eni.koinonia_daily.modules.auth.JwtService;
 import org.eni.koinonia_daily.modules.token.TokenType;
+import org.eni.koinonia_daily.utils.ErrorResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +31,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
   private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
+  private final ObjectMapper objectMapper;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -57,9 +60,19 @@ public class JwtFilter extends OncePerRequestFilter {
     } catch (JwtException | UnauthorizedException ex) {
       
       SecurityContextHolder.clearContext();
+
+      ErrorResponse errorResponse = ErrorResponse.builder()
+                                      .success(false)
+                                      .status(HttpStatus.UNAUTHORIZED.value())
+                                      .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                                      .message(ex.getMessage())
+                                      .path(request.getRequestURI())
+                                      .timestamp(LocalDateTime.now())
+                                      .build();
+
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       response.setContentType("application/json");
-      new ObjectMapper().writeValue(response.getWriter(), Map.of("success", false, "message", ex.getMessage()));
+      objectMapper.writeValue(response.getWriter(), errorResponse);
       return;
     }
 
