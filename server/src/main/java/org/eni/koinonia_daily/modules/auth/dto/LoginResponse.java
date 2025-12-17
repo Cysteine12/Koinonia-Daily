@@ -1,16 +1,13 @@
 package org.eni.koinonia_daily.modules.auth.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+@Getter
 @Builder
-@Getter @AllArgsConstructor
 public class LoginResponse {
 
-  private String accessToken;
+  private final String accessToken;
   
-  private String refreshToken;
-
-  private String message;
+  private final String refreshToken;
 }
