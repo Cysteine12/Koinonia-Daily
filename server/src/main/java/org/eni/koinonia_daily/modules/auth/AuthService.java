@@ -3,13 +3,13 @@ package org.eni.koinonia_daily.modules.auth;
 import java.time.LocalDateTime;
 
 import org.eni.koinonia_daily.exceptions.NotFoundException;
+import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.eni.koinonia_daily.exceptions.ValidationException;
 import org.eni.koinonia_daily.modules.auth.dto.ChangePasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.ForgotPasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.LoginRequest;
 import org.eni.koinonia_daily.modules.auth.dto.LoginResponse;
 import org.eni.koinonia_daily.modules.auth.dto.RegisterRequest;
-import org.eni.koinonia_daily.modules.auth.dto.RegisterResponse;
 import org.eni.koinonia_daily.modules.auth.dto.RequestOtpDto;
 import org.eni.koinonia_daily.modules.auth.dto.ResetPasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.UserProfileDto;
@@ -17,7 +17,6 @@ import org.eni.koinonia_daily.modules.auth.dto.VerifyEmailDto;
 import org.eni.koinonia_daily.modules.token.TokenService;
 import org.eni.koinonia_daily.modules.token.TokenType;
 import org.eni.koinonia_daily.services.EmailService;
-import org.eni.koinonia_daily.utils.ResponseDto;
 import org.eni.koinonia_daily.modules.user.User;
 import org.eni.koinonia_daily.modules.user.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,7 +40,7 @@ public class AuthService {
   private final int ACCESS_TOKEN_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000;
   private final int REFRESH_TOKEN_EXPIRATION_MS = 31 * 24 * 60 * 60 * 1000;
 
-  public RegisterResponse register(RegisterRequest payload) {
+  public void register(RegisterRequest payload) {
 
     if (userRepository.existsByEmail(payload.getEmail()))  {
       throw new ValidationException("This email already exists");
@@ -60,23 +59,23 @@ public class AuthService {
 
     emailService.sendEmailVerificationRequestMail(user.getEmail(), user.getFirstName(), otp);
 
-    return RegisterResponse.builder()
-            .message("Registration successful. OTP has been sent to your email for verification.")
-            .build();
+    return;
   }
   
   public LoginResponse login(LoginRequest payload) {
 
     Authentication auth = authenticationManager
                             .authenticate(new UsernamePasswordAuthenticationToken(payload.getEmail(), payload.getPassword()));
+
+    UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+    if (!principal.isVerified()) throw new UnauthorizedException("Email verification required");
     
-    String accessToken = jwtService.generateToken(auth.getName(), ACCESS_TOKEN_EXPIRATION_MS);
-    String refreshToken = jwtService.generateToken(auth.getName(), REFRESH_TOKEN_EXPIRATION_MS);
+    String accessToken = jwtService.generateToken(auth.getName(), ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN);
+    String refreshToken = jwtService.generateToken(auth.getName(), REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN);
 
     tokenService.create(auth.getName(), refreshToken, TokenType.REFRESH_TOKEN, LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRATION_MS / 1000));
                                       
     return LoginResponse.builder()
-            .message("Login Successful")
             .accessToken(accessToken)
             .refreshToken(refreshToken)
             .build();
@@ -91,10 +90,11 @@ public class AuthService {
             .email(user.getEmail())
             .role(user.getRole())
             .createdAt(user.getCreatedAt())
+            .updatedAt(user.getUpdatedAt())
             .build();
   }
 
-	public ResponseDto verifyEmail(VerifyEmailDto payload) {
+	public void verifyEmail(VerifyEmailDto payload) {
 
 		User user = userRepository.findByEmail(payload.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
@@ -110,12 +110,10 @@ public class AuthService {
 
     emailService.sendWelcomeEmail(user.getEmail(), user.getFirstName());
 
-    return ResponseDto.builder()
-            .message("OTP verified successfully")
-            .build();
+    return;
 	}
 
-	public ResponseDto requestOtp(RequestOtpDto payload) {
+	public void requestOtp(RequestOtpDto payload) {
     
 		User user = userRepository.findByEmail(payload.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
@@ -128,12 +126,10 @@ public class AuthService {
 
     emailService.sendEmailVerificationRequestMail(user.getEmail(), user.getFirstName(), otp);
 
-    return ResponseDto.builder()
-            .message("OTP has been sent to your email")
-            .build();
+    return;
 	}
 
-  public ResponseDto forgotPassword(ForgotPasswordDto payload) {
+  public void forgotPassword(ForgotPasswordDto payload) {
     
     User user = userRepository.findByEmail(payload.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
@@ -142,12 +138,10 @@ public class AuthService {
 
     emailService.sendForgotPasswordMail(user.getEmail(), otp);
 
-    return ResponseDto.builder()
-            .message("OTP has been sent to your email")
-            .build();
+    return;
   }
 
-  public ResponseDto resetPassword(ResetPasswordDto payload) {
+  public void resetPassword(ResetPasswordDto payload) {
     
     tokenService.verifyPasswordOtp(payload.getEmail(), payload.getOtp());
 
@@ -162,12 +156,10 @@ public class AuthService {
 
     emailService.sendPasswordChangedMail(newUser.getEmail(), newUser.getFirstName());
                 
-    return ResponseDto.builder()
-            .message("Password reset successfully")
-            .build();
+    return;
   }
 
-  public ResponseDto changePassword(UserPrincipal user, ChangePasswordDto payload) {
+  public void changePassword(UserPrincipal user, ChangePasswordDto payload) {
 
     User currentUser = userRepository.findById(user.getId())
                         .orElseThrow(() -> new NotFoundException("User not found"));
@@ -176,14 +168,12 @@ public class AuthService {
     if (!isMatch) throw new ValidationException("Incorrect password");
 
     String newPassword = passwordEncoder.encode(payload.getNewPassword());
-    currentUser.setPassword(newPassword);;
+    currentUser.setPassword(newPassword);
 
     userRepository.save(currentUser);
 
     emailService.sendPasswordChangedMail(currentUser.getEmail(), currentUser.getFirstName());
     
-    return ResponseDto.builder()
-            .message("Password changed successfully")
-            .build();
+    return;
   }
 }
