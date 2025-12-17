@@ -20,7 +20,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
   private final Key key;
-  private final String TOKEN_TYPE_KEY = "token_type";
+  private static final String TOKEN_TYPE_KEY = "token_type";
 
   public JwtService(@Value("${jwt.secret}") String secret) {
     this.key = Keys.hmacShaKeyFor(secret.getBytes());
