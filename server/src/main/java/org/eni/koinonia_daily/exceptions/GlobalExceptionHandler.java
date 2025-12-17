@@ -5,6 +5,7 @@ import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public class GlobalExceptionHandler {
                                 .status(status.value())
                                 .error(status.getReasonPhrase())
                                 .message(message)
-                                .path(request.getDescription(false).replace("uri=", ""))
+                                .path(((ServletWebRequest) request).getRequest().getRequestURI())
                                 .timestamp(LocalDateTime.now())
                                 .build();
                         

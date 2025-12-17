@@ -61,7 +61,7 @@ public class JwtService {
 
     String tokenType = claims.get(TOKEN_TYPE_KEY, String.class);
 
-    if (!tokenType.equals(type.name())) {
+    if (!type.name().equals(tokenType)) {
       throw new UnauthorizedException("Invalid token");
     }
 
