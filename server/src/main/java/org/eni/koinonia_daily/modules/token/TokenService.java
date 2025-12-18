@@ -6,7 +6,6 @@ import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.eni.koinonia_daily.modules.user.User;
 import org.eni.koinonia_daily.services.EmailService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,7 +38,6 @@ public class TokenService {
     return otp;
   }
 
-  @Transactional
   public void consumeEmailOtp(User user, String otp) {
 
     Token token = tokenRepository.findByEmailAndTypeAndValue(
@@ -59,7 +57,6 @@ public class TokenService {
     }
   }
 
-  @Transactional
   public void consumePasswordOtp(String email, String otp) {
 
     Token token = tokenRepository.findByEmailAndTypeAndValue(
@@ -79,7 +76,6 @@ public class TokenService {
     }
   }
 
-  @Transactional
   public void consumeRefreshToken(String email, String refreshToken) {
     
     Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.REFRESH_TOKEN, refreshToken)
