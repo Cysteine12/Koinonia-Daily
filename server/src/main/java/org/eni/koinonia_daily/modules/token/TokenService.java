@@ -1,7 +1,6 @@
 package org.eni.koinonia_daily.modules.token;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.eni.koinonia_daily.modules.user.User;
@@ -26,11 +25,6 @@ public class TokenService {
                     .type(type)
                     .expiresAt(expiresAt)
                     .build();
-
-    Optional<Token> savedToken = tokenRepository.findByEmailAndType(email, type);
-    if (savedToken.isPresent()) {
-      token.setId(savedToken.get().getId());
-    }
                 
     tokenRepository.save(token);
   }
@@ -100,6 +94,6 @@ public class TokenService {
 
       throw new UnauthorizedException("Expired token");
     }
-
+    tokenRepository.deleteById(token.getId());
   }
 }

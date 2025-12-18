@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class JwtPayload {
+public class TokenPair {
 
-  private final String subject;
+  private final String accessToken;
 
-  private final String jti;
+  private final String refreshToken;
 }

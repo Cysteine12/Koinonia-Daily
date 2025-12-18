@@ -17,6 +17,7 @@ import org.eni.koinonia_daily.modules.auth.dto.RefreshTokenResponse;
 import org.eni.koinonia_daily.modules.auth.dto.RegisterRequest;
 import org.eni.koinonia_daily.modules.auth.dto.RequestOtpDto;
 import org.eni.koinonia_daily.modules.auth.dto.ResetPasswordDto;
+import org.eni.koinonia_daily.modules.auth.dto.TokenPair;
 import org.eni.koinonia_daily.modules.auth.dto.UserProfileDto;
 import org.eni.koinonia_daily.modules.auth.dto.VerifyEmailDto;
 import org.eni.koinonia_daily.modules.token.TokenService;
@@ -76,16 +77,11 @@ public class AuthService {
     UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
     if (!principal.isVerified()) throw new UnauthorizedException("Email verification required");
 
-    String jti = UUID.randomUUID().toString();
+    TokenPair tokens = generateAndSaveTokens(auth.getName());
     
-    String accessToken = jwtService.generateToken(auth.getName(), ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN, null);
-    String refreshToken = jwtService.generateToken(auth.getName(), REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN, jti);
-
-    tokenService.create(auth.getName(), jti, TokenType.REFRESH_TOKEN, LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRATION_MS / 1000));
-                                      
     return LoginResponse.builder()
-            .accessToken(accessToken)
-            .refreshToken(refreshToken)
+            .accessToken(tokens.getAccessToken())
+            .refreshToken(tokens.getRefreshToken())
             .build();
   }
 
@@ -192,16 +188,23 @@ public class AuthService {
 
     tokenService.consumeRefreshToken(jwtPayload.getSubject(), jwtPayload.getJti());
 
+    TokenPair tokens = generateAndSaveTokens(jwtPayload.getSubject());
+    
+    return RefreshTokenResponse.builder()
+            .accessToken(tokens.getAccessToken())
+            .refreshToken(tokens.getRefreshToken())
+            .build();
+  }
+
+  private TokenPair generateAndSaveTokens(String email) {
+    
     String jti = UUID.randomUUID().toString();
 
-    String accessToken = jwtService.generateToken(jwtPayload.getSubject(), ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN, null);
-    String refreshToken = jwtService.generateToken(jwtPayload.getSubject(), REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN, jti);
+    String accessToken = jwtService.generateToken(email, ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN, null);
+    String refreshToken = jwtService.generateToken(email, REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN, jti);
 
-    tokenService.create(jwtPayload.getSubject(), jti, TokenType.REFRESH_TOKEN, LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRATION_MS / 1000));
+    tokenService.create(email, jti, TokenType.REFRESH_TOKEN, LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRATION_MS / 1000));
 
-    return RefreshTokenResponse.builder()
-            .accessToken(accessToken)
-            .refreshToken(refreshToken)
-            .build();
+    return new TokenPair(accessToken, refreshToken);
   }
 }
