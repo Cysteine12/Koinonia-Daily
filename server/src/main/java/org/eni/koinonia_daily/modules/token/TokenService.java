@@ -47,6 +47,8 @@ public class TokenService {
                     TokenType.VERIFY_EMAIL, 
                     otp)
                     .orElseThrow(() -> new UnauthorizedException("Invalid OTP"));
+    
+    tokenRepository.deleteById(token.getId());
 
     if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
       String newOtp = generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
@@ -55,7 +57,6 @@ public class TokenService {
 
       throw new UnauthorizedException("OTP expired. A new one has been sent.");
     }
-    tokenRepository.deleteById(token.getId());
   }
 
   @Transactional
@@ -67,6 +68,8 @@ public class TokenService {
                     otp)
                     .orElseThrow(() -> new UnauthorizedException("Invalid OTP"));
 
+    tokenRepository.deleteById(token.getId());
+
     if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
       String newOtp = generateAndSaveOtp(email, TokenType.CHANGE_PASSWORD);
 
@@ -74,7 +77,6 @@ public class TokenService {
 
       throw new UnauthorizedException("OTP expired. A new one has been sent.");
     }
-    tokenRepository.deleteById(token.getId());
   }
 
   @Transactional
@@ -87,13 +89,11 @@ public class TokenService {
                       return new UnauthorizedException("Revoked token");
                     });
         
+    tokenRepository.deleteById(token.getId());
 
     if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
       
-      tokenRepository.deleteById(token.getId());
-
       throw new UnauthorizedException("Expired token");
     }
-    tokenRepository.deleteById(token.getId());
   }
 }
