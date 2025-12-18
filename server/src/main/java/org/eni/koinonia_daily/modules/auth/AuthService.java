@@ -2,12 +2,14 @@ package org.eni.koinonia_daily.modules.auth;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.eni.koinonia_daily.exceptions.NotFoundException;
 import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.eni.koinonia_daily.exceptions.ValidationException;
 import org.eni.koinonia_daily.modules.auth.dto.ChangePasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.ForgotPasswordDto;
+import org.eni.koinonia_daily.modules.auth.dto.JwtPayload;
 import org.eni.koinonia_daily.modules.auth.dto.LoginRequest;
 import org.eni.koinonia_daily.modules.auth.dto.LoginResponse;
 import org.eni.koinonia_daily.modules.auth.dto.RefreshTokenRequest;
@@ -27,6 +29,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -72,11 +75,13 @@ public class AuthService {
 
     UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
     if (!principal.isVerified()) throw new UnauthorizedException("Email verification required");
-    
-    String accessToken = jwtService.generateToken(auth.getName(), ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN);
-    String refreshToken = jwtService.generateToken(auth.getName(), REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN);
 
-    tokenService.create(auth.getName(), refreshToken, TokenType.REFRESH_TOKEN, LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRATION_MS / 1000));
+    String jti = UUID.randomUUID().toString();
+    
+    String accessToken = jwtService.generateToken(auth.getName(), ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN, null);
+    String refreshToken = jwtService.generateToken(auth.getName(), REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN, jti);
+
+    tokenService.create(auth.getName(), jti, TokenType.REFRESH_TOKEN, LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRATION_MS / 1000));
                                       
     return LoginResponse.builder()
             .accessToken(accessToken)
@@ -106,7 +111,7 @@ public class AuthService {
       throw new ValidationException("User is already verified");
     }
     
-    tokenService.verifyEmailOtp(user, payload.getOtp());
+    tokenService.consumeEmailOtp(user, payload.getOtp());
 
     user.setVerified(true);
     userRepository.save(user);
@@ -146,7 +151,7 @@ public class AuthService {
 
   public void resetPassword(ResetPasswordDto payload) {
     
-    tokenService.verifyPasswordOtp(payload.getEmail(), payload.getOtp());
+    tokenService.consumePasswordOtp(payload.getEmail(), payload.getOtp());
 
     String newPassword = passwordEncoder.encode(payload.getPassword());
 
@@ -180,16 +185,19 @@ public class AuthService {
     return;
   }
 
+  @Transactional
   public RefreshTokenResponse refreshToken(RefreshTokenRequest payload) {
 
-    String email = jwtService.validateAndExtractSubject(payload.getRefreshToken(), TokenType.REFRESH_TOKEN);
+    JwtPayload jwtPayload = jwtService.validateAndExtractPayload(payload.getRefreshToken(), TokenType.REFRESH_TOKEN);
 
-    tokenService.verifyRefreshToken(email, payload.getRefreshToken());
+    tokenService.consumeRefreshToken(jwtPayload.getSubject(), jwtPayload.getJti());
 
-    String accessToken = jwtService.generateToken(email, ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN);
-    String refreshToken = jwtService.generateToken(email, REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN);
+    String jti = UUID.randomUUID().toString();
 
-    tokenService.create(email, refreshToken, TokenType.REFRESH_TOKEN, LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRATION_MS / 1000));
+    String accessToken = jwtService.generateToken(jwtPayload.getSubject(), ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN, null);
+    String refreshToken = jwtService.generateToken(jwtPayload.getSubject(), REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN, jti);
+
+    tokenService.create(jwtPayload.getSubject(), jti, TokenType.REFRESH_TOKEN, LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRATION_MS / 1000));
 
     return RefreshTokenResponse.builder()
             .accessToken(accessToken)
