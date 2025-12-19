@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import jakarta.persistence.OptimisticLockException;
+
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -60,12 +62,20 @@ public class GlobalExceptionHandler {
 
         return buildResponse(request, "Invalid credentials", HttpStatus.UNAUTHORIZED);
     }
-
+    
     // Handle unauthorized errors
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex, WebRequest request) {
 
         return buildResponse(request, ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+    
+    // Handle lock exceptions (for token) 
+    @ExceptionHandler(OptimisticLockException.class)
+    public ResponseEntity<ErrorResponse> handleOptimisticLockException(OptimisticLockException ex, WebRequest request) {
+
+        UnauthorizedException exception = new UnauthorizedException("Unable to process request due to a conflict. Please try again.");
+        return handleUnauthorizedException(exception, request);
     }
 
     // Handle all other exceptions (catch-all)

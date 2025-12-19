@@ -4,6 +4,8 @@ import org.eni.koinonia_daily.modules.auth.dto.ChangePasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.ForgotPasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.LoginRequest;
 import org.eni.koinonia_daily.modules.auth.dto.LoginResponse;
+import org.eni.koinonia_daily.modules.auth.dto.RefreshTokenRequest;
+import org.eni.koinonia_daily.modules.auth.dto.RefreshTokenResponse;
 import org.eni.koinonia_daily.modules.auth.dto.RegisterRequest;
 import org.eni.koinonia_daily.modules.auth.dto.RequestOtpDto;
 import org.eni.koinonia_daily.modules.auth.dto.ResetPasswordDto;
@@ -90,6 +92,14 @@ public class AuthController {
     authService.changePassword(user, payload);
 
     return ResponseEntity.ok(SuccessResponse.message("Password changed successfully"));
+  }
+
+  @PostMapping("/refresh-token")
+  public ResponseEntity<SuccessResponse<RefreshTokenResponse>> refreshToken(@RequestBody @Valid RefreshTokenRequest payload) {
+
+    RefreshTokenResponse res = authService.refreshToken(payload);
+
+    return ResponseEntity.ok(SuccessResponse.data(res));
   }
 
   @PostMapping("/logout")

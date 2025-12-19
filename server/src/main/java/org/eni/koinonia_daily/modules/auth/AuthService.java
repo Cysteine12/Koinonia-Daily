@@ -1,29 +1,40 @@
 package org.eni.koinonia_daily.modules.auth;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.eni.koinonia_daily.exceptions.NotFoundException;
 import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.eni.koinonia_daily.exceptions.ValidationException;
 import org.eni.koinonia_daily.modules.auth.dto.ChangePasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.ForgotPasswordDto;
+import org.eni.koinonia_daily.modules.auth.dto.JwtPayload;
 import org.eni.koinonia_daily.modules.auth.dto.LoginRequest;
 import org.eni.koinonia_daily.modules.auth.dto.LoginResponse;
+import org.eni.koinonia_daily.modules.auth.dto.RefreshTokenRequest;
+import org.eni.koinonia_daily.modules.auth.dto.RefreshTokenResponse;
 import org.eni.koinonia_daily.modules.auth.dto.RegisterRequest;
 import org.eni.koinonia_daily.modules.auth.dto.RequestOtpDto;
 import org.eni.koinonia_daily.modules.auth.dto.ResetPasswordDto;
+import org.eni.koinonia_daily.modules.auth.dto.TokenPair;
 import org.eni.koinonia_daily.modules.auth.dto.UserProfileDto;
 import org.eni.koinonia_daily.modules.auth.dto.VerifyEmailDto;
+import org.eni.koinonia_daily.modules.auth.events.EmailVerificationRequestedEvent;
+import org.eni.koinonia_daily.modules.auth.events.PasswordChangedEvent;
+import org.eni.koinonia_daily.modules.auth.events.PasswordResetOtpGeneratedEvent;
+import org.eni.koinonia_daily.modules.auth.events.UserRegisteredEvent;
 import org.eni.koinonia_daily.modules.token.TokenService;
 import org.eni.koinonia_daily.modules.token.TokenType;
-import org.eni.koinonia_daily.services.EmailService;
 import org.eni.koinonia_daily.modules.user.User;
 import org.eni.koinonia_daily.modules.user.UserRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,10 +47,11 @@ public class AuthService {
   private final TokenService tokenService;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
-  private final EmailService emailService;
-  private final int ACCESS_TOKEN_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000;
-  private final int REFRESH_TOKEN_EXPIRATION_MS = 31 * 24 * 60 * 60 * 1000;
+  private final ApplicationEventPublisher publisher;
+  private static final long ACCESS_TOKEN_EXPIRATION_MS = Duration.ofDays(7).toMillis();
+  private static final long REFRESH_TOKEN_EXPIRATION_MS = Duration.ofDays(31).toMillis();
 
+  @Transactional
   public void register(RegisterRequest payload) {
 
     if (userRepository.existsByEmail(payload.getEmail()))  {
@@ -57,11 +69,10 @@ public class AuthService {
 
     String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
 
-    emailService.sendEmailVerificationRequestMail(user.getEmail(), user.getFirstName(), otp);
-
-    return;
+    publisher.publishEvent(new EmailVerificationRequestedEvent(user.getEmail(), user.getFirstName(), otp));
   }
   
+  @Transactional
   public LoginResponse login(LoginRequest payload) {
 
     Authentication auth = authenticationManager
@@ -69,15 +80,12 @@ public class AuthService {
 
     UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
     if (!principal.isVerified()) throw new UnauthorizedException("Email verification required");
-    
-    String accessToken = jwtService.generateToken(auth.getName(), ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN);
-    String refreshToken = jwtService.generateToken(auth.getName(), REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN);
 
-    tokenService.create(auth.getName(), refreshToken, TokenType.REFRESH_TOKEN, LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRATION_MS / 1000));
-                                      
+    TokenPair tokens = generateAndSaveTokens(auth.getName());
+    
     return LoginResponse.builder()
-            .accessToken(accessToken)
-            .refreshToken(refreshToken)
+            .accessToken(tokens.getAccessToken())
+            .refreshToken(tokens.getRefreshToken())
             .build();
   }
 
@@ -94,6 +102,7 @@ public class AuthService {
             .build();
   }
 
+  @Transactional
 	public void verifyEmail(VerifyEmailDto payload) {
 
 		User user = userRepository.findByEmail(payload.getEmail())
@@ -103,16 +112,14 @@ public class AuthService {
       throw new ValidationException("User is already verified");
     }
     
-    tokenService.verifyEmailOtp(user, payload.getOtp());
+    tokenService.consumeEmailOtp(user.getEmail(), payload.getOtp());
 
     user.setVerified(true);
-    userRepository.save(user);
 
-    emailService.sendWelcomeEmail(user.getEmail(), user.getFirstName());
-
-    return;
+    publisher.publishEvent(new UserRegisteredEvent(user.getEmail(), user.getFirstName()));
 	}
 
+  @Transactional
 	public void requestOtp(RequestOtpDto payload) {
     
 		User user = userRepository.findByEmail(payload.getEmail())
@@ -124,11 +131,10 @@ public class AuthService {
 
     String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
 
-    emailService.sendEmailVerificationRequestMail(user.getEmail(), user.getFirstName(), otp);
-
-    return;
+    publisher.publishEvent(new EmailVerificationRequestedEvent(user.getEmail(), user.getFirstName(), otp));
 	}
 
+  @Transactional
   public void forgotPassword(ForgotPasswordDto payload) {
     
     User user = userRepository.findByEmail(payload.getEmail())
@@ -136,44 +142,64 @@ public class AuthService {
 
     String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.CHANGE_PASSWORD);
 
-    emailService.sendForgotPasswordMail(user.getEmail(), otp);
-
-    return;
+    publisher.publishEvent(new PasswordResetOtpGeneratedEvent(user.getEmail(), otp));
   }
 
+  @Transactional
   public void resetPassword(ResetPasswordDto payload) {
     
-    tokenService.verifyPasswordOtp(payload.getEmail(), payload.getOtp());
+    tokenService.consumePasswordOtp(payload.getEmail(), payload.getOtp());
 
     String newPassword = passwordEncoder.encode(payload.getPassword());
 
-    User newUser = userRepository.findByEmail(payload.getEmail())
-                    .map(user -> {
-                      user.setPassword(newPassword);
-                      return userRepository.save(user);
-                    })
+    User user = userRepository.findByEmail(payload.getEmail())
                     .orElseThrow(() -> new NotFoundException("User not found"));
 
-    emailService.sendPasswordChangedMail(newUser.getEmail(), newUser.getFirstName());
-                
-    return;
+    user.setPassword(newPassword);
+
+    publisher.publishEvent(new PasswordChangedEvent(user.getEmail(), user.getFirstName()));
   }
 
+  @Transactional
   public void changePassword(UserPrincipal user, ChangePasswordDto payload) {
 
     User currentUser = userRepository.findById(user.getId())
                         .orElseThrow(() -> new NotFoundException("User not found"));
 
     boolean isMatch = passwordEncoder.matches(payload.getCurrentPassword(), currentUser.getPassword());
-    if (!isMatch) throw new ValidationException("Incorrect password");
+    if (!isMatch) throw new UnauthorizedException("Incorrect password");
 
     String newPassword = passwordEncoder.encode(payload.getNewPassword());
+    
     currentUser.setPassword(newPassword);
 
-    userRepository.save(currentUser);
+    publisher.publishEvent(new PasswordChangedEvent(currentUser.getEmail(), currentUser.getFirstName()));
+  }
 
-    emailService.sendPasswordChangedMail(currentUser.getEmail(), currentUser.getFirstName());
+  @Transactional
+  public RefreshTokenResponse refreshToken(RefreshTokenRequest payload) {
+
+    JwtPayload jwtPayload = jwtService.validateAndExtractPayload(payload.getRefreshToken(), TokenType.REFRESH_TOKEN);
+
+    tokenService.consumeRefreshToken(jwtPayload.getSubject(), jwtPayload.getJti());
+
+    TokenPair tokens = generateAndSaveTokens(jwtPayload.getSubject());
     
-    return;
+    return RefreshTokenResponse.builder()
+            .accessToken(tokens.getAccessToken())
+            .refreshToken(tokens.getRefreshToken())
+            .build();
+  }
+
+  private TokenPair generateAndSaveTokens(String email) {
+    
+    String jti = UUID.randomUUID().toString();
+
+    String accessToken = jwtService.generateToken(email, ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN, null);
+    String refreshToken = jwtService.generateToken(email, REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN, jti);
+
+    tokenService.create(email, jti, TokenType.REFRESH_TOKEN, LocalDateTime.now().plus(Duration.ofMillis(REFRESH_TOKEN_EXPIRATION_MS)));
+
+    return new TokenPair(accessToken, refreshToken);
   }
 }

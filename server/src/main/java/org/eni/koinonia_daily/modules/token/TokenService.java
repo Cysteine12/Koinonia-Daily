@@ -1,12 +1,11 @@
 package org.eni.koinonia_daily.modules.token;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
-import org.eni.koinonia_daily.exceptions.ValidationException;
-import org.eni.koinonia_daily.modules.user.User;
-import org.eni.koinonia_daily.services.EmailService;
+import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +14,8 @@ import lombok.RequiredArgsConstructor;
 public class TokenService {
 
   private final TokenRepository tokenRepository;
-  private final EmailService emailService;
+  private final TokenUtil tokenUtil;
+  private static final int OTP_EXPIRATION_MINUTES = 15;
 
   public void create(String email, String value, TokenType type, LocalDateTime expiresAt) {
 
@@ -23,60 +23,69 @@ public class TokenService {
                     .email(email)
                     .value(value)
                     .type(type)
+                    .isUsed(false)
                     .expiresAt(expiresAt)
                     .build();
-
-    Optional<Token> savedToken = tokenRepository.findByEmailAndType(email, type);
-    if (savedToken.isPresent()) {
-      token.setId(savedToken.get().getId());
-    }
                 
     tokenRepository.save(token);
   }
   
+  @Transactional
   public String generateAndSaveOtp(String email, TokenType type) {
 
-    TokenUtil util = new TokenUtil();
-    String otp = util.generateOtp();
+    tokenRepository.markAllUsedByEmailAndType(email, type);
 
-    create(email, otp, type, LocalDateTime.now().plusMinutes(15));
+    String otp = tokenUtil.generateOtp();
+
+    create(email, otp, type, LocalDateTime.now().plusMinutes(OTP_EXPIRATION_MINUTES));
     
     return otp;
   }
 
-  public void verifyEmailOtp(User user, String otp) {
+  @Transactional
+  public void consumeEmailOtp(String email, String otp) {
 
-    Token token = tokenRepository.findByEmailAndTypeAndValue(
-                    user.getEmail(), 
-                    TokenType.VERIFY_EMAIL, 
-                    otp)
-                    .orElseThrow(() -> new ValidationException("Invalid OTP"));
+    Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.VERIFY_EMAIL, otp)
+                    .orElseThrow(() -> new UnauthorizedException("Invalid OTP"));
 
-    if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
-      String newOtp = generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
-
-      emailService.sendEmailVerificationRequestMail(user.getEmail(), user.getFirstName(), newOtp);
-
-      throw new ValidationException("OTP expired. A new one has been sent.");
+    if (token.isExpired()) {
+      throw new UnauthorizedException("Expired OTP");
     }
-    tokenRepository.deleteById(token.getId());
+    token.setUsed(true);
   }
 
-  public void verifyPasswordOtp(String email, String otp) {
+  @Transactional
+  public void consumePasswordOtp(String email, String otp) {
 
-    Token token = tokenRepository.findByEmailAndTypeAndValue(
-                    email, 
-                    TokenType.CHANGE_PASSWORD, 
-                    otp)
-                    .orElseThrow(() -> new ValidationException("Invalid OTP"));
+    Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.CHANGE_PASSWORD, otp)
+                    .orElseThrow(() -> new UnauthorizedException("Invalid OTP"));
 
-    if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
-      String newOtp = generateAndSaveOtp(email, TokenType.CHANGE_PASSWORD);
-
-      emailService.sendForgotPasswordMail(email, newOtp);
-
-      throw new ValidationException("OTP expired. A new one has been sent.");
+    if (token.isExpired()) {
+      throw new UnauthorizedException("Expired OTP");
     }
-    tokenRepository.deleteById(token.getId());
+    token.setUsed(true);
+  }
+
+  @Transactional
+  public void consumeRefreshToken(String email, String refreshToken) {
+    
+    Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.REFRESH_TOKEN, refreshToken)
+                    .orElseThrow(() -> new UnauthorizedException("Invalid token"));
+
+    if (token.isUsed()) {
+      revokeAllTokens(email, TokenType.REFRESH_TOKEN);
+      
+      throw new UnauthorizedException("Revoked token");
+    }
+
+    if (token.isExpired()) {
+      throw new UnauthorizedException("Expired token");
+    }
+    token.setUsed(true);
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  private void revokeAllTokens(String email, TokenType type) {
+    tokenRepository.markAllUsedByEmailAndType(email, type);
   }
 }

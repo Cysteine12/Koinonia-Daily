@@ -1,8 +1,12 @@
 package org.eni.koinonia_daily.modules.token;
 
 import java.util.Random;
+
+import org.springframework.stereotype.Component;
+
 import java.lang.StringBuilder;
 
+@Component
 public class TokenUtil {
 
   public String generateOtp() {
