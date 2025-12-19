@@ -13,20 +13,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(
-  name = "tokens",
-  uniqueConstraints = @UniqueConstraint(
-    name = "email_type",
-    columnNames = {"email", "type"}
-  )
-)
+@Table(name = "tokens")
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class Token {
   
@@ -43,6 +37,10 @@ public class Token {
   @Column(name = "'type'", nullable = false, length = 20)
   @Enumerated(EnumType.STRING)
   private TokenType type;
+  
+  @Builder.Default
+  @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+  private boolean isUsed = false;
 
   @Column(nullable = false)
   private LocalDateTime expiresAt;
@@ -53,4 +51,11 @@ public class Token {
 
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+
+  @Version
+  private Long version;
+
+  public boolean isExpired() {
+    return LocalDateTime.now().isAfter(expiresAt);
+  }
 }

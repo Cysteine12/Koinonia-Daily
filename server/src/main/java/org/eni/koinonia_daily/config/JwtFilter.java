@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.eni.koinonia_daily.modules.auth.JwtService;
+import org.eni.koinonia_daily.modules.auth.dto.JwtPayload;
 import org.eni.koinonia_daily.modules.token.TokenType;
 import org.eni.koinonia_daily.utils.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -48,9 +49,9 @@ public class JwtFilter extends OncePerRequestFilter {
     String token = header.substring(7);
     
     try {
-      String subject = jwtService.validateAndExtractSubject(token, TokenType.ACCESS_TOKEN);
+      JwtPayload jwtPayload = jwtService.validateAndExtractPayload(token, TokenType.ACCESS_TOKEN);
 
-      UserDetails userDetails = userDetailsService.loadUserByUsername(subject);
+      UserDetails userDetails = userDetailsService.loadUserByUsername(jwtPayload.getSubject());
 
       UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
