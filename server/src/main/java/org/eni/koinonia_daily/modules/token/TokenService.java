@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.eni.koinonia_daily.exceptions.UnauthorizedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +38,7 @@ public class TokenService {
     return otp;
   }
 
+  @Transactional
   public void consumeEmailOtp(String email, String otp) {
 
     Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.VERIFY_EMAIL, otp)
@@ -47,24 +50,26 @@ public class TokenService {
     token.setUsed(true);
   }
 
+  @Transactional
   public void consumePasswordOtp(String email, String otp) {
 
     Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.CHANGE_PASSWORD, otp)
                     .orElseThrow(() -> new UnauthorizedException("Invalid OTP"));
 
     if (token.isExpired()) {
-      throw new UnauthorizedException("OTP expired. A new one has been sent.");
+      throw new UnauthorizedException("Expired OTP");
     }
     token.setUsed(true);
   }
 
+  @Transactional
   public void consumeRefreshToken(String email, String refreshToken) {
     
     Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.REFRESH_TOKEN, refreshToken)
                     .orElseThrow(() -> new UnauthorizedException("Invalid token"));
 
     if (token.isUsed()) {
-      tokenRepository.markAllUsedByEmailAndType(email, TokenType.REFRESH_TOKEN);
+      revokeAllTokens(email, TokenType.REFRESH_TOKEN);
       
       throw new UnauthorizedException("Revoked token");
     }
@@ -73,5 +78,10 @@ public class TokenService {
       throw new UnauthorizedException("Expired token");
     }
     token.setUsed(true);
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  private void revokeAllTokens(String email, TokenType type) {
+    tokenRepository.markAllUsedByEmailAndType(email, type);
   }
 }

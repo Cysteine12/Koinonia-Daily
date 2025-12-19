@@ -20,16 +20,21 @@ import org.eni.koinonia_daily.modules.auth.dto.ResetPasswordDto;
 import org.eni.koinonia_daily.modules.auth.dto.TokenPair;
 import org.eni.koinonia_daily.modules.auth.dto.UserProfileDto;
 import org.eni.koinonia_daily.modules.auth.dto.VerifyEmailDto;
+import org.eni.koinonia_daily.modules.auth.events.EmailVerificationRequestedEvent;
+import org.eni.koinonia_daily.modules.auth.events.PasswordChangedEvent;
+import org.eni.koinonia_daily.modules.auth.events.PasswordResetOtpGeneratedEvent;
+import org.eni.koinonia_daily.modules.auth.events.UserRegisteredEvent;
 import org.eni.koinonia_daily.modules.token.TokenService;
 import org.eni.koinonia_daily.modules.token.TokenType;
-import org.eni.koinonia_daily.services.EmailService;
 import org.eni.koinonia_daily.modules.user.User;
 import org.eni.koinonia_daily.modules.user.UserRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,10 +47,11 @@ public class AuthService {
   private final TokenService tokenService;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
-  private final EmailService emailService;
+  private final ApplicationEventPublisher publisher;
   private static final long ACCESS_TOKEN_EXPIRATION_MS = Duration.ofDays(7).toMillis();
   private static final long REFRESH_TOKEN_EXPIRATION_MS = Duration.ofDays(31).toMillis();
 
+  @Transactional
   public void register(RegisterRequest payload) {
 
     if (userRepository.existsByEmail(payload.getEmail()))  {
@@ -63,11 +69,10 @@ public class AuthService {
 
     String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
 
-    emailService.sendEmailVerificationRequestMail(user.getEmail(), user.getFirstName(), otp);
-
-    return;
+    publisher.publishEvent(new EmailVerificationRequestedEvent(user.getEmail(), user.getFirstName(), otp));
   }
   
+  @Transactional
   public LoginResponse login(LoginRequest payload) {
 
     Authentication auth = authenticationManager
@@ -97,6 +102,7 @@ public class AuthService {
             .build();
   }
 
+  @Transactional
 	public void verifyEmail(VerifyEmailDto payload) {
 
 		User user = userRepository.findByEmail(payload.getEmail())
@@ -110,11 +116,10 @@ public class AuthService {
 
     user.setVerified(true);
 
-    emailService.sendWelcomeEmail(user.getEmail(), user.getFirstName());
-
-    return;
+    publisher.publishEvent(new UserRegisteredEvent(user.getEmail(), user.getFirstName()));
 	}
 
+  @Transactional
 	public void requestOtp(RequestOtpDto payload) {
     
 		User user = userRepository.findByEmail(payload.getEmail())
@@ -126,11 +131,10 @@ public class AuthService {
 
     String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
 
-    emailService.sendEmailVerificationRequestMail(user.getEmail(), user.getFirstName(), otp);
-
-    return;
+    publisher.publishEvent(new EmailVerificationRequestedEvent(user.getEmail(), user.getFirstName(), otp));
 	}
 
+  @Transactional
   public void forgotPassword(ForgotPasswordDto payload) {
     
     User user = userRepository.findByEmail(payload.getEmail())
@@ -138,29 +142,25 @@ public class AuthService {
 
     String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.CHANGE_PASSWORD);
 
-    emailService.sendForgotPasswordMail(user.getEmail(), otp);
-
-    return;
+    publisher.publishEvent(new PasswordResetOtpGeneratedEvent(user.getEmail(), otp));
   }
 
+  @Transactional
   public void resetPassword(ResetPasswordDto payload) {
     
     tokenService.consumePasswordOtp(payload.getEmail(), payload.getOtp());
 
     String newPassword = passwordEncoder.encode(payload.getPassword());
 
-    User newUser = userRepository.findByEmail(payload.getEmail())
-                    .map(user -> {
-                      user.setPassword(newPassword);
-                      return userRepository.save(user);
-                    })
+    User user = userRepository.findByEmail(payload.getEmail())
                     .orElseThrow(() -> new NotFoundException("User not found"));
 
-    emailService.sendPasswordChangedMail(newUser.getEmail(), newUser.getFirstName());
-                
-    return;
+    user.setPassword(newPassword);
+
+    publisher.publishEvent(new PasswordChangedEvent(user.getEmail(), user.getFirstName()));
   }
 
+  @Transactional
   public void changePassword(UserPrincipal user, ChangePasswordDto payload) {
 
     User currentUser = userRepository.findById(user.getId())
@@ -173,11 +173,10 @@ public class AuthService {
     
     currentUser.setPassword(newPassword);
 
-    emailService.sendPasswordChangedMail(currentUser.getEmail(), currentUser.getFirstName());
-    
-    return;
+    publisher.publishEvent(new PasswordChangedEvent(currentUser.getEmail(), currentUser.getFirstName()));
   }
 
+  @Transactional
   public RefreshTokenResponse refreshToken(RefreshTokenRequest payload) {
 
     JwtPayload jwtPayload = jwtService.validateAndExtractPayload(payload.getRefreshToken(), TokenType.REFRESH_TOKEN);
