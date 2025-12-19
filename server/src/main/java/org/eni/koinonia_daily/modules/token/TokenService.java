@@ -29,7 +29,10 @@ public class TokenService {
     tokenRepository.save(token);
   }
   
+  @Transactional
   public String generateAndSaveOtp(String email, TokenType type) {
+
+    tokenRepository.markAllUsedByEmailAndType(email, type);
 
     String otp = tokenUtil.generateOtp();
 
