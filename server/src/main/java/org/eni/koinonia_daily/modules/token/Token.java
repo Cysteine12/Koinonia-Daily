@@ -36,6 +36,10 @@ public class Token {
   @Column(name = "'type'", nullable = false, length = 20)
   @Enumerated(EnumType.STRING)
   private TokenType type;
+  
+  @Builder.Default
+  @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+  private boolean isUsed = false;
 
   @Column(nullable = false)
   private LocalDateTime expiresAt;
@@ -46,4 +50,8 @@ public class Token {
 
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+
+  public boolean isExpired() {
+    return LocalDateTime.now().isAfter(expiresAt);
+  }
 }

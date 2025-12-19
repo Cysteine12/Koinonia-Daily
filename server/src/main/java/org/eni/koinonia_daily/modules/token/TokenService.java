@@ -3,8 +3,6 @@ package org.eni.koinonia_daily.modules.token;
 import java.time.LocalDateTime;
 
 import org.eni.koinonia_daily.exceptions.UnauthorizedException;
-import org.eni.koinonia_daily.modules.user.User;
-import org.eni.koinonia_daily.services.EmailService;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class TokenService {
 
   private final TokenRepository tokenRepository;
-  private final EmailService emailService;
+  private final TokenUtil tokenUtil;
 
   public void create(String email, String value, TokenType type, LocalDateTime expiresAt) {
 
@@ -22,6 +20,7 @@ public class TokenService {
                     .email(email)
                     .value(value)
                     .type(type)
+                    .isUsed(false)
                     .expiresAt(expiresAt)
                     .build();
                 
@@ -30,66 +29,49 @@ public class TokenService {
   
   public String generateAndSaveOtp(String email, TokenType type) {
 
-    TokenUtil util = new TokenUtil();
-    String otp = util.generateOtp();
+    String otp = tokenUtil.generateOtp();
 
     create(email, otp, type, LocalDateTime.now().plusMinutes(15));
     
     return otp;
   }
 
-  public void consumeEmailOtp(User user, String otp) {
+  public void consumeEmailOtp(String email, String otp) {
 
-    Token token = tokenRepository.findByEmailAndTypeAndValue(
-                    user.getEmail(), 
-                    TokenType.VERIFY_EMAIL, 
-                    otp)
+    Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.VERIFY_EMAIL, otp)
                     .orElseThrow(() -> new UnauthorizedException("Invalid OTP"));
-    
-    tokenRepository.deleteById(token.getId());
 
-    if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
-      String newOtp = generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
-
-      emailService.sendEmailVerificationRequestMail(user.getEmail(), user.getFirstName(), newOtp);
-
-      throw new UnauthorizedException("OTP expired. A new one has been sent.");
+    if (token.isExpired()) {
+      throw new UnauthorizedException("Expired OTP");
     }
+    token.setUsed(true);
   }
 
   public void consumePasswordOtp(String email, String otp) {
 
-    Token token = tokenRepository.findByEmailAndTypeAndValue(
-                    email, 
-                    TokenType.CHANGE_PASSWORD, 
-                    otp)
+    Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.CHANGE_PASSWORD, otp)
                     .orElseThrow(() -> new UnauthorizedException("Invalid OTP"));
 
-    tokenRepository.deleteById(token.getId());
-
-    if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
-      String newOtp = generateAndSaveOtp(email, TokenType.CHANGE_PASSWORD);
-
-      emailService.sendForgotPasswordMail(email, newOtp);
-
+    if (token.isExpired()) {
       throw new UnauthorizedException("OTP expired. A new one has been sent.");
     }
+    token.setUsed(true);
   }
 
   public void consumeRefreshToken(String email, String refreshToken) {
     
     Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.REFRESH_TOKEN, refreshToken)
-                    .orElseThrow(() -> {
-                      tokenRepository.deleteAllByEmail(email);
+                    .orElseThrow(() -> new UnauthorizedException("Invalid token"));
 
-                      return new UnauthorizedException("Revoked token");
-                    });
-        
-    tokenRepository.deleteById(token.getId());
-
-    if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
+    if (token.isUsed()) {
+      tokenRepository.markAllUsedByEmailAndType(email, TokenType.REFRESH_TOKEN);
       
+      throw new UnauthorizedException("Revoked token");
+    }
+
+    if (token.isExpired()) {
       throw new UnauthorizedException("Expired token");
     }
+    token.setUsed(true);
   }
 }

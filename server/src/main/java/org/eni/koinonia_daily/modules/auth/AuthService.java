@@ -106,10 +106,9 @@ public class AuthService {
       throw new ValidationException("User is already verified");
     }
     
-    tokenService.consumeEmailOtp(user, payload.getOtp());
+    tokenService.consumeEmailOtp(user.getEmail(), payload.getOtp());
 
     user.setVerified(true);
-    userRepository.save(user);
 
     emailService.sendWelcomeEmail(user.getEmail(), user.getFirstName());
 
@@ -171,9 +170,8 @@ public class AuthService {
     if (!isMatch) throw new UnauthorizedException("Incorrect password");
 
     String newPassword = passwordEncoder.encode(payload.getNewPassword());
+    
     currentUser.setPassword(newPassword);
-
-    userRepository.save(currentUser);
 
     emailService.sendPasswordChangedMail(currentUser.getEmail(), currentUser.getFirstName());
     
