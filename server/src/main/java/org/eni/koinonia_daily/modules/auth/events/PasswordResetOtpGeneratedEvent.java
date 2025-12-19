@@ -1,13 +1,6 @@
 package org.eni.koinonia_daily.modules.auth.events;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public class PasswordResetOtpGeneratedEvent {
-  
-  private final String email;
-
-  private final String otp;
-}
+public record PasswordResetOtpGeneratedEvent (
+  String email,
+  String otp
+) {}

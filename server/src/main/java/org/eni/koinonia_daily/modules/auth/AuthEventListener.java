@@ -19,21 +19,21 @@ public class AuthEventListener {
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void onEmailVerificationRequested(EmailVerificationRequestedEvent event) {
-    emailService.sendEmailVerificationRequestMail(event.getEmail(), event.getFirstName(), event.getOtp());
+    emailService.sendEmailVerificationRequestMail(event.email(), event.firstName(), event.otp());
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void onUserRegistered(UserRegisteredEvent event) {
-    emailService.sendWelcomeEmail(event.getEmail(), event.getFirstName());
+    emailService.sendWelcomeEmail(event.email(), event.firstName());
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void onPasswordResetOtpGenerated(PasswordResetOtpGeneratedEvent event) {
-    emailService.sendForgotPasswordMail(event.getEmail(), event.getOtp());
+    emailService.sendForgotPasswordMail(event.email(), event.otp());
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void onPasswordChanged(PasswordChangedEvent event) {
-    emailService.sendForgotPasswordMail(event.getEmail(), event.getFirstName());
+    emailService.sendForgotPasswordMail(event.email(), event.firstName());
   }
 }
