@@ -34,6 +34,6 @@ public class AuthEventListener {
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void onPasswordChanged(PasswordChangedEvent event) {
-    emailService.sendForgotPasswordMail(event.email(), event.firstName());
+    emailService.sendPasswordChangedMail(event.email(), event.firstName());
   }
 }

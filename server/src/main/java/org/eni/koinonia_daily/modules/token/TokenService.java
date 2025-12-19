@@ -15,6 +15,7 @@ public class TokenService {
 
   private final TokenRepository tokenRepository;
   private final TokenUtil tokenUtil;
+  private static final int OTP_EXPIRATION_MINUTES = 15;
 
   public void create(String email, String value, TokenType type, LocalDateTime expiresAt) {
 
@@ -36,7 +37,7 @@ public class TokenService {
 
     String otp = tokenUtil.generateOtp();
 
-    create(email, otp, type, LocalDateTime.now().plusMinutes(15));
+    create(email, otp, type, LocalDateTime.now().plusMinutes(OTP_EXPIRATION_MINUTES));
     
     return otp;
   }
