@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(OptimisticLockException.class)
     public ResponseEntity<ErrorResponse> handleOptimisticLockException(OptimisticLockException ex, WebRequest request) {
 
-        UnauthorizedException exception = new UnauthorizedException("Race condition locked");
+        UnauthorizedException exception = new UnauthorizedException("Unable to process request due to a conflict. Please try again.");
         return handleUnauthorizedException(exception, request);
     }
 
