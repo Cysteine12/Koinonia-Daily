@@ -26,6 +26,8 @@ jobs:
           POSTGRES_DB: koinonia_test
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
+        ports:
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -46,13 +48,6 @@ jobs:
     - name: Build with Maven
       run: mvn clean install -DskipTests
 
-    - name: Wait for Postgres
-      run: |
-        until pg_isready -h postgres -p 5432; do
-          echo "Waiting for Postgres"
-          sleep 2
-        done
-
     - name: Run tests
       run: mvn test
       env:
@@ -63,7 +58,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: junit-test-results
-        path: target/surefire-reports/
+        path: server/target/surefire-reports/
     
     - name: Generate JaCoCo coverage report
       run: mvn jacoco:report
@@ -73,4 +68,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: jacoco-report
-        path: target/site/jacoco/
+        path: server/target/site/jacoco/
