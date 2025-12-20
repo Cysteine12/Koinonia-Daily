@@ -49,9 +49,7 @@ jobs:
     - name: Run tests
       run: mvn test
       env:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/koinonia_test
-        SPRING_DATASOURCE_USERNAME: test
-        SPRING_DATASOURCE_PASSWORD: test
+        SPRING_PROFILES_ACTIVE: test
 
     - name: Upload test results
       if: always()
