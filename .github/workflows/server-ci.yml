@@ -61,8 +61,8 @@ jobs:
         name: junit-test-results
         path: server/target/surefire-reports/
     
-    - name: Generate JaCoCo coverage report
-      run: mvn jacoco:report
+    - name: Check coverage report
+      run: mvn jacoco:check
     
     - name: Upload coverage report
       if: always()
