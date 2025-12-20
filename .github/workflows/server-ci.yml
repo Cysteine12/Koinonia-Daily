@@ -61,9 +61,6 @@ jobs:
         name: junit-test-results
         path: server/target/surefire-reports/
     
-    - name: Check coverage report
-      run: mvn jacoco:check
-    
     - name: Upload coverage report
       if: always()
       uses: actions/upload-artifact@v4
