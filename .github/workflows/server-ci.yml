@@ -46,6 +46,13 @@ jobs:
     - name: Build with Maven
       run: mvn clean install -DskipTests
 
+    - name: Wait for Postgres
+      run: |
+        until pg_isready -h postgres -p 5432; do
+          echo "Waiting for Postgres"
+          sleep 2
+        done
+
     - name: Run tests
       run: mvn test
       env:
