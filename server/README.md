@@ -59,7 +59,7 @@ server/
 
 Prerequisites
 
-Java 17 or newer
+Java 25
 
 Maven 3.9+
 
