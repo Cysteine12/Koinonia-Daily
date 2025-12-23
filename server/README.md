@@ -17,6 +17,8 @@ Spring Data JPA / Hibernate
 
 Spring Security (JWT-based authentication)
 
+AWS S3 & SES
+
 PostgreSQL (production & local dev)
 
 H2 (optional, for tests)
