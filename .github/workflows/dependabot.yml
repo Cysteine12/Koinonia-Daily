@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/server"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+
+    open-pull-requests-limit: 5
+
+    rebase-strategy: "auto"
+    labels:
+      - "dependencies"
+      - "java"
+      - "security"
+      
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    
+    groups:
+      spring-boot:
+        patterns:
+          - "org.springframework.boot:.*"
+        update-types:
+          - "minor"
+          - "patch"
+      aws-sdk:
+        patterns:
+          - "software.amazon.awssdk:.*"
+        update-types:
+          - "minor"
+          - "patch"
+
+      security:
+        patterns:
+          - "io.jsonwebtoken:.*" 
+          - "org.springframework.security:.*"
+        update-types:
+          - "patch"
