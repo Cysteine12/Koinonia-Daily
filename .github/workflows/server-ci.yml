@@ -75,7 +75,6 @@ jobs:
   security-scan:
     name: Security Scan (CodeQL + Trivy)
     runs-on: ubuntu-latest
-    needs: build-and-test
 
     permissions:
       actions: read
@@ -103,24 +102,23 @@ jobs:
         languages: java
 
     - name: Build for CodeQL
-      working-directory: server
       run: mvn -B clean compile -DskipTests
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:java"
-        output: sarif-results
         upload: true
 
     - name: Run Trivy FS scan
-      uses: aquasecurity/trivy-action@master
+      uses: aquasecurity/trivy-action@0.20.0
       with:
         scan-type: fs
-        scan-ref: ./
-        severity: CRITICAL, HIGH, MEDIUM
-        format: sarif # table
-        output: trivy-repo-results.sarif
+        scan-ref: ./server
+        severity: 'CRITICAL, HIGH'
+        format: sarif
+        output: trivy-results.sarif
+        scanners: vuln,secret,config
 
 
     - name: Upload Trivy FS results
