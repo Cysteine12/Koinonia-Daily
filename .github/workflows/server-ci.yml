@@ -106,10 +106,7 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
-      with:
-        category: "/language:java"
-        upload: true
-
+      
     - name: Run Trivy FS scan
       uses: aquasecurity/trivy-action@0.20.0
       with:
@@ -125,5 +122,5 @@ jobs:
       uses: github/codeql-action/upload-sarif@v3
       if: always()
       with:
-        sarif-file: trivy-results.sarif
+        sarif_file: trivy-results.sarif
         category: "Trivy FS Scan"
