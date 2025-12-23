@@ -7,7 +7,7 @@ This folder contains the Spring Boot backend for the Koinonia Daily application.
 
 🧱 Tech Stack
 
-Java 17+
+Java 25
 
 Spring Boot
 
@@ -44,7 +44,7 @@ server/
 │   │   │   ├── exception/     # Global exception handling
 │   │   │   └── KoinoniaDailyApplication.java
 │   │   └── resources/
-│   │       ├── application.yml
+│   │       ├── application.properties
 │   │       └── db/migration/  # Flyway migrations (if enabled)
 │   └── test/                  # Unit & integration tests
 ├── pom.xml
@@ -73,16 +73,16 @@ Create a application-local.yml (or use environment variables):
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/koinonia_daily
-    username: postgres
-    password: postgres
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/koinonia_daily}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: false
 
 jwt:
-  secret: your-secret-key
+  secret: ${JWT_SECRET:your-secret-key}
   expiration: 86400000
 
 > ⚠️ Never commit secrets. Use environment variables in production.
