@@ -65,8 +65,64 @@ jobs:
         name: jacoco-report
         path: server/target/site/jacoco/
     
-    - name: Upload built JAR as artifact
+    - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
       with:
         name: app-jar
-        path: target/*.jar
+        path: server/target/*.jar
+        retention-days: 1
+
+  security-scan:
+    name: Security Scan (CodeQL + Trivy)
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 25
+      uses: actions/setup-java@v4
+      with:
+        java-version: '25'
+        distribution: 'temurin'
+        cache: maven
+      
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: java
+
+    - name: Build for CodeQL
+      run: mvn -B clean compile -DskipTests
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:java"
+        upload: true
+
+    - name: Run Trivy FS scan
+      uses: aquasecurity/trivy-action@0.20.0
+      with:
+        scan-type: fs
+        scan-ref: ./server
+        severity: 'CRITICAL, HIGH'
+        format: sarif
+        output: trivy-results.sarif
+        scanners: vuln,secret,config
+
+
+    - name: Upload Trivy FS results
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif-file: trivy-results.sarif
