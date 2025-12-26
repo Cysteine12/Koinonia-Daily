@@ -148,7 +148,7 @@ jobs:
       run: mvn checkstyle:check
 
     - name: Run SpotBugs
-      run: mvn verify
+      run: mvn verify -DskipTests
 
     - name: Upload Checkstyle report
       if: always()
