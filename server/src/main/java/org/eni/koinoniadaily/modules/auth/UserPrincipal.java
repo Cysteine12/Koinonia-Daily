@@ -25,10 +25,10 @@ public class UserPrincipal implements UserDetails {
   private final LocalDateTime createdAt;
   private final LocalDateTime updatedAt;
 
-  private final User user;
+  private final String password;
+  private final String username;
 
   public UserPrincipal(User user) {
-    this.user = user;
     this.id = user.getId();
     this.firstName = user.getFirstName();
     this.lastName = user.getLastName();
@@ -37,16 +37,18 @@ public class UserPrincipal implements UserDetails {
     this.isVerified = user.isVerified();
     this.createdAt = user.getCreatedAt();
     this.updatedAt = user.getUpdatedAt();
+    this.password = user.getPassword();
+    this.username = user.getEmail();
   }
 
   @Override
   public String getUsername() {
-    return user.getEmail();
+    return this.username;
   }
 
   @Override
   public String getPassword() {
-    return user.getPassword();
+    return this.password;
   }
 
   @Override
