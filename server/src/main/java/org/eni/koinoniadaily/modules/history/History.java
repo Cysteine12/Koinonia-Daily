@@ -58,9 +58,7 @@ public class History {
   private LocalDateTime updatedAt;
 
   @PrePersist
-  private void prePersist() {
-    if (this.isMarkedRead) {
-      this.isMarkedRead = false;
-    }
+  void prePersist() {
+    this.isMarkedRead = true;
   }
 }
