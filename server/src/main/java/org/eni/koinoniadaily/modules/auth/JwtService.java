@@ -19,7 +19,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 @Service
-public class JwtService {
+public final class JwtService {
 
   private final Key key;
   private static final String TOKEN_TYPE_KEY = "token_type";
