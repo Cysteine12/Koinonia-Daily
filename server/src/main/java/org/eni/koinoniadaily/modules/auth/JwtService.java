@@ -1,5 +1,6 @@
 package org.eni.koinoniadaily.modules.auth;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +25,17 @@ public class JwtService {
   private static final String TOKEN_TYPE_KEY = "token_type";
 
   public JwtService(@Value("${jwt.secret}") String secret) {
-    this.key = Keys.hmacShaKeyFor(secret.getBytes());
+
+    if (secret == null || secret.trim().isEmpty()) {
+      throw new IllegalArgumentException("JWT secret cannot be null or empty");
+    }
+    
+    try {
+      this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    } catch (Exception e) {
+      
+      throw new IllegalStateException("Failed to initialize JWT key", e);
+    }
   }
 
   public String generateToken(String subject, long expiryInMs, TokenType type, String jti) {
