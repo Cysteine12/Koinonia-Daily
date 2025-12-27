@@ -57,7 +57,7 @@ public class Bookmark {
   private LocalDateTime updatedAt;
 
   @PrePersist
-  private void prePersist() {
+  void prePersist() {
     if (this.category == null) { 
       this.category = "general"; 
     }
