@@ -170,8 +170,8 @@
 					<consoleOutput>true</consoleOutput>
 					<failsOnError>true</failsOnError>
 					<violationSeverity>error</violationSeverity>
-         <outputFile>${project.build.directory}/checkstyle-results.xml</outputFile>
-       </configuration>
+                                        <outputFile>${project.build.directory}/checkstyle-results.xml</outputFile>
+                                </configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
