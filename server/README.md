@@ -75,7 +75,7 @@ Create a application-local.yml (or use environment variables):
 
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/koinonia_daily}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/koinoniadaily}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
   jpa:
