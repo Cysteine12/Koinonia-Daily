@@ -16,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
+
+  private static final long serialVersionUID = 1L;
+  
   private final Long id;
   private final String firstName;
   private final String lastName;
