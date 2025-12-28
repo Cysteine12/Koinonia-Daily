@@ -1,5 +1,5 @@
 # Build stage
-FROM eclipse-temurin:25-jdk AS dev
+FROM eclipse-temurin:25-jdk AS build
 
 WORKDIR /app
 
@@ -27,7 +27,11 @@ FROM eclipse-temurin:25-jre AS runtime
 
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
+
+COPY --from=build --chown=appuser:appgroup /app/target/*.jar app.jar
+
+USER appuser
 
 EXPOSE 8080
 

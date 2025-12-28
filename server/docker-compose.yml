@@ -14,8 +14,8 @@ services:
     env_file:
       - .env
     depends_on:
-      - postgres
-    command: mvn spring-boot:run
+      postgres:
+        condition: service_healthy
 
   postgres:
     image: postgres:17
