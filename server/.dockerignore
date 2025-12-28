@@ -1,0 +1,16 @@
+# dockerignore for spring boot application
+target/
+*.iml
+*.log
+*.jar
+*.war
+*.class
+*.db
+*.sqlite
+*.env
+.DS_Store
+.vscode/
+.idea/
+node_modules/
+coverage/
+logs/
