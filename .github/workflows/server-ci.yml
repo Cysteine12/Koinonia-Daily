@@ -195,7 +195,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: ./server
-        file: Dockerfile
+        file: ./server/Dockerfile
         push: true
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:latest
