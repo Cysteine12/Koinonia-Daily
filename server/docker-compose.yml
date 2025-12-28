@@ -10,7 +10,7 @@ services:
       - "8080:8080"
     volumes:
       - .:/app
-      - ~/.m2:/root/.m2
+      - m2_cache:/root/.m2
     env_file:
       - .env
     depends_on:
@@ -34,3 +34,4 @@ services:
 
 volumes:
   postgres_data:
+  m2_cache:
