@@ -1,6 +1,0 @@
-package org.eni.koinonia_daily.modules.auth.events;
-
-public record PasswordResetOtpGeneratedEvent (
-  String email,
-  String otp
-) {}
