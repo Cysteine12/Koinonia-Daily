@@ -25,12 +25,14 @@ public class TeachingService {
   }
 
   public Teaching getTeachingById(Long id) {
+
     return teachingRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Teaching not found"));
   }
 
   @Transactional
   public Teaching createTeaching(TeachingDto dto) {
+
     Teaching teaching = teachingMapper.toEntity(dto);
                           
     return teachingRepository.save(teaching);
@@ -38,6 +40,7 @@ public class TeachingService {
 
   @Transactional
   public Teaching updateTeaching(Long id, TeachingDto dto) {
+
     return teachingRepository.findById(id)
             .map(teaching -> {
               teaching = teachingMapper.updateToEntity(teaching, dto);
@@ -49,6 +52,7 @@ public class TeachingService {
 
   @Transactional
   public void deleteTeachingById(Long id) {
+    
     if (!teachingRepository.existsById(id)) {
       throw new NotFoundException("Teaching not found");
     }

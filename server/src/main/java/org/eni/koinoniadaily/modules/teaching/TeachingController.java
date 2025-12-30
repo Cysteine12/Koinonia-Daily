@@ -26,7 +26,10 @@ public class TeachingController {
   private final TeachingService teachingService;
 
   @GetMapping
-  public ResponseEntity<SuccessResponse<Page<Teaching>>> getTeachings(@RequestParam int page, @RequestParam int size) {
+  public ResponseEntity<SuccessResponse<Page<Teaching>>> getTeachings(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "100") int size
+  ) {
 
     Page<Teaching> teachings = teachingService.getTeachings(page, size);
 
@@ -43,14 +46,16 @@ public class TeachingController {
 
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<Teaching> createTeaching(@Valid @RequestBody TeachingDto dto) {
+  public ResponseEntity<SuccessResponse<Teaching>> createTeaching(@Valid @RequestBody TeachingDto dto) {
+
     Teaching createdTeaching = teachingService.createTeaching(dto);
-    return ResponseEntity.status(HttpStatus.CREATED).body(createdTeaching);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.data(createdTeaching));
   }
 
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<SuccessResponse<Teaching>> updateTeaching(@Valid @PathVariable Long id, @RequestBody TeachingDto dto) {
+  public ResponseEntity<SuccessResponse<Teaching>> updateTeaching(@PathVariable Long id, @Valid @RequestBody TeachingDto dto) {
 
     Teaching updatedTeaching = teachingService.updateTeaching(id, dto);
 
@@ -60,7 +65,7 @@ public class TeachingController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> deleteTeaching(@PathVariable Long id) {
-
+    
     teachingService.deleteTeachingById(id);
 
     return ResponseEntity.ok(SuccessResponse.message("Teaching deleted successfully"));
