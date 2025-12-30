@@ -1,9 +1,5 @@
 package org.eni.koinoniadaily.modules.auth;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import org.eni.koinoniadaily.exceptions.NotFoundException;
 import org.eni.koinoniadaily.exceptions.UnauthorizedException;
 import org.eni.koinoniadaily.exceptions.ValidationException;
@@ -48,8 +44,6 @@ public class AuthService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final ApplicationEventPublisher publisher;
-  private static final long ACCESS_TOKEN_EXPIRATION_MS = Duration.ofDays(7).toMillis();
-  private static final long REFRESH_TOKEN_EXPIRATION_MS = Duration.ofDays(31).toMillis();
 
   @Transactional
   public void register(RegisterRequest payload) {
@@ -83,7 +77,7 @@ public class AuthService {
       throw new UnauthorizedException("Email verification required");
     }
 
-    TokenPair tokens = generateAndSaveTokens(auth.getName());
+    TokenPair tokens = tokenService.generateAndSaveTokens(auth.getName());
     
     return LoginResponse.builder()
             .accessToken(tokens.getAccessToken())
@@ -187,23 +181,11 @@ public class AuthService {
 
     tokenService.consumeRefreshToken(jwtPayload.getSubject(), jwtPayload.getJti());
 
-    TokenPair tokens = generateAndSaveTokens(jwtPayload.getSubject());
+    TokenPair tokens = tokenService.generateAndSaveTokens(jwtPayload.getSubject());
     
     return RefreshTokenResponse.builder()
             .accessToken(tokens.getAccessToken())
             .refreshToken(tokens.getRefreshToken())
             .build();
-  }
-
-  private TokenPair generateAndSaveTokens(String email) {
-    
-    String jti = UUID.randomUUID().toString();
-
-    String accessToken = jwtService.generateToken(email, ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN, null);
-    String refreshToken = jwtService.generateToken(email, REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN, jti);
-
-    tokenService.create(email, jti, TokenType.REFRESH_TOKEN, LocalDateTime.now().plus(Duration.ofMillis(REFRESH_TOKEN_EXPIRATION_MS)));
-
-    return new TokenPair(accessToken, refreshToken);
   }
 }
