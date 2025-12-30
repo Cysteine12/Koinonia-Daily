@@ -20,16 +20,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "teachings")
+@Data
 @Builder 
-@Getter 
-@Setter 
 @NoArgsConstructor 
 @AllArgsConstructor
 public class Teaching {
