@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {
 
-  Optional<Token> findByEmailAndType(String email, TokenType type);
-
   Optional<Token> findByEmailAndTypeAndValue(String email, TokenType type, String value);
 
   @Modifying(clearAutomatically = true)

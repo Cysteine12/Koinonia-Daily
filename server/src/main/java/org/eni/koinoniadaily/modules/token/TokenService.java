@@ -1,7 +1,11 @@
 package org.eni.koinoniadaily.modules.token;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+import org.eni.koinoniadaily.modules.auth.JwtService;
+import org.eni.koinoniadaily.modules.auth.dto.TokenPair;
 import org.eni.koinoniadaily.exceptions.UnauthorizedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,9 +19,12 @@ public class TokenService {
 
   private final TokenRepository tokenRepository;
   private final TokenUtil tokenUtil;
+  private final JwtService jwtService;
   private static final int OTP_EXPIRATION_MINUTES = 15;
+  private static final long ACCESS_TOKEN_EXPIRATION_MS = Duration.ofDays(7).toMillis();
+  private static final long REFRESH_TOKEN_EXPIRATION_MS = Duration.ofDays(31).toMillis();
 
-  public void create(String email, String value, TokenType type, LocalDateTime expiresAt) {
+  private void create(String email, String value, TokenType type, LocalDateTime expiresAt) {
 
     Token token = Token.builder()
                     .email(email)
@@ -33,8 +40,6 @@ public class TokenService {
   @Transactional
   public String generateAndSaveOtp(String email, TokenType type) {
 
-    tokenRepository.markAllUsedByEmailAndType(email, type);
-
     String otp = tokenUtil.generateOtp();
 
     create(email, otp, type, LocalDateTime.now().plusMinutes(OTP_EXPIRATION_MINUTES));
@@ -48,6 +53,12 @@ public class TokenService {
     Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.VERIFY_EMAIL, otp)
                     .orElseThrow(() -> new UnauthorizedException("Invalid OTP"));
 
+    if (token.isUsed()) {
+      revokeAllTokens(email, TokenType.VERIFY_EMAIL);
+
+      throw new UnauthorizedException("Revoked token");
+    }
+                    
     if (token.isExpired()) {
       throw new UnauthorizedException("Expired OTP");
     }
@@ -60,10 +71,29 @@ public class TokenService {
     Token token = tokenRepository.findByEmailAndTypeAndValue(email, TokenType.CHANGE_PASSWORD, otp)
                     .orElseThrow(() -> new UnauthorizedException("Invalid OTP"));
 
+    if (token.isUsed()) {
+      revokeAllTokens(email, TokenType.CHANGE_PASSWORD);
+      
+      throw new UnauthorizedException("Revoked token");
+    }
+      
     if (token.isExpired()) {
       throw new UnauthorizedException("Expired OTP");
     }
     token.setUsed(true);
+  }
+
+  @Transactional
+  public TokenPair generateAndSaveTokens(String email) {
+    
+    String jti = UUID.randomUUID().toString();
+
+    String accessToken = jwtService.generateToken(email, ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN, null);
+    String refreshToken = jwtService.generateToken(email, REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN, jti);
+
+    create(email, jti, TokenType.REFRESH_TOKEN, LocalDateTime.now().plus(Duration.ofMillis(REFRESH_TOKEN_EXPIRATION_MS)));
+
+    return new TokenPair(accessToken, refreshToken);
   }
 
   @Transactional
