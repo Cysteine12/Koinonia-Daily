@@ -28,7 +28,7 @@ public class TeachingController {
   @GetMapping
   public ResponseEntity<SuccessResponse<Page<Teaching>>> getTeachings(
       @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "100") int size
+      @RequestParam(defaultValue = "50") int size
   ) {
 
     Page<Teaching> teachings = teachingService.getTeachings(page, size);
