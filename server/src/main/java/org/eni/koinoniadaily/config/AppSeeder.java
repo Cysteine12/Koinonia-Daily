@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
-@Profile("!production")
+@Profile("development")
 @Component
 @RequiredArgsConstructor
 public class AppSeeder implements CommandLineRunner {
@@ -45,7 +45,7 @@ public class AppSeeder implements CommandLineRunner {
         return objectMapper.readValue(inputStream, new TypeReference<List<T>>(){});
         
       } catch (IOException e) {
-        throw new RuntimeException("Error seeding data: " + e.getMessage());
+        throw new IllegalStateException("Error seeding data: ", e);
       }
   }
 }
