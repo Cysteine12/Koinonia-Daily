@@ -18,7 +18,7 @@ public class TeachingDto {
   private String title;
   
   @NotEmpty(message = "Atleast one scriptural reference is required")
-  private String[] scripturalReferences;
+  private String scripturalReferences;
   
   @NotBlank(message = "Message is required")
   private String message;
@@ -39,7 +39,7 @@ public class TeachingDto {
   private TeachingType type;
   
   @NotEmpty(message = "Tags are required")
-  private String[] tags; 
+  private String tags; 
   
   private Series series;
   
