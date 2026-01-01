@@ -16,10 +16,11 @@ public class TeachingService {
   
   private final TeachingRepository teachingRepository;
   private final TeachingMapper teachingMapper;
+  private static final String TAUGHT_AT = "taughtAt";
 
   public Page<Teaching> getTeachings(int page, int size) {
 
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "taughtAt"));
+    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, TAUGHT_AT));
     
     return teachingRepository.findAll(pageable);
   }
