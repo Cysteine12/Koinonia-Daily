@@ -1,34 +1,28 @@
 package org.eni.koinoniadaily.modules.user;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.eni.koinoniadaily.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "users")
-@Data 
-@Builder 
+@Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor 
 @AllArgsConstructor
-public class User {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private Long id;
+public class User extends BaseEntity {
 
   @Column(nullable = false, length = 50)
   private String firstName;
@@ -49,13 +43,6 @@ public class User {
   @Builder.Default
   @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
   private boolean isVerified = false;
-
-  @CreationTimestamp
-  @Column(updatable = false)
-  private LocalDateTime createdAt;
-
-  @UpdateTimestamp
-  private LocalDateTime updatedAt;
 
   @PrePersist
   public void prePersist() {

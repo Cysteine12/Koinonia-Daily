@@ -11,6 +11,7 @@ public class AppProperties {
   private String name = "Koinonia-Daily";
   private int version = 1;
   private String jwtSecret;
+  private String seederUserPassword;
 
   private Aws aws = new Aws();
 

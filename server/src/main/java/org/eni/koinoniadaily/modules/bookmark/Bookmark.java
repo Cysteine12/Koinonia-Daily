@@ -1,26 +1,21 @@
 package org.eni.koinoniadaily.modules.bookmark;
 
-import java.time.LocalDateTime;
-
+import org.eni.koinoniadaily.entity.BaseEntity;
 import org.eni.koinoniadaily.modules.teaching.Teaching;
 import org.eni.koinoniadaily.modules.user.User;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(
@@ -30,13 +25,11 @@ import lombok.NoArgsConstructor;
         columnNames = {"category", "userId", "teachingId"}
     )
 )
-@Data 
-@NoArgsConstructor 
-@AllArgsConstructor
-public class Bookmark {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor
+public class Bookmark extends BaseEntity {
 
   @Column(nullable = false, length = 50)
   private String category;
@@ -48,13 +41,6 @@ public class Bookmark {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "teachingId", nullable = false)
   private Teaching teaching;
-
-  @CreationTimestamp
-  @Column(updatable = false)
-  private LocalDateTime createdAt;
-
-  @UpdateTimestamp
-  private LocalDateTime updatedAt;
 
   @PrePersist
   void prePersist() {

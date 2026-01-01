@@ -1,7 +1,7 @@
 package org.eni.koinoniadaily.modules.teaching;
 
-import java.util.List;
-
+import org.eni.koinoniadaily.utils.SuccessResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -25,34 +26,48 @@ public class TeachingController {
   private final TeachingService teachingService;
 
   @GetMapping
-  public ResponseEntity<List<Teaching>> getTeachings() {
-    List<Teaching> teachings = teachingService.findAll();
-    return ResponseEntity.ok(teachings);
+  public ResponseEntity<SuccessResponse<Page<Teaching>>> getTeachings(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "50") int size
+  ) {
+
+    Page<Teaching> teachings = teachingService.getTeachings(page, size);
+
+    return ResponseEntity.ok(SuccessResponse.data(teachings));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Teaching> getTeaching(@PathVariable Long id) {
-    Teaching teaching = teachingService.findById(id);
-    return ResponseEntity.ok(teaching);
+  public ResponseEntity<SuccessResponse<Teaching>> getTeachingById(@PathVariable Long id) {
+
+    Teaching teaching = teachingService.getTeachingById(id);
+
+    return ResponseEntity.ok(SuccessResponse.data(teaching));
   }
 
   @PostMapping
-  @PreAuthorize("hasRole('ROLE_USER')")
-  public ResponseEntity<Teaching> createTeaching(@Valid @RequestBody TeachingDto dto) {
-    Teaching createdTeaching = teachingService.create(dto);
-    return ResponseEntity.status(HttpStatus.CREATED).body(createdTeaching);
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public ResponseEntity<SuccessResponse<Teaching>> createTeaching(@Valid @RequestBody TeachingDto dto) {
+
+    Teaching createdTeaching = teachingService.createTeaching(dto);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.data(createdTeaching));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Teaching> updateTeaching(@Valid @PathVariable Long id, @RequestBody TeachingDto dto) {
-    Teaching updatedTeaching = teachingService.update(id, dto);
-    return ResponseEntity.ok(updatedTeaching);
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public ResponseEntity<SuccessResponse<Teaching>> updateTeaching(@PathVariable Long id, @Valid @RequestBody TeachingDto dto) {
+
+    Teaching updatedTeaching = teachingService.updateTeaching(id, dto);
+
+    return ResponseEntity.ok(SuccessResponse.data(updatedTeaching));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteTeaching(@PathVariable Long id) {
-    teachingService.delete(id);
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public ResponseEntity<SuccessResponse<Void>> deleteTeaching(@PathVariable Long id) {
+    
+    teachingService.deleteTeachingById(id);
 
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(SuccessResponse.message("Teaching deleted successfully"));
   }
 }
