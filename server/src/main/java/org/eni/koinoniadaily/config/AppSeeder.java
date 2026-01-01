@@ -26,6 +26,7 @@ public class AppSeeder implements CommandLineRunner {
   private final UserRepository userRepository;
   private final TeachingRepository teachingRepository;
   private final PasswordEncoder passwordEncoder;
+  private final AppProperties props;
   private static final Logger logger = LoggerFactory.getLogger(AppSeeder.class);
   
   @Override
@@ -39,7 +40,7 @@ public class AppSeeder implements CommandLineRunner {
             .firstName("Test")
             .lastName("Admin")
             .email("testadmin@gmail.com")
-            .password(passwordEncoder.encode("test1234"))
+            .password(passwordEncoder.encode(props.getSeederUserPassword()))
             .isVerified(true)
             .role(UserRole.ADMIN)
             .build(),
@@ -47,7 +48,7 @@ public class AppSeeder implements CommandLineRunner {
             .firstName("Test")
             .lastName("User")
             .email("testuser@gmail.com")
-            .password(passwordEncoder.encode("test1234"))
+            .password(passwordEncoder.encode(props.getSeederUserPassword()))
             .isVerified(true)
             .role(UserRole.USER)
             .build()

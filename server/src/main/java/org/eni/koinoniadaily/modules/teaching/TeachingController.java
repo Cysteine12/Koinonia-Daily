@@ -37,7 +37,7 @@ public class TeachingController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<SuccessResponse<Teaching>> getTeaching(@PathVariable Long id) {
+  public ResponseEntity<SuccessResponse<Teaching>> getTeachingById(@PathVariable Long id) {
 
     Teaching teaching = teachingService.getTeachingById(id);
 
