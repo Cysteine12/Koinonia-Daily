@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HistoryRepository extends JpaRepository<History, Long> {
 
+  boolean existsByIdAndUserId(Long id, Long userId);
+  
+  Optional<History> findByUserIdAndTeachingId(Long userId, Long teachingId);
+
   Page<History> findAllByUser(User user, Pageable pageable);
 
   Optional<History> findByIdAndUserId(Long id, Long userId);

@@ -35,32 +35,35 @@ public class TeachingService {
   }
 
   @Transactional
-  public Teaching getTeachingById(Long id) {
+  public TeachingResponse getTeachingById(Long id) {
 
-    historyService.createHistory(id);
+    historyService.createOrUpdateHistory(id);
 
     return teachingRepository.findById(id)
+            .map(teachingMapper::toDto)
             .orElseThrow(() -> new NotFoundException("Teaching not found"));
   }
 
   @Transactional
-  public Teaching createTeaching(TeachingRequest dto) {
+  public TeachingResponse createTeaching(TeachingRequest dto) {
 
     Teaching teaching = teachingMapper.toEntity(dto);
                           
-    return teachingRepository.save(teaching);
+    Teaching savedTeaching = teachingRepository.save(teaching);
+
+    return teachingMapper.toDto(savedTeaching);
   }
 
   @Transactional
-  public Teaching updateTeaching(Long id, TeachingRequest dto) {
+  public TeachingResponse updateTeaching(Long id, TeachingRequest dto) {
 
-    return teachingRepository.findById(id)
-            .map(teaching -> {
-              teaching = teachingMapper.updateToEntity(teaching, dto);
-              
-              return teachingRepository.save(teaching);
-            })
-            .orElseThrow(() -> new NotFoundException("Teaching not found"));
+    Teaching currentTeaching = teachingRepository.findById(id)
+                                .map(teaching -> teachingMapper.updateToEntity(teaching, dto))
+                                .orElseThrow(() -> new NotFoundException("Teaching not found"));
+
+    Teaching updatedTeaching = teachingRepository.save(currentTeaching);
+
+    return teachingMapper.toDto(updatedTeaching);
   }
 
   @Transactional

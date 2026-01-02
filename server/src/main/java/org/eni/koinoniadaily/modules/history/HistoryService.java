@@ -1,5 +1,7 @@
 package org.eni.koinoniadaily.modules.history;
 
+import java.util.Optional;
+
 import org.eni.koinoniadaily.exceptions.NotFoundException;
 import org.eni.koinoniadaily.modules.auth.CurrentUserProvider;
 import org.eni.koinoniadaily.modules.history.dto.HistoryRequest;
@@ -45,9 +47,17 @@ public class HistoryService {
   }
 
   @Transactional
-  public History createHistory(Long teachingId) {
+  public History createOrUpdateHistory(Long teachingId) {
 
     Long userId = currentUserProvider.getCurrentUserId();
+
+    Optional<History> existingHistory = historyRepository.findByUserIdAndTeachingId(userId, teachingId);
+
+    if (existingHistory.isPresent()) {
+      existingHistory.get().setUpdatedAt(null);
+
+      return existingHistory.get();
+    }
 
     User user = userRepository.getReferenceById(userId);
 
@@ -57,7 +67,7 @@ public class HistoryService {
   }
 
   @Transactional
-  public History updateHistoryMarkAsRead(Long id, HistoryRequest payload) {
+  public HistoryResponse updateHistoryMarkAsRead(Long id, HistoryRequest payload) {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
@@ -66,13 +76,17 @@ public class HistoryService {
               
     history.setMarkedRead(payload.getIsMarkedRead());
 
-    return history;
+    return historyMapper.toDto(history);
   }
 
   @Transactional
   public void deleteHistory(Long id) {
 
     Long userId = currentUserProvider.getCurrentUserId();
+
+    if (!historyRepository.existsByIdAndUserId(id, userId)) {
+      throw new NotFoundException("History not found");
+    }
 
     historyRepository.deleteByIdAndUserId(id, userId);
   }

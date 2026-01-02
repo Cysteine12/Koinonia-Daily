@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,10 +34,12 @@ public class HistoryContoller {
     return ResponseEntity.ok(SuccessResponse.data(histories));
   }
 
-  @PatchMapping("/{id}")
-  public ResponseEntity<SuccessResponse<History>> updateHistoryMarkAsRead(@PathVariable Long id, @RequestBody HistoryRequest payload) {
-    
-    History history = historyService.updateHistoryMarkAsRead(id, payload);
+  @PatchMapping("/{id}/marked-read")
+  public ResponseEntity<SuccessResponse<HistoryResponse>> updateHistoryMarkAsRead(
+      @PathVariable Long id, 
+      @Valid @RequestBody HistoryRequest payload
+  ) {
+    HistoryResponse history = historyService.updateHistoryMarkAsRead(id, payload);
 
     return ResponseEntity.ok(SuccessResponse.of(history, "History updated successfully"));
   }
@@ -46,6 +49,6 @@ public class HistoryContoller {
     
     historyService.deleteHistory(id);
 
-    return ResponseEntity.ok(SuccessResponse.message("History updated successfully"));
+    return ResponseEntity.ok(SuccessResponse.message("History deleted successfully"));
   }
 }
