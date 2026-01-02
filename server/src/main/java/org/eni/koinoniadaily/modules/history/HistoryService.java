@@ -52,20 +52,19 @@ public class HistoryService {
     Optional<History> existingHistory = historyRepository.findByUserIdAndTeachingId(userId, teachingId);
 
     if (existingHistory.isPresent()) {
-      existingHistory.get().setUpdatedAt(LocalDateTime.now());
       
-      return;
+      existingHistory.get().setUpdatedAt(LocalDateTime.now());
+    } else {
+      User user = userRepository.getReferenceById(userId);
+      
+      Teaching teaching = teachingRepository.getReferenceById(teachingId);
+      
+      historyRepository.save(historyMapper.toEntity(user, teaching));
     }
-
-    User user = userRepository.getReferenceById(userId);
-
-    Teaching teaching = teachingRepository.getReferenceById(teachingId);
-
-    historyRepository.save(historyMapper.toEntity(user, teaching));
   }
 
   @Transactional
-  public HistoryResponse updateHistoryMarkAsRead(Long id, HistoryRequest payload) {
+  public void updateHistoryMarkAsRead(Long id, HistoryRequest payload) {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
@@ -73,8 +72,6 @@ public class HistoryService {
                         .orElseThrow(() -> new NotFoundException("History not found"));
               
     history.setMarkedRead(payload.getIsMarkedRead());
-
-    return historyMapper.toDto(history);
   }
 
   @Transactional

@@ -35,13 +35,13 @@ public class HistoryController {
   }
 
   @PatchMapping("/{id}/marked-read")
-  public ResponseEntity<SuccessResponse<HistoryResponse>> updateHistoryMarkAsRead(
+  public ResponseEntity<SuccessResponse<Void>> updateHistoryMarkAsRead(
       @PathVariable Long id, 
       @Valid @RequestBody HistoryRequest payload
   ) {
-    HistoryResponse history = historyService.updateHistoryMarkAsRead(id, payload);
+    historyService.updateHistoryMarkAsRead(id, payload);
 
-    return ResponseEntity.ok(SuccessResponse.of(history, "History updated successfully"));
+    return ResponseEntity.ok(SuccessResponse.message("History updated successfully"));
   }
 
   @DeleteMapping("/{id}")

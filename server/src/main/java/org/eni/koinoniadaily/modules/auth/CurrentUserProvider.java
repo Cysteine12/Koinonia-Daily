@@ -5,25 +5,32 @@ import org.eni.koinoniadaily.modules.user.UserRole;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
 
 @Component
+@RequestScope
 public class CurrentUserProvider {
+  
+  private UserPrincipal cachedUserPrincipal;
   
   public UserPrincipal getCurrentUser() {
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (authentication == null || !authentication.isAuthenticated()) {
-      throw new UnauthorizedException("User is not authenticated");
+    if (cachedUserPrincipal == null) {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+  
+      if (authentication == null || !authentication.isAuthenticated()) {
+        throw new UnauthorizedException("User is not authenticated");
+      }
+  
+      Object principal = authentication.getPrincipal();
+  
+      if (!(principal instanceof UserPrincipal)) {
+        throw new UnauthorizedException("Invalid authentication principal ");
+      }
+      cachedUserPrincipal = (UserPrincipal) principal;
     }
 
-    Object principal = authentication.getPrincipal();
-
-    if (!(principal instanceof UserPrincipal)) {
-      throw new UnauthorizedException("Invalid authentication principal ");
-    }
-
-    return (UserPrincipal) principal;
+    return cachedUserPrincipal;
   }
 
   public Long getCurrentUserId() {
