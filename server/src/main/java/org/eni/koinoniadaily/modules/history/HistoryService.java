@@ -39,16 +39,13 @@ public class HistoryService {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
-    User user = userRepository.getReferenceById(userId);
-
-    Page<HistoryResponse> histories = historyRepository.findAllByUser(user, pageable)
-                                        .map(historyMapper::toDto);
+    Page<HistoryResponse> histories = historyRepository.findAllByUserId(userId, pageable);
 
     return PageResponse.from(histories);
   }
 
   @Transactional
-  public History createOrUpdateHistory(Long teachingId) {
+  public void createOrUpdateHistory(Long teachingId) {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
@@ -56,15 +53,13 @@ public class HistoryService {
 
     if (existingHistory.isPresent()) {
       existingHistory.get().setUpdatedAt(LocalDateTime.now());
-
-      return existingHistory.get();
     }
 
     User user = userRepository.getReferenceById(userId);
 
     Teaching teaching = teachingRepository.getReferenceById(teachingId);
 
-    return historyRepository.save(historyMapper.toEntity(user, teaching));
+    historyRepository.save(historyMapper.toEntity(user, teaching));
   }
 
   @Transactional

@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/histories")
 @RequiredArgsConstructor
-public class HistoryContoller {
+public class HistoryController {
   
   private final HistoryService historyService;
 
