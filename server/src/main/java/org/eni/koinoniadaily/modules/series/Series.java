@@ -25,7 +25,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class Series extends BaseEntity {
 
-  @Column(nullable= false)
+  @Column(nullable = false)
   private String title;
 
   @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = false)

@@ -13,7 +13,6 @@ import org.eni.koinoniadaily.modules.auth.dto.UserProfileDto;
 import org.eni.koinoniadaily.modules.auth.dto.VerifyEmailDto;
 import org.eni.koinoniadaily.utils.SuccessResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,9 +46,9 @@ public class AuthController {
   }
 
   @GetMapping("/profile")
-  public ResponseEntity<SuccessResponse<UserProfileDto>> profile(@AuthenticationPrincipal UserPrincipal user) {
+  public ResponseEntity<SuccessResponse<UserProfileDto>> profile() {
     
-    UserProfileDto res = authService.profile(user);
+    UserProfileDto res = authService.profile();
 
     return ResponseEntity.ok(SuccessResponse.data(res));
   }
@@ -87,9 +86,9 @@ public class AuthController {
   }
 
   @PostMapping("/change-password")
-  public ResponseEntity<SuccessResponse<Void>> changePassword(@AuthenticationPrincipal UserPrincipal user, @RequestBody @Valid ChangePasswordDto payload) {
+  public ResponseEntity<SuccessResponse<Void>> changePassword(@RequestBody @Valid ChangePasswordDto payload) {
 
-    authService.changePassword(user, payload);
+    authService.changePassword(payload);
 
     return ResponseEntity.ok(SuccessResponse.message("Password changed successfully"));
   }
