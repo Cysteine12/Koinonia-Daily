@@ -1,23 +1,23 @@
-package org.eni.koinoniadaily.modules.teaching;
+package org.eni.koinoniadaily.modules.teaching.dto;
 
 import java.time.LocalDateTime;
 
 import org.eni.koinoniadaily.modules.series.Series;
+import org.eni.koinoniadaily.modules.teaching.TeachingType;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter 
 @Setter
-public class TeachingDto {
+public class TeachingRequest {
 
   @NotBlank(message = "Title is required")
   private String title;
   
-  @NotEmpty(message = "Atleast one scriptural reference is required")
+  @NotBlank(message = "Atleast one scriptural reference is required")
   private String scripturalReferences;
   
   @NotBlank(message = "Message is required")
@@ -38,7 +38,7 @@ public class TeachingDto {
   @NotNull(message = "Teaching type is required")
   private TeachingType type;
   
-  @NotEmpty(message = "Tags are required")
+  @NotBlank(message = "Tags are required")
   private String tags; 
   
   private Series series;

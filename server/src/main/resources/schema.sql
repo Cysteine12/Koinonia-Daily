@@ -7,3 +7,4 @@ CREATE TABLE IF NOT EXISTS test_table (
 -- DROP TABLE IF EXISTS bookmarks;
 -- DROP TABLE IF EXISTS tokens;
 -- DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS teachings;

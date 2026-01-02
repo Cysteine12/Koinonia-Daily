@@ -1,6 +1,10 @@
 package org.eni.koinoniadaily.modules.teaching;
 
 import org.eni.koinoniadaily.exceptions.NotFoundException;
+import org.eni.koinoniadaily.modules.history.HistoryService;
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
+import org.eni.koinoniadaily.utils.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,43 +16,53 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TeachingService {
   
   private final TeachingRepository teachingRepository;
   private final TeachingMapper teachingMapper;
+  private final HistoryService historyService;
   private static final String TAUGHT_AT = "taughtAt";
 
-  public Page<Teaching> getTeachings(int page, int size) {
+  public PageResponse<TeachingResponse> getTeachings(int page, int size) {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, TAUGHT_AT));
     
-    return teachingRepository.findAll(pageable);
+    Page<TeachingResponse> teachings = teachingRepository.findAll(pageable)
+                            .map(teachingMapper::toDto);
+
+    return PageResponse.from(teachings);
   }
 
-  public Teaching getTeachingById(Long id) {
+  @Transactional
+  public TeachingResponse getTeachingById(Long id) {
+
+    historyService.createOrUpdateHistory(id);
 
     return teachingRepository.findById(id)
+            .map(teachingMapper::toDto)
             .orElseThrow(() -> new NotFoundException("Teaching not found"));
   }
 
   @Transactional
-  public Teaching createTeaching(TeachingDto dto) {
+  public TeachingResponse createTeaching(TeachingRequest dto) {
 
     Teaching teaching = teachingMapper.toEntity(dto);
                           
-    return teachingRepository.save(teaching);
+    Teaching savedTeaching = teachingRepository.save(teaching);
+
+    return teachingMapper.toDto(savedTeaching);
   }
 
   @Transactional
-  public Teaching updateTeaching(Long id, TeachingDto dto) {
+  public TeachingResponse updateTeaching(Long id, TeachingRequest dto) {
 
-    return teachingRepository.findById(id)
-            .map(teaching -> {
-              teaching = teachingMapper.updateToEntity(teaching, dto);
-              
-              return teachingRepository.save(teaching);
-            })
-            .orElseThrow(() -> new NotFoundException("Teaching not found"));
+    Teaching teaching = teachingRepository.findById(id)
+                          .orElseThrow(() -> new NotFoundException("Teaching not found"));
+
+    teachingMapper.updateToEntity(teaching, dto);
+
+    return teachingMapper.toDto(teaching);
   }
 
   @Transactional

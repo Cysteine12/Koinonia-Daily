@@ -1,7 +1,9 @@
 package org.eni.koinoniadaily.modules.teaching;
 
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
+import org.eni.koinoniadaily.utils.PageResponse;
 import org.eni.koinoniadaily.utils.SuccessResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,44 +28,44 @@ public class TeachingController {
   private final TeachingService teachingService;
 
   @GetMapping
-  public ResponseEntity<SuccessResponse<Page<Teaching>>> getTeachings(
+  public ResponseEntity<SuccessResponse<PageResponse<TeachingResponse>>> getTeachings(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "50") int size
   ) {
 
-    Page<Teaching> teachings = teachingService.getTeachings(page, size);
+    PageResponse<TeachingResponse> teachings = teachingService.getTeachings(page, size);
 
     return ResponseEntity.ok(SuccessResponse.data(teachings));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<SuccessResponse<Teaching>> getTeachingById(@PathVariable Long id) {
+  public ResponseEntity<SuccessResponse<TeachingResponse>> getTeachingById(@PathVariable Long id) {
 
-    Teaching teaching = teachingService.getTeachingById(id);
+    TeachingResponse teaching = teachingService.getTeachingById(id);
 
     return ResponseEntity.ok(SuccessResponse.data(teaching));
   }
 
   @PostMapping
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<SuccessResponse<Teaching>> createTeaching(@Valid @RequestBody TeachingDto dto) {
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity<SuccessResponse<TeachingResponse>> createTeaching(@Valid @RequestBody TeachingRequest dto) {
 
-    Teaching createdTeaching = teachingService.createTeaching(dto);
+    TeachingResponse createdTeaching = teachingService.createTeaching(dto);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.data(createdTeaching));
   }
 
   @PutMapping("/{id}")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<SuccessResponse<Teaching>> updateTeaching(@PathVariable Long id, @Valid @RequestBody TeachingDto dto) {
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity<SuccessResponse<TeachingResponse>> updateTeaching(@PathVariable Long id, @Valid @RequestBody TeachingRequest dto) {
 
-    Teaching updatedTeaching = teachingService.updateTeaching(id, dto);
+    TeachingResponse updatedTeaching = teachingService.updateTeaching(id, dto);
 
     return ResponseEntity.ok(SuccessResponse.data(updatedTeaching));
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> deleteTeaching(@PathVariable Long id) {
     
     teachingService.deleteTeachingById(id);
