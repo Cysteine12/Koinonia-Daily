@@ -1,11 +1,31 @@
 package org.eni.koinoniadaily.modules.teaching;
 
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TeachingMapper {
+
+  public TeachingResponse toDto(Teaching teaching) {
+
+    return TeachingResponse.builder()
+            .title(teaching.getTitle())
+            .scripturalReferences(teaching.getScripturalReferences())
+            .message(teaching.getMessage())
+            .summary(teaching.getSummary())
+            .audioUrl(teaching.getAudioUrl())
+            .videoUrl(teaching.getVideoUrl())
+            .thumbnailUrl(teaching.getThumbnailUrl())
+            .type(teaching.getType())
+            .tags(teaching.getTags())
+            .series(teaching.getSeries())
+            .seriesPart(teaching.getSeriesPart())
+            .taughtAt(teaching.getTaughtAt())
+            .build();
+  }
   
-  public Teaching toEntity(TeachingDto dto) {
+  public Teaching toEntity(TeachingRequest dto) {
 
     return Teaching.builder()
             .title(dto.getTitle())
@@ -23,7 +43,7 @@ public class TeachingMapper {
             .build();
   }
 
-  public Teaching updateToEntity(Teaching teaching, TeachingDto dto) {
+  public Teaching updateToEntity(Teaching teaching, TeachingRequest dto) {
 
     teaching.setTitle(dto.getTitle());
     teaching.setScripturalReferences(dto.getScripturalReferences());

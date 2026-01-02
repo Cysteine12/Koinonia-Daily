@@ -1,7 +1,9 @@
 package org.eni.koinoniadaily.modules.teaching;
 
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
+import org.eni.koinoniadaily.utils.PageResponse;
 import org.eni.koinoniadaily.utils.SuccessResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,12 +28,12 @@ public class TeachingController {
   private final TeachingService teachingService;
 
   @GetMapping
-  public ResponseEntity<SuccessResponse<Page<Teaching>>> getTeachings(
+  public ResponseEntity<SuccessResponse<PageResponse<TeachingResponse>>> getTeachings(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "50") int size
   ) {
 
-    Page<Teaching> teachings = teachingService.getTeachings(page, size);
+    PageResponse<TeachingResponse> teachings = teachingService.getTeachings(page, size);
 
     return ResponseEntity.ok(SuccessResponse.data(teachings));
   }
@@ -45,8 +47,8 @@ public class TeachingController {
   }
 
   @PostMapping
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<SuccessResponse<Teaching>> createTeaching(@Valid @RequestBody TeachingDto dto) {
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity<SuccessResponse<Teaching>> createTeaching(@Valid @RequestBody TeachingRequest dto) {
 
     Teaching createdTeaching = teachingService.createTeaching(dto);
 
@@ -54,8 +56,8 @@ public class TeachingController {
   }
 
   @PutMapping("/{id}")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<SuccessResponse<Teaching>> updateTeaching(@PathVariable Long id, @Valid @RequestBody TeachingDto dto) {
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity<SuccessResponse<Teaching>> updateTeaching(@PathVariable Long id, @Valid @RequestBody TeachingRequest dto) {
 
     Teaching updatedTeaching = teachingService.updateTeaching(id, dto);
 
@@ -63,7 +65,7 @@ public class TeachingController {
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> deleteTeaching(@PathVariable Long id) {
     
     teachingService.deleteTeachingById(id);

@@ -44,6 +44,6 @@ public class History extends BaseEntity {
 
   @PrePersist
   void prePersist() {
-    this.isMarkedRead = true;
+    this.isMarkedRead = false;
   }
 }

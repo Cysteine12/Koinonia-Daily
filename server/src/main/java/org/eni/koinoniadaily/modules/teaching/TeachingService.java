@@ -1,6 +1,10 @@
 package org.eni.koinoniadaily.modules.teaching;
 
 import org.eni.koinoniadaily.exceptions.NotFoundException;
+import org.eni.koinoniadaily.modules.history.HistoryService;
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
+import org.eni.koinoniadaily.utils.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,27 +16,35 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TeachingService {
   
   private final TeachingRepository teachingRepository;
   private final TeachingMapper teachingMapper;
+  private final HistoryService historyService;
   private static final String TAUGHT_AT = "taughtAt";
 
-  public Page<Teaching> getTeachings(int page, int size) {
+  public PageResponse<TeachingResponse> getTeachings(int page, int size) {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, TAUGHT_AT));
     
-    return teachingRepository.findAll(pageable);
+    Page<TeachingResponse> teachings = teachingRepository.findAll(pageable)
+                            .map(teachingMapper::toDto);
+
+    return PageResponse.from(teachings);
   }
 
+  @Transactional
   public Teaching getTeachingById(Long id) {
+
+    historyService.createHistory(id);
 
     return teachingRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Teaching not found"));
   }
 
   @Transactional
-  public Teaching createTeaching(TeachingDto dto) {
+  public Teaching createTeaching(TeachingRequest dto) {
 
     Teaching teaching = teachingMapper.toEntity(dto);
                           
@@ -40,7 +52,7 @@ public class TeachingService {
   }
 
   @Transactional
-  public Teaching updateTeaching(Long id, TeachingDto dto) {
+  public Teaching updateTeaching(Long id, TeachingRequest dto) {
 
     return teachingRepository.findById(id)
             .map(teaching -> {

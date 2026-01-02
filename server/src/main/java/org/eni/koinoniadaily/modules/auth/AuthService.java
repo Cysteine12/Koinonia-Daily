@@ -39,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthService {
 
   private final AuthenticationManager authenticationManager;
+  private final CurrentUserProvider currentUserProvider;
   private final UserRepository userRepository;
   private final TokenService tokenService;
   private final PasswordEncoder passwordEncoder;
@@ -85,7 +86,9 @@ public class AuthService {
             .build();
   }
 
-  public UserProfileDto profile(UserPrincipal user) {
+  public UserProfileDto profile() {
+
+    UserPrincipal user = currentUserProvider.getCurrentUser();
 
     return UserProfileDto.builder()
             .id(user.getId())
@@ -157,21 +160,23 @@ public class AuthService {
   }
 
   @Transactional
-  public void changePassword(UserPrincipal user, ChangePasswordDto payload) {
+  public void changePassword(ChangePasswordDto payload) {
 
-    User currentUser = userRepository.findById(user.getId())
+    UserPrincipal currentUser = currentUserProvider.getCurrentUser();
+
+    User user = userRepository.findById(currentUser.getId())
                         .orElseThrow(() -> new NotFoundException("User not found"));
 
-    boolean isMatch = passwordEncoder.matches(payload.getCurrentPassword(), currentUser.getPassword());
+    boolean isMatch = passwordEncoder.matches(payload.getCurrentPassword(), user.getPassword());
     if (!isMatch) {
       throw new UnauthorizedException("Incorrect password");
     }
 
     String newPassword = passwordEncoder.encode(payload.getNewPassword());
     
-    currentUser.setPassword(newPassword);
+    user.setPassword(newPassword);
 
-    publisher.publishEvent(new PasswordChangedEvent(currentUser.getEmail(), currentUser.getFirstName()));
+    publisher.publishEvent(new PasswordChangedEvent(user.getEmail(), user.getFirstName()));
   }
 
   @Transactional
