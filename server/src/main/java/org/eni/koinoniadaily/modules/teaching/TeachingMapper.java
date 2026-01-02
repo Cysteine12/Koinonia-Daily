@@ -10,6 +10,7 @@ public class TeachingMapper {
   public TeachingResponse toDto(Teaching teaching) {
 
     return TeachingResponse.builder()
+            .id(teaching.getId())
             .title(teaching.getTitle())
             .scripturalReferences(teaching.getScripturalReferences())
             .message(teaching.getMessage())
@@ -22,6 +23,8 @@ public class TeachingMapper {
             .series(teaching.getSeries())
             .seriesPart(teaching.getSeriesPart())
             .taughtAt(teaching.getTaughtAt())
+            .createdAt(teaching.getCreatedAt())
+            .updatedAt(teaching.getUpdatedAt())
             .build();
   }
   

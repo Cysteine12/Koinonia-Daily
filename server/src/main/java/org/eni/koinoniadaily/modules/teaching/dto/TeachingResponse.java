@@ -12,7 +12,7 @@ import lombok.Getter;
 @Builder
 public class TeachingResponse {
   
-  private String id;
+  private Long id;
 
   private String title;
   
@@ -37,4 +37,8 @@ public class TeachingResponse {
   private int seriesPart;
 
   private LocalDateTime taughtAt;
+  
+  private LocalDateTime createdAt;
+  
+  private LocalDateTime updatedAt;
 }
