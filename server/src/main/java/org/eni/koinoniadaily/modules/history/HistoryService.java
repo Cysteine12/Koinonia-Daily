@@ -53,6 +53,8 @@ public class HistoryService {
 
     if (existingHistory.isPresent()) {
       existingHistory.get().setUpdatedAt(LocalDateTime.now());
+      
+      return;
     }
 
     User user = userRepository.getReferenceById(userId);
