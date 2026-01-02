@@ -1,5 +1,6 @@
 package org.eni.koinoniadaily.modules.history;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.eni.koinoniadaily.exceptions.NotFoundException;
@@ -30,7 +31,7 @@ public class HistoryService {
   private final UserRepository userRepository;
   private final TeachingRepository teachingRepository;
   private final CurrentUserProvider currentUserProvider;
-  private final static String UPDATED_AT = "updatedAt";
+  private static final String UPDATED_AT = "updatedAt";
 
   public PageResponse<HistoryResponse> getHistoriesByUser(int page, int size) {
 
@@ -54,7 +55,7 @@ public class HistoryService {
     Optional<History> existingHistory = historyRepository.findByUserIdAndTeachingId(userId, teachingId);
 
     if (existingHistory.isPresent()) {
-      existingHistory.get().setUpdatedAt(null);
+      existingHistory.get().setUpdatedAt(LocalDateTime.now());
 
       return existingHistory.get();
     }

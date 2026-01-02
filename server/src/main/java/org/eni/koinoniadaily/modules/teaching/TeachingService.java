@@ -57,13 +57,12 @@ public class TeachingService {
   @Transactional
   public TeachingResponse updateTeaching(Long id, TeachingRequest dto) {
 
-    Teaching currentTeaching = teachingRepository.findById(id)
-                                .map(teaching -> teachingMapper.updateToEntity(teaching, dto))
-                                .orElseThrow(() -> new NotFoundException("Teaching not found"));
+    Teaching teaching = teachingRepository.findById(id)
+                          .orElseThrow(() -> new NotFoundException("Teaching not found"));
 
-    Teaching updatedTeaching = teachingRepository.save(currentTeaching);
+    teachingMapper.updateToEntity(teaching, dto);
 
-    return teachingMapper.toDto(updatedTeaching);
+    return teachingMapper.toDto(teaching);
   }
 
   @Transactional
