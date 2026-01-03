@@ -1,6 +1,7 @@
 package org.eni.koinoniadaily.modules.bookmark;
 
 import org.eni.koinoniadaily.entity.BaseEntity;
+import org.eni.koinoniadaily.modules.bookmarkcategory.BookmarkCategory;
 import org.eni.koinoniadaily.modules.teaching.Teaching;
 import org.eni.koinoniadaily.modules.user.User;
 
@@ -9,7 +10,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
@@ -21,8 +21,8 @@ import lombok.experimental.SuperBuilder;
 @Table(
     name = "bookmarks",
     uniqueConstraints = @UniqueConstraint(
-        name = "category_userId_teachingId",
-        columnNames = {"category", "userId", "teachingId"}
+        name = "unique_user_teaching_category",
+        columnNames = {"userId", "teachingId", "categoryId"}
     )
 )
 @Getter
@@ -30,9 +30,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class Bookmark extends BaseEntity {
-
-  @Column(nullable = false, length = 50)
-  private String category;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "userId", nullable = false)
@@ -42,10 +39,10 @@ public class Bookmark extends BaseEntity {
   @JoinColumn(name = "teachingId", nullable = false)
   private Teaching teaching;
 
-  @PrePersist
-  void prePersist() {
-    if (this.category == null) { 
-      this.category = "general"; 
-    }
-  }
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "categoryId", nullable = false)
+  private BookmarkCategory category;
+
+  @Column(length = 500)
+  private String note;
 }
