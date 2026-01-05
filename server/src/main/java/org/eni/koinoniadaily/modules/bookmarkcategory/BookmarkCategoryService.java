@@ -59,11 +59,11 @@ public class BookmarkCategoryService {
   }
 
   @Transactional
-  public void updateBookmarkCategoryName(Long id, String name) {
+  public void updateBookmarkCategoryName(Long id, BookmarkCategoryRequest payload) {
 
     BookmarkCategory bookmarkCategory = getBookmarkCategoryById(id);
     
-    bookmarkCategory.setName(name);
+    bookmarkCategory.setName(payload.getName());
   }
 
   @Transactional
@@ -75,6 +75,7 @@ public class BookmarkCategoryService {
       throw new NotFoundException("Bookmark category not found");
     }
 
+    // This will delete all associated bookmarks also.
     bookmarkCategoryRepository.deleteByIdAndUserId(id, userId);
   }
 }
