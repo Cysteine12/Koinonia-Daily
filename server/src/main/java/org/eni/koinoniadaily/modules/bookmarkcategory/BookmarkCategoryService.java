@@ -38,7 +38,7 @@ public class BookmarkCategoryService {
     return PageResponse.from(histories);
   }
 
-  public BookmarkCategory getBookmarkCategoryById(Long id) {
+  public BookmarkCategoryResponse getBookmarkCategoryById(Long id) {
     
     Long userId = currentUserProvider.getCurrentUserId();
 
@@ -47,7 +47,7 @@ public class BookmarkCategoryService {
   }
 
   @Transactional
-  public BookmarkCategory createBookmarkCategory(BookmarkCategoryRequest payload) {
+  public BookmarkCategoryResponse createBookmarkCategory(BookmarkCategoryRequest payload) {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
@@ -55,13 +55,15 @@ public class BookmarkCategoryService {
 
     BookmarkCategory bookmarkCategory = bookmarkCategoryMapper.toEntity(payload.getName(), user);
 
-    return bookmarkCategoryRepository.save(bookmarkCategory);
+    BookmarkCategory savedBookmarkCategory = bookmarkCategoryRepository.save(bookmarkCategory);
+
+    return bookmarkCategoryMapper.toDto(savedBookmarkCategory);
   }
 
   @Transactional
   public void updateBookmarkCategoryName(Long id, BookmarkCategoryRequest payload) {
 
-    BookmarkCategory bookmarkCategory = getBookmarkCategoryById(id);
+    BookmarkCategoryResponse bookmarkCategory = getBookmarkCategoryById(id);
     
     bookmarkCategory.setName(payload.getName());
   }
@@ -71,11 +73,10 @@ public class BookmarkCategoryService {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
-    if (!bookmarkCategoryRepository.existsByIdAndUserId(id, userId)) {
-      throw new NotFoundException("Bookmark category not found");
-    }
+    BookmarkCategoryResponse bookmarkCategory = bookmarkCategoryRepository.findByIdAndUserId(id, userId)
+                              .orElseThrow(() -> new NotFoundException("Bookmark category not found"));
 
-    // This will delete all associated bookmarks also.
-    bookmarkCategoryRepository.deleteByIdAndUserId(id, userId);
+    // By deleting this managed entity, JPA will handle cascading to associated bookmarks.
+    bookmarkCategoryRepository.deleteById(bookmarkCategory.getId());
   }
 }

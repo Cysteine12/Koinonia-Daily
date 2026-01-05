@@ -152,7 +152,7 @@ public class AuthService {
     String newPassword = passwordEncoder.encode(payload.getPassword());
 
     User user = userRepository.findByEmail(payload.getEmail())
-                    .orElseThrow(() -> new NotFoundException("User not found"));
+                  .orElseThrow(() -> new NotFoundException("User not found"));
 
     user.setPassword(newPassword);
 
@@ -165,7 +165,7 @@ public class AuthService {
     UserPrincipal currentUser = currentUserProvider.getCurrentUser();
 
     User user = userRepository.findById(currentUser.getId())
-                        .orElseThrow(() -> new NotFoundException("User not found"));
+                  .orElseThrow(() -> new NotFoundException("User not found"));
 
     boolean isMatch = passwordEncoder.matches(payload.getCurrentPassword(), user.getPassword());
     if (!isMatch) {

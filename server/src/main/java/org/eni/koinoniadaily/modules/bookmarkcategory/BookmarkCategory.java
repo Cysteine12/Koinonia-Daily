@@ -17,7 +17,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,13 +24,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(
-    name = "bookmark_categories",
-    uniqueConstraints = @UniqueConstraint(
-        name = "unique_user_category_name",
-        columnNames = {"userId", "name"}
-    )
-)
+@Table(name = "bookmark_categories")
 @Getter
 @Setter
 @SuperBuilder

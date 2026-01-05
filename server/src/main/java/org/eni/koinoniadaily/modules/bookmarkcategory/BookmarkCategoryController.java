@@ -37,18 +37,18 @@ public class BookmarkCategoryController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<SuccessResponse<BookmarkCategory>> getBookmarkCategoryById(@PathVariable Long id) {
+  public ResponseEntity<SuccessResponse<BookmarkCategoryResponse>> getBookmarkCategoryById(@PathVariable Long id) {
 
-    BookmarkCategory bookmarkCategory = bookmarkCategoryService.getBookmarkCategoryById(id);
+    BookmarkCategoryResponse bookmarkCategory = bookmarkCategoryService.getBookmarkCategoryById(id);
 
     return ResponseEntity.ok(SuccessResponse.data(bookmarkCategory));
   }
 
   @PostMapping
-  public ResponseEntity<SuccessResponse<BookmarkCategory>> createBookmarkCategory(
+  public ResponseEntity<SuccessResponse<BookmarkCategoryResponse>> createBookmarkCategory(
       @RequestBody @Valid BookmarkCategoryRequest payload
   ) {
-    BookmarkCategory bookmarkCategory = bookmarkCategoryService.createBookmarkCategory(payload);
+    BookmarkCategoryResponse bookmarkCategory = bookmarkCategoryService.createBookmarkCategory(payload);
 
     return ResponseEntity.ok(SuccessResponse.data(bookmarkCategory));
   }
