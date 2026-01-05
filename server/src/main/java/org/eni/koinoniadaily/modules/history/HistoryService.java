@@ -64,14 +64,14 @@ public class HistoryService {
   }
 
   @Transactional
-  public void updateHistoryMarkAsRead(Long id, HistoryRequest payload) {
+  public void updateHistoryMarkAsRead(Long id, HistoryRequest request) {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
     History history = historyRepository.findByIdAndUserId(id, userId)
                         .orElseThrow(() -> new NotFoundException("History not found"));
               
-    history.setMarkedRead(payload.getIsMarkedRead());
+    history.setMarkedRead(request.getIsMarkedRead());
   }
 
   @Transactional

@@ -29,17 +29,17 @@ public class HistoryController {
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "50") int size
   ) {
-    PageResponse<HistoryResponse> histories = historyService.getHistoriesByUser(page, size);
+    PageResponse<HistoryResponse> response = historyService.getHistoriesByUser(page, size);
 
-    return ResponseEntity.ok(SuccessResponse.data(histories));
+    return ResponseEntity.ok(SuccessResponse.data(response));
   }
 
   @PatchMapping("/{id}/marked-read")
   public ResponseEntity<SuccessResponse<Void>> updateHistoryMarkAsRead(
       @PathVariable Long id, 
-      @Valid @RequestBody HistoryRequest payload
+      @Valid @RequestBody HistoryRequest request
   ) {
-    historyService.updateHistoryMarkAsRead(id, payload);
+    historyService.updateHistoryMarkAsRead(id, request);
 
     return ResponseEntity.ok(SuccessResponse.message("History updated successfully"));
   }
