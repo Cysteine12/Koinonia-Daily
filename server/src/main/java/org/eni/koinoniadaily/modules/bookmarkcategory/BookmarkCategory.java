@@ -37,7 +37,7 @@ public class BookmarkCategory extends BaseEntity {
   @JoinColumn(name = "userId", nullable = false)
   private User user;
 
-  @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = false)
+  @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
   @Builder.Default
   private List<Bookmark> bookmarks = new ArrayList<>();
 }
