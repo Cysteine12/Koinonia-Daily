@@ -4,6 +4,7 @@ import org.eni.koinoniadaily.modules.bookmarkcategory.dto.BookmarkCategoryReques
 import org.eni.koinoniadaily.modules.bookmarkcategory.dto.BookmarkCategoryResponse;
 import org.eni.koinoniadaily.utils.PageResponse;
 import org.eni.koinoniadaily.utils.SuccessResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,35 +31,35 @@ public class BookmarkCategoryController {
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size
   ) {
-    PageResponse<BookmarkCategoryResponse> bookmarkCategories = 
+    PageResponse<BookmarkCategoryResponse> response = 
         bookmarkCategoryService.getBookmarkCategoryByUser(page, size);
 
-    return ResponseEntity.ok(SuccessResponse.data(bookmarkCategories));
+    return ResponseEntity.ok(SuccessResponse.data(response));
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<SuccessResponse<BookmarkCategoryResponse>> getBookmarkCategoryById(@PathVariable Long id) {
 
-    BookmarkCategoryResponse bookmarkCategory = bookmarkCategoryService.getBookmarkCategoryById(id);
+    BookmarkCategoryResponse response = bookmarkCategoryService.getBookmarkCategoryById(id);
 
-    return ResponseEntity.ok(SuccessResponse.data(bookmarkCategory));
+    return ResponseEntity.ok(SuccessResponse.data(response));
   }
 
   @PostMapping
   public ResponseEntity<SuccessResponse<BookmarkCategoryResponse>> createBookmarkCategory(
-      @RequestBody @Valid BookmarkCategoryRequest payload
+      @RequestBody @Valid BookmarkCategoryRequest request
   ) {
-    BookmarkCategoryResponse bookmarkCategory = bookmarkCategoryService.createBookmarkCategory(payload);
+    BookmarkCategoryResponse response = bookmarkCategoryService.createBookmarkCategory(request);
 
-    return ResponseEntity.ok(SuccessResponse.data(bookmarkCategory));
+    return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.data(response));
   }
 
   @PatchMapping("/{id}/name")
   public ResponseEntity<SuccessResponse<Void>> updateBookmarkCategoryName(
       @PathVariable Long id,
-      @RequestBody @Valid BookmarkCategoryRequest payload
+      @RequestBody @Valid BookmarkCategoryRequest request
   ) {
-    bookmarkCategoryService.updateBookmarkCategoryName(id, payload);
+    bookmarkCategoryService.updateBookmarkCategoryName(id, request);
 
     return ResponseEntity.ok(SuccessResponse.message("Bookmark category name updated successfully"));
   }

@@ -33,35 +33,35 @@ public class TeachingController {
       @RequestParam(defaultValue = "50") int size
   ) {
 
-    PageResponse<TeachingResponse> teachings = teachingService.getTeachings(page, size);
+    PageResponse<TeachingResponse> response = teachingService.getTeachings(page, size);
 
-    return ResponseEntity.ok(SuccessResponse.data(teachings));
+    return ResponseEntity.ok(SuccessResponse.data(response));
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<SuccessResponse<TeachingResponse>> getTeachingById(@PathVariable Long id) {
 
-    TeachingResponse teaching = teachingService.getTeachingById(id);
+    TeachingResponse response = teachingService.getTeachingById(id);
 
-    return ResponseEntity.ok(SuccessResponse.data(teaching));
+    return ResponseEntity.ok(SuccessResponse.data(response));
   }
 
   @PostMapping
   @PreAuthorize("hasAuthority('ADMIN')")
-  public ResponseEntity<SuccessResponse<TeachingResponse>> createTeaching(@Valid @RequestBody TeachingRequest dto) {
+  public ResponseEntity<SuccessResponse<TeachingResponse>> createTeaching(@Valid @RequestBody TeachingRequest request) {
 
-    TeachingResponse createdTeaching = teachingService.createTeaching(dto);
+    TeachingResponse response = teachingService.createTeaching(request);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.data(createdTeaching));
+    return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.data(response));
   }
 
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public ResponseEntity<SuccessResponse<TeachingResponse>> updateTeaching(@PathVariable Long id, @Valid @RequestBody TeachingRequest dto) {
+  public ResponseEntity<SuccessResponse<TeachingResponse>> updateTeaching(@PathVariable Long id, @Valid @RequestBody TeachingRequest request) {
 
-    TeachingResponse updatedTeaching = teachingService.updateTeaching(id, dto);
+    TeachingResponse response = teachingService.updateTeaching(id, request);
 
-    return ResponseEntity.ok(SuccessResponse.data(updatedTeaching));
+    return ResponseEntity.ok(SuccessResponse.data(response));
   }
 
   @DeleteMapping("/{id}")

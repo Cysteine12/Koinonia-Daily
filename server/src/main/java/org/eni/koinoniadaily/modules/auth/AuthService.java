@@ -102,16 +102,16 @@ public class AuthService {
   }
 
   @Transactional
-	public void verifyEmail(VerifyEmailDto payload) {
+	public void verifyEmail(VerifyEmailDto request) {
 
-		User user = userRepository.findByEmail(payload.getEmail())
+		User user = userRepository.findByEmail(request.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
       
     if (user.isVerified()) {
       throw new ValidationException("User is already verified");
     }
     
-    tokenService.consumeEmailOtp(user.getEmail(), payload.getOtp());
+    tokenService.consumeEmailOtp(user.getEmail(), request.getOtp());
 
     user.setVerified(true);
 
@@ -119,9 +119,9 @@ public class AuthService {
 	}
 
   @Transactional
-	public void requestOtp(RequestOtpDto payload) {
+	public void requestOtp(RequestOtpDto request) {
     
-		User user = userRepository.findByEmail(payload.getEmail())
+		User user = userRepository.findByEmail(request.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
         
     if (user.isVerified()) {
@@ -134,9 +134,9 @@ public class AuthService {
 	}
 
   @Transactional
-  public void forgotPassword(ForgotPasswordDto payload) {
+  public void forgotPassword(ForgotPasswordDto request) {
     
-    User user = userRepository.findByEmail(payload.getEmail())
+    User user = userRepository.findByEmail(request.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
 
     String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.CHANGE_PASSWORD);
@@ -145,13 +145,13 @@ public class AuthService {
   }
 
   @Transactional
-  public void resetPassword(ResetPasswordDto payload) {
+  public void resetPassword(ResetPasswordDto request) {
     
-    tokenService.consumePasswordOtp(payload.getEmail(), payload.getOtp());
+    tokenService.consumePasswordOtp(request.getEmail(), request.getOtp());
 
-    String newPassword = passwordEncoder.encode(payload.getPassword());
+    String newPassword = passwordEncoder.encode(request.getPassword());
 
-    User user = userRepository.findByEmail(payload.getEmail())
+    User user = userRepository.findByEmail(request.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
 
     user.setPassword(newPassword);
@@ -160,19 +160,19 @@ public class AuthService {
   }
 
   @Transactional
-  public void changePassword(ChangePasswordDto payload) {
+  public void changePassword(ChangePasswordDto request) {
 
     UserPrincipal currentUser = currentUserProvider.getCurrentUser();
 
     User user = userRepository.findById(currentUser.getId())
                   .orElseThrow(() -> new NotFoundException("User not found"));
 
-    boolean isMatch = passwordEncoder.matches(payload.getCurrentPassword(), user.getPassword());
+    boolean isMatch = passwordEncoder.matches(request.getCurrentPassword(), user.getPassword());
     if (!isMatch) {
       throw new UnauthorizedException("Incorrect password");
     }
 
-    String newPassword = passwordEncoder.encode(payload.getNewPassword());
+    String newPassword = passwordEncoder.encode(request.getNewPassword());
     
     user.setPassword(newPassword);
 
@@ -180,9 +180,9 @@ public class AuthService {
   }
 
   @Transactional
-  public RefreshTokenResponse refreshToken(RefreshTokenRequest payload) {
+  public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
 
-    JwtPayload jwtPayload = jwtService.validateAndExtractPayload(payload.getRefreshToken(), TokenType.REFRESH_TOKEN);
+    JwtPayload jwtPayload = jwtService.validateAndExtractPayload(request.getRefreshToken(), TokenType.REFRESH_TOKEN);
 
     tokenService.consumeRefreshToken(jwtPayload.getSubject(), jwtPayload.getJti());
 

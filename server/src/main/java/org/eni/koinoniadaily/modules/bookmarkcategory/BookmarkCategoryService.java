@@ -33,9 +33,9 @@ public class BookmarkCategoryService {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
-    Page<BookmarkCategoryResponse> histories = bookmarkCategoryRepository.findAllByUserId(userId, pageable);
+    Page<BookmarkCategoryResponse> categories = bookmarkCategoryRepository.findAllByUserId(userId, pageable);
 
-    return PageResponse.from(histories);
+    return PageResponse.from(categories);
   }
 
   public BookmarkCategoryResponse getBookmarkCategoryById(Long id) {
@@ -47,25 +47,32 @@ public class BookmarkCategoryService {
   }
 
   @Transactional
-  public BookmarkCategoryResponse createBookmarkCategory(BookmarkCategoryRequest payload) {
+  public BookmarkCategoryResponse createBookmarkCategory(BookmarkCategoryRequest request) {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
     User user = userRepository.getReferenceById(userId);
 
-    BookmarkCategory bookmarkCategory = bookmarkCategoryMapper.toEntity(payload.getName(), user);
+    BookmarkCategory category = bookmarkCategoryMapper.toEntity(request.getName(), user);
 
-    BookmarkCategory savedBookmarkCategory = bookmarkCategoryRepository.save(bookmarkCategory);
+    BookmarkCategory savedCategory = bookmarkCategoryRepository.save(category);
 
-    return bookmarkCategoryMapper.toDto(savedBookmarkCategory);
+    return bookmarkCategoryMapper.toDto(savedCategory);
   }
 
   @Transactional
-  public void updateBookmarkCategoryName(Long id, BookmarkCategoryRequest payload) {
+  public void updateBookmarkCategoryName(Long id, BookmarkCategoryRequest request) {
 
-    BookmarkCategoryResponse bookmarkCategory = getBookmarkCategoryById(id);
+    Long userId = currentUserProvider.getCurrentUserId();
+
+    BookmarkCategory category = bookmarkCategoryRepository.findById(id)
+                                  .orElseThrow(() -> new NotFoundException("Bookmark category not found"));
+
+    if (!category.getUser().getId().equals(userId)) {
+      throw new NotFoundException("Bookmark category not found");
+    }
     
-    bookmarkCategory.setName(payload.getName());
+    category.setName(request.getName());
   }
 
   @Transactional
@@ -73,10 +80,14 @@ public class BookmarkCategoryService {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
-    BookmarkCategoryResponse bookmarkCategory = bookmarkCategoryRepository.findByIdAndUserId(id, userId)
-                              .orElseThrow(() -> new NotFoundException("Bookmark category not found"));
+    BookmarkCategory category = bookmarkCategoryRepository.findById(id)
+                                  .orElseThrow(() -> new NotFoundException("Bookmark category not found"));
 
-    // By deleting this managed entity, JPA will handle cascading to associated bookmarks.
-    bookmarkCategoryRepository.deleteById(bookmarkCategory.getId());
+    if (!category.getUser().getId().equals(userId)) {
+      throw new NotFoundException("Bookmark category not found");
+    }
+    
+    // By deleting a managed entity, JPA will handle cascading to associated bookmarks as expected behaviour.
+    bookmarkCategoryRepository.delete(category);
   }
 }
