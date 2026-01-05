@@ -15,7 +15,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,11 +40,4 @@ public class BookmarkCategory extends BaseEntity {
   @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = false)
   @Builder.Default
   private List<Bookmark> bookmarks = new ArrayList<>();
-
-  @PrePersist
-  void prePersist() {
-    if (this.name == null) { 
-      this.name = "General"; 
-    }
-  }
 }

@@ -65,12 +65,8 @@ public class BookmarkCategoryService {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
-    BookmarkCategory category = bookmarkCategoryRepository.findById(id)
+    BookmarkCategory category = bookmarkCategoryRepository.findByIdAndUser_Id(id, userId)
                                   .orElseThrow(() -> new NotFoundException("Bookmark category not found"));
-
-    if (!category.getUser().getId().equals(userId)) {
-      throw new NotFoundException("Bookmark category not found");
-    }
     
     category.setName(request.getName());
   }
@@ -80,13 +76,9 @@ public class BookmarkCategoryService {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
-    BookmarkCategory category = bookmarkCategoryRepository.findById(id)
+    BookmarkCategory category = bookmarkCategoryRepository.findByIdAndUser_Id(id, userId)
                                   .orElseThrow(() -> new NotFoundException("Bookmark category not found"));
 
-    if (!category.getUser().getId().equals(userId)) {
-      throw new NotFoundException("Bookmark category not found");
-    }
-    
     // By deleting a managed entity, JPA will handle cascading to associated bookmarks as expected behaviour.
     bookmarkCategoryRepository.delete(category);
   }

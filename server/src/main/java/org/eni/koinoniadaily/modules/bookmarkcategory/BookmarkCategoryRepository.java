@@ -22,4 +22,6 @@ public interface BookmarkCategoryRepository extends JpaRepository<BookmarkCatego
           "bc.id, bc.name, SIZE(bc.bookmarks), bc.createdAt, bc.updatedAt) " +
           "FROM BookmarkCategory bc WHERE bc.id = :id AND bc.user.id = :userId")
   Optional<BookmarkCategoryResponse> findByIdAndUserId(Long id, Long userId);
+
+  Optional<BookmarkCategory> findByIdAndUser_Id(Long id, Long userId);
 }

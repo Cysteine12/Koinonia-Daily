@@ -21,8 +21,8 @@ import lombok.experimental.SuperBuilder;
 @Table(
     name = "bookmarks",
     uniqueConstraints = @UniqueConstraint(
-        name = "unique_user_teaching_category",
-        columnNames = {"userId", "teachingId", "categoryId"}
+        name = "unique_user_category_teaching",
+        columnNames = {"userId", "categoryId", "teachingId"}
     )
 )
 @Getter

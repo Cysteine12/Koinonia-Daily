@@ -12,7 +12,7 @@ public class BookmarkCategoryMapper {
     return BookmarkCategoryResponse.builder()
             .id(category.getId())
             .name(category.getName())
-            .totalBookmarks(0)
+            .totalBookmarks(category.getBookmarks().size())
             .createdAt(category.getCreatedAt())
             .updatedAt(category.getUpdatedAt())
             .build();
