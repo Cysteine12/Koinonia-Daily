@@ -32,7 +32,7 @@ public class BookmarkCategoryController {
       @RequestParam(defaultValue = "10") int size
   ) {
     PageResponse<BookmarkCategoryResponse> response = 
-        bookmarkCategoryService.getBookmarkCategoryByUser(page, size);
+        bookmarkCategoryService.getBookmarkCategoriesByUser(page, size);
 
     return ResponseEntity.ok(SuccessResponse.data(response));
   }
