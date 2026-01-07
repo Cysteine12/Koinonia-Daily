@@ -9,6 +9,12 @@ import org.eni.koinoniadaily.modules.auth.CurrentUserProvider;
 import org.eni.koinoniadaily.modules.bookmark.dto.BookmarkRequest;
 import org.eni.koinoniadaily.modules.bookmark.dto.BookmarkResponse;
 import org.eni.koinoniadaily.modules.bookmark.dto.BookmarkUpdateRequest;
+import org.eni.koinoniadaily.modules.bookmarkcategory.BookmarkCategory;
+import org.eni.koinoniadaily.modules.bookmarkcategory.BookmarkCategoryRepository;
+import org.eni.koinoniadaily.modules.teaching.Teaching;
+import org.eni.koinoniadaily.modules.teaching.TeachingRepository;
+import org.eni.koinoniadaily.modules.user.User;
+import org.eni.koinoniadaily.modules.user.UserRepository;
 import org.eni.koinoniadaily.utils.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,17 +31,20 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkService {
   
   private final BookmarkRepository bookmarkRepository;
+  private final BookmarkCategoryRepository bookmarkCategoryRepository;
+  private final TeachingRepository teachingRepository;
+  private final UserRepository userRepository;
   private final BookmarkMapper bookmarkMapper;
   private final CurrentUserProvider currentUserProvider;
   private static final String UPDATED_AT = "updatedAt";
 
-  public PageResponse<BookmarkResponse> getBookmarksByCategory(Long id, int page, int size) {
+  public PageResponse<BookmarkResponse> getBookmarksByCategory(Long categoryId, int page, int size) {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, UPDATED_AT));
 
     Long userId = currentUserProvider.getCurrentUserId();
 
-    Page<BookmarkResponse> bookmarks = bookmarkRepository.findAllByCategoryIdAndUserId(id, userId, pageable);
+    Page<BookmarkResponse> bookmarks = bookmarkRepository.findAllByCategoryIdAndUserId(categoryId, userId, pageable);
 
     return PageResponse.from(bookmarks);
   }
@@ -51,7 +60,15 @@ public class BookmarkService {
       throw new ValidationException("Teaching already added to the category");
     }
 
-    bookmarkRepository.save(bookmarkMapper.toEntity(userId, request));
+    User user = userRepository.getReferenceById(userId);
+
+    Teaching teaching = teachingRepository.findById(request.getTeachingId())
+                          .orElseThrow(() -> new NotFoundException("Teaching not found"));
+
+    BookmarkCategory category = bookmarkCategoryRepository.findByIdAndUser_Id(request.getCategoryId(), userId)
+                                  .orElseThrow(() -> new NotFoundException("Category not found"));
+
+    bookmarkRepository.save(bookmarkMapper.toEntity(user, category, teaching, request.getNote()));
   }
 
   @Transactional
@@ -70,12 +87,9 @@ public class BookmarkService {
 
     Long userId = currentUserProvider.getCurrentUserId();
 
-    boolean bookmarkExists = bookmarkRepository.existsByIdAndUserId(id, userId);
+    Bookmark bookmark = bookmarkRepository.findByIdAndUserId(id, userId)
+                          .orElseThrow(() -> new NotFoundException("Bookmark not found"));
 
-    if (!bookmarkExists) {
-      throw new NotFoundException("Bookmark not found");
-    }
-
-    bookmarkRepository.deleteById(id);
+    bookmarkRepository.delete(bookmark);
   }
 }
