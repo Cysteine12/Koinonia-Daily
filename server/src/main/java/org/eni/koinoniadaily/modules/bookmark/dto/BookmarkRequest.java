@@ -15,9 +15,8 @@ public class BookmarkRequest {
   private Long teachingId;
 
   @NotNull(message = "categoryId is required")
-  @Positive(message = "teachingId must be greater than zero")
+  @Positive(message = "categoryId must be greater than zero")
   private Long categoryId;
 
-  @Null(message = "Note is a string field")
   private String note;
 }

@@ -18,7 +18,7 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         "FROM Bookmark b JOIN b.teaching t WHERE b.category.id = :categoryId AND b.user.id = :userId")
   Page<BookmarkResponse> findAllByCategoryIdAndUserId(@Param("categoryId") Long categoryId, @Param("userId") Long userId, Pageable pageable);  
 
-  Optional<Bookmark> findByCategoryIdAndTeachingId(Long categoryId, Long teachingId);
+  Optional<Bookmark> findByUserIdAndCategoryIdAndTeachingId(Long userId, Long categoryId, Long teachingId);
 
   Optional<Bookmark> findByIdAndUserId(Long id, Long userId);
 

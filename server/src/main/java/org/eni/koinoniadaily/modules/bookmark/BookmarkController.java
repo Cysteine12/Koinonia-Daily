@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +34,7 @@ public class BookmarkController {
   private final BookmarkService bookmarkService;
 
   @GetMapping
-  public ResponseEntity<SuccessResponse<PageResponse<BookmarkResponse>>> getBookingsByCategory(
+  public ResponseEntity<SuccessResponse<PageResponse<BookmarkResponse>>> getBookmarksByCategory(
       @RequestParam Long categoryId,
       @RequestParam(defaultValue = "0") @Min(0) int page,
       @RequestParam(defaultValue = "50") @Max(100) int size
@@ -44,7 +45,7 @@ public class BookmarkController {
   }
 
   @PostMapping
-  public ResponseEntity<SuccessResponse<Void>> createBookmark(@Valid BookmarkRequest request) {
+  public ResponseEntity<SuccessResponse<Void>> createBookmark(@RequestBody @Valid BookmarkRequest request) {
 
     bookmarkService.createBookmark(request);
 
@@ -54,7 +55,7 @@ public class BookmarkController {
   @PatchMapping("/{id}/note")
   public ResponseEntity<SuccessResponse<Void>> updateBookmarkNote(
       @PathVariable @NotNull @Positive Long id, 
-      @Valid BookmarkUpdateRequest request
+      @RequestBody @Valid BookmarkUpdateRequest request
   ) {
     bookmarkService.updateBookmarkNote(id, request);
 
