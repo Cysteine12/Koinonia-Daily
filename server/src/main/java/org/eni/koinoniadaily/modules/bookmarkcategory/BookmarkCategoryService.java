@@ -27,7 +27,7 @@ public class BookmarkCategoryService {
   private final CurrentUserProvider currentUserProvider;
   private static final String UPDATED_AT = "updatedAt";
 
-  public PageResponse<BookmarkCategoryResponse> getBookmarkCategoryByUser(int page, int size) {
+  public PageResponse<BookmarkCategoryResponse> getBookmarkCategoriesByUser(int page, int size) {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, UPDATED_AT));
 
