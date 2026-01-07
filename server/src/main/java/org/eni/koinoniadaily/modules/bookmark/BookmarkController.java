@@ -35,7 +35,7 @@ public class BookmarkController {
 
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<BookmarkResponse>>> getBookmarksByCategory(
-      @RequestParam Long categoryId,
+      @RequestParam @NotNull @Positive Long categoryId,
       @RequestParam(defaultValue = "0") @Min(0) int page,
       @RequestParam(defaultValue = "50") @Max(100) int size
   ) {

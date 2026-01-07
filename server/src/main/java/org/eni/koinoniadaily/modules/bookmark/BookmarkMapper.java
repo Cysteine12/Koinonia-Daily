@@ -10,7 +10,6 @@ public class BookmarkMapper {
 
   public Bookmark toEntity(User user, BookmarkCategory category, Teaching teaching, String note) {
 
-
     return Bookmark.builder()
             .user(user)
             .category(category)
