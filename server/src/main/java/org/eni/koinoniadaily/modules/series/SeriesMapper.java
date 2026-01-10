@@ -24,6 +24,8 @@ public class SeriesMapper {
             .id(series.getId())
             .title(series.getTitle())
             .description(series.getDescription())
+            .createdAt(series.getCreatedAt())
+            .updatedAt(series.getUpdatedAt())
             .teachings(teachings)
             .build();
   }

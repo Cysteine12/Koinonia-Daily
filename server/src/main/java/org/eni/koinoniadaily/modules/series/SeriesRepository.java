@@ -16,7 +16,5 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
   @Query("SELECT new org.eni.koinoniadaily.modules.series.dto.SeriesPageResponse(" +
         "s.id, s.title, s.description, s.createdAt, s.updatedAt, SIZE(s.teachings)) " + 
         "FROM Series s")
-  Page<SeriesPageResponse> findAllBy(Pageable pageable); 
-
-  Optional<SeriesResponse> findProjectedById(Long id); 
+  Page<SeriesPageResponse> findAllBy(Pageable pageable);
 }

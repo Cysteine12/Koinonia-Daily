@@ -1,5 +1,6 @@
 package org.eni.koinoniadaily.modules.series;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eni.koinoniadaily.exceptions.NotFoundException;
@@ -52,7 +53,7 @@ public class SeriesService {
 
     Series series = seriesRepository.save(seriesMapper.toEntity(request));
 
-    return seriesMapper.toDto(series, null);
+    return seriesMapper.toDto(series, Collections.emptyList());
   }
 
   @Transactional
@@ -64,7 +65,7 @@ public class SeriesService {
     series.setTitle(request.getTitle());
     series.setDescription(request.getDescription());
 
-    return seriesMapper.toDto(series, null);
+    return seriesMapper.toDto(series, Collections.emptyList());
   }
   
   @Transactional
