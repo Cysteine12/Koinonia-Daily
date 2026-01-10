@@ -2,6 +2,7 @@ package org.eni.koinoniadaily.modules.teaching;
 
 import org.eni.koinoniadaily.exceptions.NotFoundException;
 import org.eni.koinoniadaily.modules.history.HistoryService;
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
 import org.eni.koinoniadaily.utils.PageResponse;
@@ -24,12 +25,11 @@ public class TeachingService {
   private final HistoryService historyService;
   private static final String TAUGHT_AT = "taughtAt";
 
-  public PageResponse<TeachingResponse> getTeachings(int page, int size) {
+  public PageResponse<TeachingPageResponse> getTeachings(int page, int size) {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, TAUGHT_AT));
     
-    Page<TeachingResponse> teachings = teachingRepository.findAll(pageable)
-                            .map(teachingMapper::toDto);
+    Page<TeachingPageResponse> teachings = teachingRepository.findAllBy(pageable);
 
     return PageResponse.from(teachings);
   }

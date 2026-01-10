@@ -1,5 +1,6 @@
 package org.eni.koinoniadaily.modules.teaching;
 
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
 import org.eni.koinoniadaily.utils.PageResponse;
@@ -28,12 +29,12 @@ public class TeachingController {
   private final TeachingService teachingService;
 
   @GetMapping
-  public ResponseEntity<SuccessResponse<PageResponse<TeachingResponse>>> getTeachings(
+  public ResponseEntity<SuccessResponse<PageResponse<TeachingPageResponse>>> getTeachings(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "50") int size
   ) {
 
-    PageResponse<TeachingResponse> response = teachingService.getTeachings(page, size);
+    PageResponse<TeachingPageResponse> response = teachingService.getTeachings(page, size);
 
     return ResponseEntity.ok(SuccessResponse.data(response));
   }
