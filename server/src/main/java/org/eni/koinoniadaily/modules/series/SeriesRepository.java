@@ -1,9 +1,6 @@
 package org.eni.koinoniadaily.modules.series;
 
-import java.util.Optional;
-
 import org.eni.koinoniadaily.modules.series.dto.SeriesPageResponse;
-import org.eni.koinoniadaily.modules.series.dto.SeriesResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
