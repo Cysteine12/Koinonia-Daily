@@ -65,7 +65,8 @@ public class SeriesService {
     series.setTitle(request.getTitle());
     series.setDescription(request.getDescription());
 
-    return seriesMapper.toDto(series, Collections.emptyList());
+    List<TeachingPageResponse> teachings = teachingRepository.findAllBySeriesId(id);
+    return seriesMapper.toDto(series, teachings);
   }
   
   @Transactional
