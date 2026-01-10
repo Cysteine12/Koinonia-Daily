@@ -10,7 +10,7 @@ import lombok.Setter;
 public class SeriesRequest {
   
   @NotBlank(message = "Title is required")
-  @Size(max = 100, message = "Title length cannot exceed 50 characters")
+  @Size(max = 100, message = "Title length cannot exceed 100 characters")
   private String title;
 
   @NotBlank(message = "Description is required")

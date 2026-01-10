@@ -1,9 +1,13 @@
 package org.eni.koinoniadaily.modules.series;
 
+import java.util.List;
+
 import org.eni.koinoniadaily.exceptions.NotFoundException;
 import org.eni.koinoniadaily.modules.series.dto.SeriesPageResponse;
 import org.eni.koinoniadaily.modules.series.dto.SeriesRequest;
 import org.eni.koinoniadaily.modules.series.dto.SeriesResponse;
+import org.eni.koinoniadaily.modules.teaching.TeachingRepository;
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
 import org.eni.koinoniadaily.utils.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class SeriesService {
   
   private final SeriesRepository seriesRepository;
+  private final TeachingRepository teachingRepository;
   private final SeriesMapper seriesMapper;
   private static final String UPDATED_AT = "updatedAt";
 
@@ -34,8 +39,12 @@ public class SeriesService {
 
   public SeriesResponse getSeriesById(Long id) {
 
-    return seriesRepository.findProjectedById(id)
-            .orElseThrow(() -> new NotFoundException("Series not found"));
+    Series series = seriesRepository.findById(id)
+                      .orElseThrow(() -> new NotFoundException("Series not found"));
+
+    List<TeachingPageResponse> teachings = teachingRepository.findAllBySeriesId(id);
+
+    return seriesMapper.toDto(series, teachings);
   }
 
   @Transactional
@@ -43,17 +52,19 @@ public class SeriesService {
 
     Series series = seriesRepository.save(seriesMapper.toEntity(request));
 
-    return getSeriesById(series.getId());
+    return seriesMapper.toDto(series, null);
   }
 
   @Transactional
-  public void updateSeries(Long id, SeriesRequest request) {
+  public SeriesResponse updateSeries(Long id, SeriesRequest request) {
 
     Series series = seriesRepository.findById(id)
                       .orElseThrow(() -> new NotFoundException("Series not found"));
 
     series.setTitle(request.getTitle());
     series.setDescription(request.getDescription());
+
+    return seriesMapper.toDto(series, null);
   }
   
   @Transactional

@@ -65,13 +65,13 @@ public class SeriesController {
 
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public ResponseEntity<SuccessResponse<Void>> updateSeries(
+  public ResponseEntity<SuccessResponse<SeriesResponse>> updateSeries(
     @PathVariable @NotNull @Positive Long id,
     @RequestBody @Valid SeriesRequest request
   ) {
-    seriesService.updateSeries(id, request);
+    SeriesResponse response = seriesService.updateSeries(id, request);
 
-    return ResponseEntity.ok(SuccessResponse.message("Series updated successfully"));
+    return ResponseEntity.ok(SuccessResponse.of(response, "Series updated successfully"));
   }
 
   @DeleteMapping("/{id}")

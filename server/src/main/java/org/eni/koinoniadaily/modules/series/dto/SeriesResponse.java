@@ -5,17 +5,22 @@ import java.util.List;
 
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
 
-public interface SeriesResponse {
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class SeriesResponse {
   
-  Long getId();
+  private Long id;
 
-  String getTitle();
+  private String title;
 
-  String getDescription();
+  private String description;
 
-  LocalDateTime getCreatedAt();
+  private LocalDateTime createdAt;
 
-  LocalDateTime getUpdatedAt();
+  private LocalDateTime updatedAt;
 
-  List<TeachingPageResponse> getTeachings();
+  private List<TeachingPageResponse> teachings;
 }
