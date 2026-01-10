@@ -2,7 +2,6 @@ package org.eni.koinoniadaily.modules.teaching.dto;
 
 import java.time.LocalDateTime;
 
-import org.eni.koinoniadaily.modules.series.Series;
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 
 public interface TeachingPageResponse {
@@ -24,8 +23,6 @@ public interface TeachingPageResponse {
   TeachingType getType();
 
   String getTags();
-  
-  Series getSeries();
 
   int getSeriesPart();
 

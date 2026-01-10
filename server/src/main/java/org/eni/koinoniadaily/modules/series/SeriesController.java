@@ -7,6 +7,7 @@ import org.eni.koinoniadaily.utils.PageResponse;
 import org.eni.koinoniadaily.utils.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +53,7 @@ public class SeriesController {
   }
 
   @PostMapping
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<SeriesResponse>> createSeries(
       @RequestBody @Valid SeriesRequest request
   ) {
@@ -62,6 +64,7 @@ public class SeriesController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> updateSeries(
     @PathVariable @NotNull @Positive Long id,
     @RequestBody @Valid SeriesRequest request
@@ -72,6 +75,7 @@ public class SeriesController {
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> deleteSeries(
     @PathVariable @NotNull @Positive Long id
   ) {
