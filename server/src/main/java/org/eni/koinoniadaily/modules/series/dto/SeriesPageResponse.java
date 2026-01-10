@@ -23,5 +23,5 @@ public class SeriesPageResponse {
 
   private LocalDateTime updatedAt;
 
-  private Long totalTeachings;
+  private Integer totalTeachings;
 }
