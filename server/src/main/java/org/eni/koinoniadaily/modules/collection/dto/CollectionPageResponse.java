@@ -1,4 +1,4 @@
-package org.eni.koinoniadaily.modules.series.dto;
+package org.eni.koinoniadaily.modules.collection.dto;
 
 import java.time.LocalDateTime;
 
@@ -11,18 +11,18 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class SeriesPageResponse {
+public class CollectionPageResponse {
   
   private Long id;
-
+  
   private String name;
 
   private String description;
 
   private String thumbnailUrl;
-
+  
   private LocalDateTime createdAt;
-
+  
   private LocalDateTime updatedAt;
 
   private Integer totalTeachings;
