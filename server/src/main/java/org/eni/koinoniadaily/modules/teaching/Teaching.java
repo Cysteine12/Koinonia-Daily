@@ -1,8 +1,11 @@
 package org.eni.koinoniadaily.modules.teaching;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eni.koinoniadaily.entity.BaseEntity;
+import org.eni.koinoniadaily.modules.collection.Collection;
 import org.eni.koinoniadaily.modules.series.Series;
 import org.eni.koinoniadaily.modules.transcript.Transcript;
 
@@ -12,9 +15,11 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -69,4 +74,8 @@ public class Teaching extends BaseEntity {
 
   @Column(nullable = false)
   private LocalDateTime taughtAt;
+
+  @ManyToMany(mappedBy = "teachings")
+  @Builder.Default
+  private List<Collection> collections = new ArrayList<>();
 }

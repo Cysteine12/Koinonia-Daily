@@ -4,31 +4,36 @@ import java.time.LocalDateTime;
 
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 
-public interface TeachingPageResponse {
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class TeachingPageResponse {
   
-  Long getId();
+  private Long id;
 
-  String getTitle();
+  private String title;
   
-  String getScripturalReferences();
+  private String scripturalReferences;
 
-  String getSummary();
+  private String summary;
 
-  String getAudioUrl();
+  private String audioUrl;
 
-  String getVideoUrl();
+  private String videoUrl;
 
-  String getThumbnailUrl();
+  private String thumbnailUrl;
 
-  TeachingType getType();
+  private TeachingType type;
 
-  String getTags();
+  private String tags;
 
-  int getSeriesPart();
+  private int seriesPart;
 
-  LocalDateTime getTaughtAt();
+  private LocalDateTime taughtAt;
   
-  LocalDateTime getCreatedAt();
+  private LocalDateTime createdAt;
   
-  LocalDateTime getUpdatedAt();
+  private LocalDateTime updatedAt;
 }

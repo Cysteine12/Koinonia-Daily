@@ -8,7 +8,7 @@ import org.eni.koinoniadaily.modules.series.dto.SeriesPageResponse;
 import org.eni.koinoniadaily.modules.series.dto.SeriesRequest;
 import org.eni.koinoniadaily.modules.series.dto.SeriesResponse;
 import org.eni.koinoniadaily.modules.teaching.TeachingRepository;
-import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
+import org.eni.koinoniadaily.modules.teaching.projection.TeachingWithoutMessageProjection;
 import org.eni.koinoniadaily.utils.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +43,7 @@ public class SeriesService {
     Series series = seriesRepository.findById(id)
                       .orElseThrow(() -> new NotFoundException("Series not found"));
 
-    List<TeachingPageResponse> teachings = teachingRepository.findAllBySeriesId(id);
+    List<TeachingWithoutMessageProjection> teachings = teachingRepository.findAllBySeriesId(id);
 
     return seriesMapper.toDto(series, teachings);
   }
@@ -62,10 +62,12 @@ public class SeriesService {
     Series series = seriesRepository.findById(id)
                       .orElseThrow(() -> new NotFoundException("Series not found"));
 
-    series.setTitle(request.getTitle());
+    series.setName(request.getName());
     series.setDescription(request.getDescription());
+    series.setThumbnailUrl(request.getThumbnailUrl());
 
-    List<TeachingPageResponse> teachings = teachingRepository.findAllBySeriesId(id);
+    List<TeachingWithoutMessageProjection> teachings = teachingRepository.findAllBySeriesId(id);
+
     return seriesMapper.toDto(series, teachings);
   }
   

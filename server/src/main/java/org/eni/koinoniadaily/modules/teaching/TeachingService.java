@@ -29,7 +29,8 @@ public class TeachingService {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, TAUGHT_AT));
     
-    Page<TeachingPageResponse> teachings = teachingRepository.findAllBy(pageable);
+    Page<TeachingPageResponse> teachings = teachingRepository.findAllBy(pageable)
+                                            .map(teachingMapper::toDto);
 
     return PageResponse.from(teachings);
   }
