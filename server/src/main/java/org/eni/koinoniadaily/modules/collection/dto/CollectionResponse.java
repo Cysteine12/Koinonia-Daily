@@ -1,17 +1,16 @@
-package org.eni.koinoniadaily.modules.series.dto;
+package org.eni.koinoniadaily.modules.collection.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import lombok.AllArgsConstructor;
+import org.eni.koinoniadaily.modules.teaching.projection.TeachingWithoutMessageProjection;
+
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Builder
-@AllArgsConstructor
-public class SeriesPageResponse {
+public class CollectionResponse {
   
   private Long id;
 
@@ -25,5 +24,5 @@ public class SeriesPageResponse {
 
   private LocalDateTime updatedAt;
 
-  private Integer totalTeachings;
+  private List<TeachingWithoutMessageProjection> teachings;
 }

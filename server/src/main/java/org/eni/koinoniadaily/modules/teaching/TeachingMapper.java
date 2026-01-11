@@ -1,11 +1,32 @@
 package org.eni.koinoniadaily.modules.teaching;
 
+import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
+import org.eni.koinoniadaily.modules.teaching.projection.TeachingWithoutMessageProjection;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TeachingMapper {
+
+  public TeachingPageResponse toDto(TeachingWithoutMessageProjection teaching) {
+
+    return TeachingPageResponse.builder()
+            .id(teaching.getId())
+            .title(teaching.getTitle())
+            .scripturalReferences(teaching.getScripturalReferences())
+            .summary(teaching.getSummary())
+            .audioUrl(teaching.getAudioUrl())
+            .videoUrl(teaching.getVideoUrl())
+            .thumbnailUrl(teaching.getThumbnailUrl())
+            .type(teaching.getType())
+            .tags(teaching.getTags())
+            .seriesPart(teaching.getSeriesPart())
+            .taughtAt(teaching.getTaughtAt())
+            .createdAt(teaching.getCreatedAt())
+            .updatedAt(teaching.getUpdatedAt())
+            .build();
+  }
 
   public TeachingResponse toDto(Teaching teaching) {
 

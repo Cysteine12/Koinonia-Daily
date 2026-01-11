@@ -3,7 +3,7 @@ package org.eni.koinoniadaily.modules.series.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
+import org.eni.koinoniadaily.modules.teaching.projection.TeachingWithoutMessageProjection;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -14,13 +14,15 @@ public class SeriesResponse {
   
   private Long id;
 
-  private String title;
+  private String name;
 
   private String description;
+
+  private String thumbnailUrl;
 
   private LocalDateTime createdAt;
 
   private LocalDateTime updatedAt;
 
-  private List<TeachingPageResponse> teachings;
+  private List<TeachingWithoutMessageProjection> teachings;
 }

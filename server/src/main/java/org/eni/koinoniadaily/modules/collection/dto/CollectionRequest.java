@@ -1,4 +1,4 @@
-package org.eni.koinoniadaily.modules.series.dto;
+package org.eni.koinoniadaily.modules.collection.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SeriesRequest {
+public class CollectionRequest {
   
   @NotBlank(message = "Name is required")
   @Size(max = 50, message = "Name length cannot exceed 50 characters")

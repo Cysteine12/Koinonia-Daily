@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class BookmarkCategoryRequest {
   
-  @NotBlank
+  @NotBlank(message = "Name is required")
   private String name;
 }
