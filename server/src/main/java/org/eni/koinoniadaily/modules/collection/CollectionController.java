@@ -12,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -76,7 +75,7 @@ public class CollectionController {
     return ResponseEntity.ok(SuccessResponse.of(response, "Collection updated successfully"));
   }
 
-  @PatchMapping("/{id}/teachings")
+  @PostMapping("/{id}/teachings")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> addCollectionTeaching(
     @PathVariable @NotNull @Positive Long id,
@@ -87,13 +86,13 @@ public class CollectionController {
     return ResponseEntity.ok(SuccessResponse.message("Teaching added successfully"));
   }
 
-  @DeleteMapping("/{id}/teachings")
+  @DeleteMapping("/{id}/teachings/{teachingId}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> removeCollectionTeaching(
     @PathVariable @NotNull @Positive Long id,
-    @RequestBody @Valid CollectionTeachingRequest request
+    @PathVariable @NotNull @Positive Long teachingId
   ) {
-    collectionService.removeCollectionTeaching(id, request);
+    collectionService.removeCollectionTeaching(id, teachingId);
 
     return ResponseEntity.ok(SuccessResponse.message("Teaching removed successfully"));
   }

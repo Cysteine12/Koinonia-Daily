@@ -45,14 +45,4 @@ public class CollectionMapper {
             .thumbnailUrl(request.getThumbnailUrl())
             .build();
   }
-
-  public Collection toEntity(Long id, CollectionRequest request) {
-    
-    return Collection.builder()
-            .id(id)
-            .name(request.getName())
-            .description(request.getDescription())
-            .thumbnailUrl(request.getThumbnailUrl())
-            .build();
-  }
 }

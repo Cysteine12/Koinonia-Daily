@@ -14,4 +14,6 @@ public interface TeachingRepository extends JpaRepository<Teaching, Long> {
   Page<TeachingWithoutMessageProjection> findAllBy(Pageable pageable);
 
   List<TeachingWithoutMessageProjection> findAllBySeriesId(Long seriesId);
+
+  List<TeachingWithoutMessageProjection> findAllByCollections_Id(Long collectionId);
 }

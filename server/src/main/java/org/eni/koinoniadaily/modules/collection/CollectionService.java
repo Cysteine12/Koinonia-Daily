@@ -1,6 +1,7 @@
 package org.eni.koinoniadaily.modules.collection;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.eni.koinoniadaily.exceptions.NotFoundException;
 import org.eni.koinoniadaily.modules.collection.dto.CollectionPageResponse;
@@ -9,6 +10,7 @@ import org.eni.koinoniadaily.modules.collection.dto.CollectionResponse;
 import org.eni.koinoniadaily.modules.collection.dto.CollectionTeachingRequest;
 import org.eni.koinoniadaily.modules.teaching.Teaching;
 import org.eni.koinoniadaily.modules.teaching.TeachingRepository;
+import org.eni.koinoniadaily.modules.teaching.projection.TeachingWithoutMessageProjection;
 import org.eni.koinoniadaily.utils.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -58,14 +60,16 @@ public class CollectionService {
   @Transactional
   public CollectionResponse updateCollection(Long id, CollectionRequest request) {
 
-    var collection = collectionRepository.findProjectedById(id)
-                      .orElseThrow(() -> new NotFoundException("Collection not found"));
+    Collection collection = collectionRepository.findById(id)
+                              .orElseThrow(() -> new NotFoundException("Collection not found"));
 
-    Collection newCollection = collectionMapper.toEntity(collection.getId(), request);
+    collection.setName(request.getName());
+    collection.setDescription(request.getDescription());
+    collection.setThumbnailUrl(request.getThumbnailUrl());
 
-    Collection updatedCollection = collectionRepository.save(newCollection);
-
-    return collectionMapper.toDto(updatedCollection, collection.getTeachings());
+    List<TeachingWithoutMessageProjection> teachings = teachingRepository.findAllByCollections_Id(id);
+    
+    return collectionMapper.toDto(collection, teachings);
   }
 
   @Transactional
@@ -80,12 +84,12 @@ public class CollectionService {
   }
 
   @Transactional
-  public void removeCollectionTeaching(Long id, CollectionTeachingRequest request) {
+  public void removeCollectionTeaching(Long id, Long teachingId) {
 
     Collection collection = collectionRepository.findById(id)
                               .orElseThrow(() -> new NotFoundException("Collection not found"));
 
-    Teaching teaching = teachingRepository.getReferenceById(request.getTeachingId());
+    Teaching teaching = teachingRepository.getReferenceById(teachingId);
 
     collection.removeTeaching(teaching);
   }
