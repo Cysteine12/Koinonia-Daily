@@ -36,6 +36,9 @@ public class User extends BaseEntity {
   @Column(nullable = false)
   private String password;
 
+  @Column(nullable = true, length = 100)
+  private String photoUrl;
+
   @Column(nullable = false, length = 10)
   @Enumerated(EnumType.STRING)
   private UserRole role;

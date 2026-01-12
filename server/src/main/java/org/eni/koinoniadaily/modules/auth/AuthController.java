@@ -9,11 +9,9 @@ import org.eni.koinoniadaily.modules.auth.dto.RefreshTokenResponse;
 import org.eni.koinoniadaily.modules.auth.dto.RegisterRequest;
 import org.eni.koinoniadaily.modules.auth.dto.RequestOtpDto;
 import org.eni.koinoniadaily.modules.auth.dto.ResetPasswordDto;
-import org.eni.koinoniadaily.modules.auth.dto.UserProfileDto;
 import org.eni.koinoniadaily.modules.auth.dto.VerifyEmailDto;
 import org.eni.koinoniadaily.utils.SuccessResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,14 +41,6 @@ public class AuthController {
     LoginResponse response = authService.login(request);
 
     return ResponseEntity.ok(SuccessResponse.of(response, "Login Successful"));
-  }
-
-  @GetMapping("/profile")
-  public ResponseEntity<SuccessResponse<UserProfileDto>> profile() {
-    
-    UserProfileDto response = authService.profile();
-
-    return ResponseEntity.ok(SuccessResponse.data(response));
   }
 
   @PostMapping("/verify-email")

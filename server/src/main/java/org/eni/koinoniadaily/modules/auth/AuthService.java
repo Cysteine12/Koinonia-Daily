@@ -14,7 +14,6 @@ import org.eni.koinoniadaily.modules.auth.dto.RegisterRequest;
 import org.eni.koinoniadaily.modules.auth.dto.RequestOtpDto;
 import org.eni.koinoniadaily.modules.auth.dto.ResetPasswordDto;
 import org.eni.koinoniadaily.modules.auth.dto.TokenPair;
-import org.eni.koinoniadaily.modules.auth.dto.UserProfileDto;
 import org.eni.koinoniadaily.modules.auth.dto.VerifyEmailDto;
 import org.eni.koinoniadaily.modules.auth.events.EmailVerificationRequestedEvent;
 import org.eni.koinoniadaily.modules.auth.events.PasswordChangedEvent;
@@ -83,21 +82,6 @@ public class AuthService {
     return LoginResponse.builder()
             .accessToken(tokens.getAccessToken())
             .refreshToken(tokens.getRefreshToken())
-            .build();
-  }
-
-  public UserProfileDto profile() {
-
-    UserPrincipal user = currentUserProvider.getCurrentUser();
-
-    return UserProfileDto.builder()
-            .id(user.getId())
-            .firstName(user.getFirstName())
-            .lastName(user.getLastName())
-            .email(user.getEmail())
-            .role(user.getRole())
-            .createdAt(user.getCreatedAt())
-            .updatedAt(user.getUpdatedAt())
             .build();
   }
 
