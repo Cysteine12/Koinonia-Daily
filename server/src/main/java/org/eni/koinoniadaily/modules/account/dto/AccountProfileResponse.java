@@ -1,4 +1,4 @@
-package org.eni.koinoniadaily.modules.auth.dto;
+package org.eni.koinoniadaily.modules.account.dto;
 
 import java.time.LocalDateTime;
 
@@ -7,10 +7,10 @@ import org.eni.koinoniadaily.modules.user.UserRole;
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
 @Getter
-public class UserProfileDto {
-
+@Builder
+public class AccountProfileResponse {
+  
   private Long id;
 
   private String firstName;
@@ -18,6 +18,8 @@ public class UserProfileDto {
   private String lastName;
 
   private String email;
+
+  private String photoUrl;
 
   private UserRole role;
 
