@@ -35,6 +35,16 @@ public class TeachingService {
     return PageResponse.from(teachings);
   }
 
+  public PageResponse<TeachingPageResponse> searchTeachings(String query, int page, int size) {
+
+    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, TAUGHT_AT));
+    
+    Page<TeachingPageResponse> teachings = teachingRepository.searchByTitle(query, pageable)
+                                            .map(teachingMapper::toDto);
+
+    return PageResponse.from(teachings);
+  }
+
   @Transactional
   public TeachingResponse getTeachingById(Long id) {
 
