@@ -40,9 +40,9 @@ public class AccountService {
     user.setLastName(request.getLastName());
     user.setPhotoUrl(request.getPhotoUrl());
 
-    return accountMapper.toDto(user);
+    return accountMapper.toDto(new UserPrincipal(user));
   }
-  
+
   @Transactional
   public void deleteAccount() {
     
