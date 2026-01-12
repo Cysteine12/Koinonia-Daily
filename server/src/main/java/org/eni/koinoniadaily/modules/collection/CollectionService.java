@@ -67,7 +67,7 @@ public class CollectionService {
     collection.setDescription(request.getDescription());
     collection.setThumbnailUrl(request.getThumbnailUrl());
 
-    List<TeachingWithoutMessageProjection> teachings = teachingRepository.findAllByCollections_Id(id);
+    List<TeachingWithoutMessageProjection> teachings = teachingRepository.findAllByCollectionsId(id);
     
     return collectionMapper.toDto(collection, teachings);
   }

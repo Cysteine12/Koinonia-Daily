@@ -6,6 +6,8 @@ import org.eni.koinoniadaily.modules.teaching.projection.TeachingWithoutMessageP
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,5 +17,8 @@ public interface TeachingRepository extends JpaRepository<Teaching, Long> {
 
   List<TeachingWithoutMessageProjection> findAllBySeriesId(Long seriesId);
 
-  List<TeachingWithoutMessageProjection> findAllByCollections_Id(Long collectionId);
+  List<TeachingWithoutMessageProjection> findAllByCollectionsId(Long collectionId);
+
+  @Query("SELECT t FROM Teaching t WHERE LOWER(t.title) LIKE LOWER(CONCAT('%', :title, '%'))")
+  Page<TeachingWithoutMessageProjection> searchByTitle(@Param("title") String title, Pageable pageable);
 }
