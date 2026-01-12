@@ -47,8 +47,8 @@ public class TeachingController {
   @GetMapping("/search")
   public ResponseEntity<SuccessResponse<PageResponse<TeachingPageResponse>>> searchTeachings(
       @RequestParam @NotBlank String q,
-      @RequestParam(defaultValue = "0") @NotNull @PositiveOrZero int page,
-      @RequestParam(defaultValue = "50") @NotNull @Positive int size
+      @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+      @RequestParam(defaultValue = "50") @Positive int size
   ) {
     PageResponse<TeachingPageResponse> response = teachingService.searchTeachings(q, page, size);
 
