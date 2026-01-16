@@ -74,7 +74,7 @@ public class Teaching extends BaseEntity {
   private Series series;
 
   @Column(nullable = true)
-  private int seriesPart;
+  private Integer seriesPart;
 
   @Column(nullable = false)
   private LocalDateTime taughtAt;

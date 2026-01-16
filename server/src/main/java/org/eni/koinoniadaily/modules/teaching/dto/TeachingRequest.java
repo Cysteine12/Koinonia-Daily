@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.eni.koinoniadaily.modules.series.Series;
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
+import org.hibernate.validator.constraints.URL;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +18,7 @@ public class TeachingRequest {
   @NotBlank(message = "Title is required")
   private String title;
   
-  @NotBlank(message = "Atleast one scriptural reference is required")
+  @NotBlank(message = "At least one scriptural reference is required")
   private String scripturalReferences;
   
   @NotBlank(message = "Message is required")
@@ -27,9 +28,11 @@ public class TeachingRequest {
   private String summary;
   
   @NotBlank(message = "Audio URL is required")
+  @URL(message = "Audio URL must be a valid URL")
   private String audioUrl;
   
   @NotBlank(message = "Video URL is required")
+  @URL(message = "Video URL must be a valid URL")
   private String videoUrl;
   
   @NotBlank(message = "Thumbnail is required")
@@ -43,7 +46,7 @@ public class TeachingRequest {
   
   private Series series;
   
-  private int seriesPart;
+  private Integer seriesPart;
   
   @NotNull(message = "Record datetime is required")
   private LocalDateTime taughtAt;

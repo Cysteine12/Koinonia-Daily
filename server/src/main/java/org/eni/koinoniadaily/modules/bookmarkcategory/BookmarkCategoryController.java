@@ -6,6 +6,7 @@ import org.eni.koinoniadaily.utils.PageResponse;
 import org.eni.koinoniadaily.utils.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,19 +18,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/bookmark-categories")
 @RequiredArgsConstructor
+@Validated
 public class BookmarkCategoryController {
   
   private final BookmarkCategoryService bookmarkCategoryService;
 
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<BookmarkCategoryResponse>>> getBookmarkCategories(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size
+      @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+      @RequestParam(defaultValue = "10") @Positive int size
   ) {
     PageResponse<BookmarkCategoryResponse> response = 
         bookmarkCategoryService.getBookmarkCategoriesByUser(page, size);
@@ -38,8 +43,9 @@ public class BookmarkCategoryController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<SuccessResponse<BookmarkCategoryResponse>> getBookmarkCategoryById(@PathVariable Long id) {
-
+  public ResponseEntity<SuccessResponse<BookmarkCategoryResponse>> getBookmarkCategoryById(
+      @PathVariable @NotNull @Positive Long id
+  ) {
     BookmarkCategoryResponse response = bookmarkCategoryService.getBookmarkCategoryById(id);
 
     return ResponseEntity.ok(SuccessResponse.data(response));
@@ -56,7 +62,7 @@ public class BookmarkCategoryController {
 
   @PatchMapping("/{id}/name")
   public ResponseEntity<SuccessResponse<Void>> updateBookmarkCategoryName(
-      @PathVariable Long id,
+      @PathVariable @NotNull @Positive Long id,
       @RequestBody @Valid BookmarkCategoryRequest request
   ) {
     bookmarkCategoryService.updateBookmarkCategoryName(id, request);
@@ -65,8 +71,9 @@ public class BookmarkCategoryController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<SuccessResponse<Void>> deleteBookmarkCategory(@PathVariable Long id) {
-
+  public ResponseEntity<SuccessResponse<Void>> deleteBookmarkCategory(
+      @PathVariable @NotNull @Positive Long id
+  ) {
     bookmarkCategoryService.deleteBookmarkCategory(id);
 
     return ResponseEntity.ok(SuccessResponse.message("Bookmark category deleted successfully"));

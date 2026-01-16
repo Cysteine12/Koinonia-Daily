@@ -36,8 +36,8 @@ public class CollectionController {
 
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<CollectionPageResponse>>> getCollections(
-      @RequestParam @NotNull @PositiveOrZero int page,
-      @RequestParam @NotNull @Positive int size
+      @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+      @RequestParam(defaultValue = "50") @Positive int size
   ) {
     PageResponse<CollectionPageResponse> response = collectionService.getCollections(page, size);
 

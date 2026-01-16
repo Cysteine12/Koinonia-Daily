@@ -78,7 +78,8 @@ public class CollectionService {
     Collection collection = collectionRepository.findById(id)
                               .orElseThrow(() -> new NotFoundException("Collection not found"));
 
-    Teaching teaching = teachingRepository.getReferenceById(request.getTeachingId());
+    Teaching teaching = teachingRepository.findById(request.getTeachingId())
+                          .orElseThrow(() -> new NotFoundException("Teaching not found"));
 
     collection.addTeaching(teaching);
   }
@@ -89,7 +90,8 @@ public class CollectionService {
     Collection collection = collectionRepository.findById(id)
                               .orElseThrow(() -> new NotFoundException("Collection not found"));
 
-    Teaching teaching = teachingRepository.getReferenceById(teachingId);
+    Teaching teaching = teachingRepository.findById(teachingId)
+                          .orElseThrow(() -> new NotFoundException("Teaching not found"));
 
     collection.removeTeaching(teaching);
   }

@@ -177,4 +177,12 @@ public class AuthService {
             .refreshToken(tokens.getRefreshToken())
             .build();
   }
+
+  @Transactional
+  public void logout(RefreshTokenRequest request) {
+    
+    JwtPayload jwtPayload = jwtService.validateAndExtractPayload(request.getRefreshToken(), TokenType.REFRESH_TOKEN);
+
+    tokenService.consumeRefreshToken(jwtPayload.getSubject(), jwtPayload.getJti());
+  }
 }

@@ -9,9 +9,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @Table(
     name = "histories", 
     uniqueConstraints = @UniqueConstraint(
-        name = "userId_teachingId", 
+        name = "unique_user_teaching", 
         columnNames = {"userId", "teachingId"}
     )
 )
@@ -40,10 +40,6 @@ public class History extends BaseEntity {
   private Teaching teaching;
 
   @Column(nullable = false)
-  private boolean isMarkedRead;
-
-  @PrePersist
-  void prePersist() {
-    this.isMarkedRead = false;
-  }
+  @Builder.Default
+  private boolean isMarkedRead = false;
 }

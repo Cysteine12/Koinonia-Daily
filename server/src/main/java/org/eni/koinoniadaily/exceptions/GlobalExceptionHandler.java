@@ -1,6 +1,8 @@
 package org.eni.koinoniadaily.exceptions;
 
 import org.eni.koinoniadaily.utils.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+  private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
   private ResponseEntity<ErrorResponse> buildResponse(WebRequest request, String message, HttpStatus status) {
     ErrorResponse error = ErrorResponse.builder()
@@ -76,14 +80,15 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(OptimisticLockException.class)
   public ResponseEntity<ErrorResponse> handleOptimisticLockException(OptimisticLockException ex, WebRequest request) {
 
-    UnauthorizedException exception = new UnauthorizedException("Unable to process request due to a conflict. Please try again.");
-    return handleUnauthorizedException(exception, request);
+    return buildResponse(request, "Unable to process request due to a conflict. Please try again.", HttpStatus.CONFLICT);
   }
 
   // Handle all other exceptions (catch-all)
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, WebRequest request) {
+
+    logger.error("Unhandled exception", ex);
         
-    return buildResponse(request, ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    return buildResponse(request, "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

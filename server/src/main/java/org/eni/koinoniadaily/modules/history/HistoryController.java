@@ -5,6 +5,7 @@ import org.eni.koinoniadaily.modules.history.dto.HistoryResponse;
 import org.eni.koinoniadaily.utils.PageResponse;
 import org.eni.koinoniadaily.utils.SuccessResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,19 +16,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/histories")
 @RequiredArgsConstructor
+@Validated
 public class HistoryController {
   
   private final HistoryService historyService;
 
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<HistoryResponse>>> getHistoriesByUser(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "50") int size
+      @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+      @RequestParam(defaultValue = "50") @Positive int size
   ) {
     PageResponse<HistoryResponse> response = historyService.getHistoriesByUser(page, size);
 
@@ -36,7 +41,7 @@ public class HistoryController {
 
   @PatchMapping("/{id}/marked-read")
   public ResponseEntity<SuccessResponse<Void>> updateHistoryMarkAsRead(
-      @PathVariable Long id, 
+      @PathVariable @NotNull @Positive Long id, 
       @Valid @RequestBody HistoryRequest request
   ) {
     historyService.updateHistoryMarkAsRead(id, request);
@@ -45,8 +50,9 @@ public class HistoryController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<SuccessResponse<Void>> deleteHistory(@PathVariable Long id) {
-    
+  public ResponseEntity<SuccessResponse<Void>> deleteHistory(
+      @PathVariable @NotNull @Positive Long id
+  ) {
     historyService.deleteHistory(id);
 
     return ResponseEntity.ok(SuccessResponse.message("History deleted successfully"));

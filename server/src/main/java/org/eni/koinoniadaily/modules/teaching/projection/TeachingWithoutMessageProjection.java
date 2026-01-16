@@ -24,7 +24,7 @@ public interface TeachingWithoutMessageProjection {
 
   String getTags();
 
-  int getSeriesPart();
+  Integer getSeriesPart();
 
   LocalDateTime getTaughtAt();
   

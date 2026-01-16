@@ -24,13 +24,13 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor 
 public class Token extends BaseEntity {
 
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, length = 100)
   private String email;
 
   @Column(nullable = false, length = 255)
   private String value;
 
-  @Column(name = "'type'", nullable = false, length = 20)
+  @Column(name = "\"type\"", nullable = false, length = 20)
   @Enumerated(EnumType.STRING)
   private TokenType type;
   
