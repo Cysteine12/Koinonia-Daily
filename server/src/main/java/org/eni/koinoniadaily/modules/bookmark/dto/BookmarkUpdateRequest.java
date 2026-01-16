@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class BookmarkUpdateRequest {
   
-  @Size(message = "Note cannot be more than 500 characters")
+  @Size(max = 500, message = "Note length cannot exceed 500 characters")
   private String note;
 }

@@ -38,7 +38,7 @@ server/
 │   ├── main/
 │   │   ├── java/com/koinoniadaily/
 │   │   │   ├── config/        # Security, JWT, CORS, app configs
-│   │   │   ├── modules/       # Feature modules with controllers, services, etc
+│   │   │   ├── modules/       # Feature modules with controllers, services, etc.
 │   │   │   ├── service/       # Business logic
 │   │   │   ├── utils/         # Utilities
 │   │   │   ├── dto/           # Request/response DTOs
@@ -104,7 +104,7 @@ java -jar target/*.jar
 
 The server will start on:
 
-http://localhost:8080
+<http://localhost:8080>
 
 
 ---

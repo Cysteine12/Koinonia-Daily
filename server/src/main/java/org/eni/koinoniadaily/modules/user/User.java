@@ -1,11 +1,19 @@
 package org.eni.koinoniadaily.modules.user;
 
-import org.eni.koinoniadaily.entity.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eni.koinoniadaily.entity.BaseEntity;
+import org.eni.koinoniadaily.modules.bookmark.Bookmark;
+import org.eni.koinoniadaily.modules.bookmarkcategory.BookmarkCategory;
+import org.eni.koinoniadaily.modules.history.History;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -46,6 +54,18 @@ public class User extends BaseEntity {
   @Builder.Default
   @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
   private boolean isVerified = false;
+
+  @OneToMany(mappedBy = "histories", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<History> histories = new ArrayList<>();
+
+  @OneToMany(mappedBy = "bookmarks", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<Bookmark> bookmarks = new ArrayList<>();
+
+  @OneToMany(mappedBy = "bookmarks_categories", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<BookmarkCategory> bookmarkCategories = new ArrayList<>();
 
   @PrePersist
   public void prePersist() {

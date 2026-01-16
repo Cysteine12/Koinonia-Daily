@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,7 @@ public class BookmarkCategoryController {
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<BookmarkCategoryResponse>>> getBookmarkCategories(
       @RequestParam(defaultValue = "0") @PositiveOrZero int page,
-      @RequestParam(defaultValue = "10") @Positive int size
+      @RequestParam(defaultValue = "50") @Positive int size
   ) {
     PageResponse<BookmarkCategoryResponse> response = 
         bookmarkCategoryService.getBookmarkCategoriesByUser(page, size);
@@ -44,7 +43,7 @@ public class BookmarkCategoryController {
 
   @GetMapping("/{id}")
   public ResponseEntity<SuccessResponse<BookmarkCategoryResponse>> getBookmarkCategoryById(
-      @PathVariable @NotNull @Positive Long id
+      @PathVariable @Positive Long id
   ) {
     BookmarkCategoryResponse response = bookmarkCategoryService.getBookmarkCategoryById(id);
 
@@ -57,12 +56,13 @@ public class BookmarkCategoryController {
   ) {
     BookmarkCategoryResponse response = bookmarkCategoryService.createBookmarkCategory(request);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.data(response));
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .body(SuccessResponse.of(response, "Bookmark category created successfully"));
   }
 
   @PatchMapping("/{id}/name")
   public ResponseEntity<SuccessResponse<Void>> updateBookmarkCategoryName(
-      @PathVariable @NotNull @Positive Long id,
+      @PathVariable @Positive Long id,
       @RequestBody @Valid BookmarkCategoryRequest request
   ) {
     bookmarkCategoryService.updateBookmarkCategoryName(id, request);
@@ -72,7 +72,7 @@ public class BookmarkCategoryController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<SuccessResponse<Void>> deleteBookmarkCategory(
-      @PathVariable @NotNull @Positive Long id
+      @PathVariable @Positive Long id
   ) {
     bookmarkCategoryService.deleteBookmarkCategory(id);
 

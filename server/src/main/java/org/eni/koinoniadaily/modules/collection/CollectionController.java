@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +45,7 @@ public class CollectionController {
 
   @GetMapping("/{id}")
   public ResponseEntity<SuccessResponse<CollectionResponse>> getCollectionById(
-      @PathVariable @NotNull @Positive Long id
+      @PathVariable @Positive Long id
   ) {
     CollectionResponse response = collectionService.getCollectionById(id);
 
@@ -67,7 +66,7 @@ public class CollectionController {
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<CollectionResponse>> updateCollection(
-    @PathVariable @NotNull @Positive Long id,
+    @PathVariable @Positive Long id,
     @RequestBody @Valid CollectionRequest request
   ) {
     CollectionResponse response = collectionService.updateCollection(id, request);
@@ -78,19 +77,20 @@ public class CollectionController {
   @PostMapping("/{id}/teachings")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> addCollectionTeaching(
-    @PathVariable @NotNull @Positive Long id,
+    @PathVariable @Positive Long id,
     @RequestBody @Valid CollectionTeachingRequest request
   ) {
     collectionService.addCollectionTeaching(id, request);
 
-    return ResponseEntity.ok(SuccessResponse.message("Teaching added successfully"));
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .body(SuccessResponse.message("Teaching added successfully"));
   }
 
   @DeleteMapping("/{id}/teachings/{teachingId}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> removeCollectionTeaching(
-    @PathVariable @NotNull @Positive Long id,
-    @PathVariable @NotNull @Positive Long teachingId
+    @PathVariable @Positive Long id,
+    @PathVariable @Positive Long teachingId
   ) {
     collectionService.removeCollectionTeaching(id, teachingId);
 
@@ -100,7 +100,7 @@ public class CollectionController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> deleteCollection(
-    @PathVariable @NotNull @Positive Long id
+    @PathVariable @Positive Long id
   ) {
     collectionService.deleteCollection(id);
 

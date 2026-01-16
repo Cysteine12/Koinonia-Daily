@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +56,7 @@ public class TeachingController {
 
   @GetMapping("/{id}")
   public ResponseEntity<SuccessResponse<TeachingResponse>> getTeachingById(
-      @PathVariable @NotNull @Positive Long id
+      @PathVariable @Positive Long id
   ) {
     TeachingResponse response = teachingService.getTeachingById(id);
 
@@ -71,13 +70,14 @@ public class TeachingController {
   ) {
     TeachingResponse response = teachingService.createTeaching(request);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.of(response, "Teaching created successfully"));
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .body(SuccessResponse.of(response, "Teaching created successfully"));
   }
 
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<TeachingResponse>> updateTeaching(
-      @PathVariable @NotNull @Positive Long id, 
+      @PathVariable @Positive Long id, 
       @RequestBody @Valid TeachingRequest request
   ) {
     TeachingResponse response = teachingService.updateTeaching(id, request);
@@ -88,7 +88,7 @@ public class TeachingController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> deleteTeaching(
-      @PathVariable @NotNull @Positive Long id
+      @PathVariable @Positive Long id
   ) {
     
     teachingService.deleteTeachingById(id);
