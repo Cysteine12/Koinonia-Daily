@@ -140,6 +140,8 @@ public class AuthService {
 
     user.setPassword(newPassword);
 
+    tokenService.revokeAllTokens(user.getEmail(), TokenType.REFRESH_TOKEN);
+
     publisher.publishEvent(new PasswordChangedEvent(user.getEmail(), user.getFirstName()));
   }
 
@@ -159,6 +161,8 @@ public class AuthService {
     String newPassword = passwordEncoder.encode(request.getNewPassword());
     
     user.setPassword(newPassword);
+
+    tokenService.revokeAllTokens(user.getEmail(), TokenType.REFRESH_TOKEN);
 
     publisher.publishEvent(new PasswordChangedEvent(user.getEmail(), user.getFirstName()));
   }

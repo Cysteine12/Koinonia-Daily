@@ -55,15 +55,15 @@ public class User extends BaseEntity {
   @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
   private boolean isVerified = false;
 
-  @OneToMany(mappedBy = "histories", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @Builder.Default
   private List<History> histories = new ArrayList<>();
 
-  @OneToMany(mappedBy = "bookmarks", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @Builder.Default
   private List<Bookmark> bookmarks = new ArrayList<>();
 
-  @OneToMany(mappedBy = "bookmarks_categories", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @Builder.Default
   private List<BookmarkCategory> bookmarkCategories = new ArrayList<>();
 

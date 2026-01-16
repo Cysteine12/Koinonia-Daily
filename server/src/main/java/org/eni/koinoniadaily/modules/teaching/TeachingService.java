@@ -96,6 +96,6 @@ public class TeachingService {
     Teaching teaching = teachingRepository.findById(id)
                           .orElseThrow(() -> new NotFoundException("Teaching not found"));
     
-    teachingRepository.deleteById(id);
+    teachingRepository.delete(teaching);
   }
 }
