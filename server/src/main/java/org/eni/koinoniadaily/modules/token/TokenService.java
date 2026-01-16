@@ -115,7 +115,7 @@ public class TokenService {
   }
 
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  private void revokeAllTokens(String email, TokenType type) {
+  public void revokeAllTokens(String email, TokenType type) {
     tokenRepository.markAllUsedByEmailAndType(email, type);
   }
 }

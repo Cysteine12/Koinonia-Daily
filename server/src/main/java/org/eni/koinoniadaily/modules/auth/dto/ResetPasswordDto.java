@@ -15,7 +15,7 @@ public class ResetPasswordDto {
   private String email;
 
   @NotBlank(message = "Password is required")
-  @Size(min = 7, message = "Minimum password length of 7 required")
+  @Size(min = 8, message = "Minimum password length of 8 required")
   private String password;
   
   @NotBlank(message = "OTP is required")

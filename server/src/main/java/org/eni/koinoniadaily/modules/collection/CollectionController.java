@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class CollectionController {
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<CollectionPageResponse>>> getCollections(
       @RequestParam(defaultValue = "0") @PositiveOrZero int page,
-      @RequestParam(defaultValue = "50") @Positive int size
+      @RequestParam(defaultValue = "50") @Positive @Max(100) int size
   ) {
     PageResponse<CollectionPageResponse> response = collectionService.getCollections(page, size);
 

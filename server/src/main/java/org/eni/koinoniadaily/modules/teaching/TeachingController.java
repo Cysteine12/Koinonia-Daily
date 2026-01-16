@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -36,7 +37,7 @@ public class TeachingController {
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<TeachingPageResponse>>> getTeachings(
       @RequestParam(defaultValue = "0") @PositiveOrZero int page,
-      @RequestParam(defaultValue = "50") @Positive int size
+      @RequestParam(defaultValue = "50") @Positive @Max(100) int size
   ) {
     PageResponse<TeachingPageResponse> response = teachingService.getTeachings(page, size);
 
@@ -47,7 +48,7 @@ public class TeachingController {
   public ResponseEntity<SuccessResponse<PageResponse<TeachingPageResponse>>> searchTeachings(
       @RequestParam @NotBlank String q,
       @RequestParam(defaultValue = "0") @PositiveOrZero int page,
-      @RequestParam(defaultValue = "50") @Positive int size
+      @RequestParam(defaultValue = "50") @Positive @Max(100) int size
   ) {
     PageResponse<TeachingPageResponse> response = teachingService.searchTeachings(q, page, size);
 

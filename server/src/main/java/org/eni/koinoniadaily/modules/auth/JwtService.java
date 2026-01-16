@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -68,6 +69,8 @@ public final class JwtService {
             .getPayload();
     } catch (ExpiredJwtException e) {
       throw new UnauthorizedException("Expired token");
+    } catch (JwtException e) {
+      throw new UnauthorizedException("Invalid token");
     }
   }
 

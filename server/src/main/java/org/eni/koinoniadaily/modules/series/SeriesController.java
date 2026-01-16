@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class SeriesController {
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<SeriesPageResponse>>> getSeries(
       @RequestParam(defaultValue = "0") @PositiveOrZero int page,
-      @RequestParam(defaultValue = "50") @Positive int size
+      @RequestParam(defaultValue = "50") @Positive @Max(100) int size
   ) {
     PageResponse<SeriesPageResponse> response = seriesService.getSeries(page, size);
 
