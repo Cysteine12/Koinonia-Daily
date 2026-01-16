@@ -35,7 +35,7 @@ updates:
 
       security:
         patterns:
-          - "io.jsonwebtoken:.*" 
-          - "org.springframework.security:.*"
+          - "io.jsonwebtoken:*" 
+          - "org.springframework.security:*"
         update-types:
           - "patch"

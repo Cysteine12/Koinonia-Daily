@@ -35,8 +35,8 @@ public class SeriesController {
 
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<SeriesPageResponse>>> getSeries(
-      @RequestParam(defaultValue = "0") @NotNull @PositiveOrZero int page,
-      @RequestParam(defaultValue = "50") @NotNull @Positive int size
+      @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+      @RequestParam(defaultValue = "50") @Positive int size
   ) {
     PageResponse<SeriesPageResponse> response = seriesService.getSeries(page, size);
 

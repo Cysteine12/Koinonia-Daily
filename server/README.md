@@ -36,14 +36,13 @@ Maven
 server/
 ├── src/
 │   ├── main/
-│   │   ├── java/com/koinonia/daily/
+│   │   ├── java/com/koinoniadaily/
 │   │   │   ├── config/        # Security, JWT, CORS, app configs
-│   │   │   ├── controller/    # REST controllers
+│   │   │   ├── modules/       # Feature modules with controllers, services, etc
 │   │   │   ├── service/       # Business logic
-│   │   │   ├── repository/    # JPA repositories
-│   │   │   ├── model/         # JPA entities
+│   │   │   ├── utils/         # Utilities
 │   │   │   ├── dto/           # Request/response DTOs
-│   │   │   ├── exception/     # Global exception handling
+│   │   │   ├── exceptions/    # Global exception handling
 │   │   │   └── KoinoniaDailyApplication.java
 │   │   └── resources/
 │   │       ├── application.properties

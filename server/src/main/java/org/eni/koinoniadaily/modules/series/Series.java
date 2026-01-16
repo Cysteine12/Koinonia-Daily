@@ -34,7 +34,7 @@ public class Series extends BaseEntity {
   @Column(nullable = false, length = 100)
   private String thumbnailUrl;
 
-  @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = false)
+  @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
   @Builder.Default
   private List<Teaching> teachings = new ArrayList<>();
 }

@@ -1,8 +1,7 @@
 package org.eni.koinoniadaily.modules.bookmarkcategory;
 
-import java.util.List;
-
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eni.koinoniadaily.entity.BaseEntity;
 import org.eni.koinoniadaily.modules.bookmark.Bookmark;

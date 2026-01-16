@@ -16,6 +16,6 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
 
   @Modifying(clearAutomatically = true)
   @Transactional
-  @Query("UPDATE Token t SET t.isUsed = true WHERE t.email = :email AND t.type = :type")
+  @Query("UPDATE Token t SET t.isUsed = true WHERE t.email = :email AND t.type = :type AND t.isUsed = false")
   int markAllUsedByEmailAndType(@Param("email") String email, @Param("type") TokenType type);
 }

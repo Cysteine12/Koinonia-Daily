@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -59,19 +60,19 @@ public final class JwtService {
   }
 
   public Claims parseClaims(String token) {
-    return Jwts.parser()
+    try {
+      return Jwts.parser()
             .verifyWith((SecretKey) key)
             .build()
             .parseSignedClaims(token)
             .getPayload();
+    } catch (ExpiredJwtException e) {
+      throw new UnauthorizedException("Expired token");
+    }
   }
 
   public JwtPayload validateAndExtractPayload(String token, TokenType type) {
     Claims claims = parseClaims(token);
-
-    if (claims.getExpiration().before(new Date())) {
-      throw new UnauthorizedException("Expired token");
-    }
 
     String tokenType = claims.get(TOKEN_TYPE_KEY, String.class);
 

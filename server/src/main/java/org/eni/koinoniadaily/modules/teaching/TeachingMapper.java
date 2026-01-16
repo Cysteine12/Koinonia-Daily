@@ -1,5 +1,6 @@
 package org.eni.koinoniadaily.modules.teaching;
 
+import org.eni.koinoniadaily.modules.series.dto.SeriesSummary;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
@@ -30,6 +31,13 @@ public class TeachingMapper {
 
   public TeachingResponse toDto(Teaching teaching) {
 
+    SeriesSummary series = teaching.getSeries() != null 
+                            ? SeriesSummary.builder()
+                                .id(teaching.getSeries().getId())
+                                .name(teaching.getSeries().getName())
+                                .build() 
+                            : null;
+
     return TeachingResponse.builder()
             .id(teaching.getId())
             .title(teaching.getTitle())
@@ -41,7 +49,7 @@ public class TeachingMapper {
             .thumbnailUrl(teaching.getThumbnailUrl())
             .type(teaching.getType())
             .tags(teaching.getTags())
-            .series(teaching.getSeries())
+            .series(series)
             .seriesPart(teaching.getSeriesPart())
             .taughtAt(teaching.getTaughtAt())
             .createdAt(teaching.getCreatedAt())

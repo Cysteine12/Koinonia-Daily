@@ -39,7 +39,7 @@ public class TeachingService {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, TAUGHT_AT));
     
-    Page<TeachingPageResponse> teachings = teachingRepository.searchByTitle(query, pageable)
+    Page<TeachingPageResponse> teachings = teachingRepository.findByTitleContainingIgnoreCase(query, pageable)
                                             .map(teachingMapper::toDto);
 
     return PageResponse.from(teachings);
@@ -48,11 +48,12 @@ public class TeachingService {
   @Transactional
   public TeachingResponse getTeachingById(Long id) {
 
+    Teaching teaching = teachingRepository.findById(id)
+                          .orElseThrow(() -> new NotFoundException("Teaching not found"));
+
     historyService.createOrUpdateHistory(id);
 
-    return teachingRepository.findById(id)
-            .map(teachingMapper::toDto)
-            .orElseThrow(() -> new NotFoundException("Teaching not found"));
+    return teachingMapper.toDto(teaching);
   }
 
   @Transactional

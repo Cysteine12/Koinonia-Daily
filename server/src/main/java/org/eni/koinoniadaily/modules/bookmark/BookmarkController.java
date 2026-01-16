@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -36,8 +35,8 @@ public class BookmarkController {
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<BookmarkResponse>>> getBookmarksByCategory(
       @RequestParam @NotNull @Positive Long categoryId,
-      @RequestParam(defaultValue = "0") @Min(0) int page,
-      @RequestParam(defaultValue = "50") @Max(100) int size
+      @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+      @RequestParam(defaultValue = "50") @Positive int size
   ) {
     PageResponse<BookmarkResponse> response = bookmarkService.getBookmarksByCategory(categoryId, page, size);
 
@@ -45,8 +44,9 @@ public class BookmarkController {
   }
 
   @PostMapping
-  public ResponseEntity<SuccessResponse<Void>> createBookmark(@RequestBody @Valid BookmarkRequest request) {
-
+  public ResponseEntity<SuccessResponse<Void>> createBookmark(
+      @RequestBody @Valid BookmarkRequest request
+  ) {
     bookmarkService.createBookmark(request);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.message("Bookmark created successfully"));
@@ -63,8 +63,9 @@ public class BookmarkController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<SuccessResponse<Void>> deleteBookmark(@PathVariable @NotNull @Positive Long id) {
-
+  public ResponseEntity<SuccessResponse<Void>> deleteBookmark(
+      @PathVariable @NotNull @Positive Long id
+  ) {
     bookmarkService.deleteBookmark(id);
 
     return ResponseEntity.ok(SuccessResponse.message("Bookmark deleted successfully"));

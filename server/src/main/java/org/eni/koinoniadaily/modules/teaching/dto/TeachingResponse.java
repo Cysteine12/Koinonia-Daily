@@ -2,7 +2,7 @@ package org.eni.koinoniadaily.modules.teaching.dto;
 
 import java.time.LocalDateTime;
 
-import org.eni.koinoniadaily.modules.series.Series;
+import org.eni.koinoniadaily.modules.series.dto.SeriesSummary;
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 
 import lombok.Builder;
@@ -32,9 +32,9 @@ public class TeachingResponse {
 
   private String tags;
   
-  private Series series;
+  private SeriesSummary series;
 
-  private int seriesPart;
+  private Integer seriesPart;
 
   private LocalDateTime taughtAt;
   

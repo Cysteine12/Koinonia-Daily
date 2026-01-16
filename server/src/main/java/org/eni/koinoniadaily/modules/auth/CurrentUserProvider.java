@@ -25,7 +25,7 @@ public class CurrentUserProvider {
       Object principal = authentication.getPrincipal();
   
       if (!(principal instanceof UserPrincipal)) {
-        throw new UnauthorizedException("Invalid authentication principal ");
+        throw new UnauthorizedException("Invalid authentication principal");
       }
       cachedUserPrincipal = (UserPrincipal) principal;
     }

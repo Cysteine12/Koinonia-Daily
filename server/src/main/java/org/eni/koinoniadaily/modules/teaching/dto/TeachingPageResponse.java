@@ -29,7 +29,7 @@ public class TeachingPageResponse {
 
   private String tags;
 
-  private int seriesPart;
+  private Integer seriesPart;
 
   private LocalDateTime taughtAt;
   
