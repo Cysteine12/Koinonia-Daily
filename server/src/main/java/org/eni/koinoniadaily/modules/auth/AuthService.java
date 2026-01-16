@@ -131,12 +131,12 @@ public class AuthService {
   @Transactional
   public void resetPassword(ResetPasswordDto request) {
     
+    User user = userRepository.findByEmail(request.getEmail())
+                  .orElseThrow(() -> new NotFoundException("User not found"));
+
     tokenService.consumePasswordOtp(request.getEmail(), request.getOtp());
 
     String newPassword = passwordEncoder.encode(request.getPassword());
-
-    User user = userRepository.findByEmail(request.getEmail())
-                  .orElseThrow(() -> new NotFoundException("User not found"));
 
     user.setPassword(newPassword);
 

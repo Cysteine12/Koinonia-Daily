@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +40,7 @@ public class HistoryController {
 
   @PatchMapping("/{id}/marked-read")
   public ResponseEntity<SuccessResponse<Void>> updateHistoryMarkAsRead(
-      @PathVariable @NotNull @Positive Long id, 
+      @PathVariable @Positive Long id, 
       @Valid @RequestBody HistoryRequest request
   ) {
     historyService.updateHistoryMarkAsRead(id, request);
@@ -51,7 +50,7 @@ public class HistoryController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<SuccessResponse<Void>> deleteHistory(
-      @PathVariable @NotNull @Positive Long id
+      @PathVariable @Positive Long id
   ) {
     historyService.deleteHistory(id);
 

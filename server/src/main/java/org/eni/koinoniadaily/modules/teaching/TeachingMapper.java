@@ -1,5 +1,6 @@
 package org.eni.koinoniadaily.modules.teaching;
 
+import org.eni.koinoniadaily.modules.series.Series;
 import org.eni.koinoniadaily.modules.series.dto.SeriesSummary;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
@@ -57,7 +58,7 @@ public class TeachingMapper {
             .build();
   }
   
-  public Teaching toEntity(TeachingRequest dto) {
+  public Teaching toEntity(TeachingRequest dto, Series series) {
 
     return Teaching.builder()
             .title(dto.getTitle())
@@ -69,13 +70,13 @@ public class TeachingMapper {
             .thumbnailUrl(dto.getThumbnailUrl())
             .type(dto.getType())
             .tags(dto.getTags())
-            .series(dto.getSeries())
+            .series(series)
             .seriesPart(dto.getSeriesPart())
             .taughtAt(dto.getTaughtAt())
             .build();
   }
 
-  public Teaching updateToEntity(Teaching teaching, TeachingRequest dto) {
+  public Teaching updateToEntity(Teaching teaching, TeachingRequest dto, Series series) {
 
     teaching.setTitle(dto.getTitle());
     teaching.setScripturalReferences(dto.getScripturalReferences());
@@ -86,7 +87,7 @@ public class TeachingMapper {
     teaching.setThumbnailUrl(dto.getThumbnailUrl());
     teaching.setType(dto.getType());
     teaching.setTags(dto.getTags());
-    teaching.setSeries(dto.getSeries());
+    teaching.setSeries(series);
     teaching.setSeriesPart(dto.getSeriesPart());
     teaching.setTaughtAt(dto.getTaughtAt());
 

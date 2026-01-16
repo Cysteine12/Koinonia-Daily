@@ -2,7 +2,6 @@ package org.eni.koinoniadaily.modules.teaching.dto;
 
 import java.time.LocalDateTime;
 
-import org.eni.koinoniadaily.modules.series.Series;
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 import org.hibernate.validator.constraints.URL;
 
@@ -18,7 +17,7 @@ public class TeachingRequest {
   @NotBlank(message = "Title is required")
   private String title;
   
-  @NotBlank(message = "At least one scriptural reference is required")
+  @NotBlank(message = "Scriptural references are required (semi-colon-separated)")
   private String scripturalReferences;
   
   @NotBlank(message = "Message is required")
@@ -41,10 +40,10 @@ public class TeachingRequest {
   @NotNull(message = "Teaching type is required")
   private TeachingType type;
   
-  @NotBlank(message = "Tags are required")
+  @NotBlank(message = "Tags are required (comma-separated)")
   private String tags; 
   
-  private Series series;
+  private Long seriesId;
   
   private Integer seriesPart;
   

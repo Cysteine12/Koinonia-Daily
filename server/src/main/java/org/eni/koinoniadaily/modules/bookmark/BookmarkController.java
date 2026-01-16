@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,7 @@ public class BookmarkController {
 
   @GetMapping
   public ResponseEntity<SuccessResponse<PageResponse<BookmarkResponse>>> getBookmarksByCategory(
-      @RequestParam @NotNull @Positive Long categoryId,
+      @RequestParam @Positive Long categoryId,
       @RequestParam(defaultValue = "0") @PositiveOrZero int page,
       @RequestParam(defaultValue = "50") @Positive int size
   ) {
@@ -49,12 +48,13 @@ public class BookmarkController {
   ) {
     bookmarkService.createBookmark(request);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.message("Bookmark created successfully"));
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .body(SuccessResponse.message("Bookmark created successfully"));
   }
 
   @PatchMapping("/{id}/note")
   public ResponseEntity<SuccessResponse<Void>> updateBookmarkNote(
-      @PathVariable @NotNull @Positive Long id, 
+      @PathVariable @Positive Long id, 
       @RequestBody @Valid BookmarkUpdateRequest request
   ) {
     bookmarkService.updateBookmarkNote(id, request);
@@ -64,7 +64,7 @@ public class BookmarkController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<SuccessResponse<Void>> deleteBookmark(
-      @PathVariable @NotNull @Positive Long id
+      @PathVariable @Positive Long id
   ) {
     bookmarkService.deleteBookmark(id);
 

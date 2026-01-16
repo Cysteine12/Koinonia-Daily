@@ -2,6 +2,8 @@ package org.eni.koinoniadaily.modules.teaching;
 
 import org.eni.koinoniadaily.exceptions.NotFoundException;
 import org.eni.koinoniadaily.modules.history.HistoryService;
+import org.eni.koinoniadaily.modules.series.Series;
+import org.eni.koinoniadaily.modules.series.SeriesRepository;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class TeachingService {
   
   private final TeachingRepository teachingRepository;
+  private final SeriesRepository seriesRepository;
   private final TeachingMapper teachingMapper;
   private final HistoryService historyService;
   private static final String TAUGHT_AT = "taughtAt";
@@ -59,7 +62,12 @@ public class TeachingService {
   @Transactional
   public TeachingResponse createTeaching(TeachingRequest request) {
 
-    Teaching teaching = teachingMapper.toEntity(request);
+    Series series = request.getSeriesId() != null 
+                      ? seriesRepository.findById(request.getSeriesId())
+                          .orElseThrow(() -> new NotFoundException("Series not found"))
+                      : null;
+
+    Teaching teaching = teachingMapper.toEntity(request, series);
                           
     Teaching savedTeaching = teachingRepository.save(teaching);
 
@@ -72,7 +80,12 @@ public class TeachingService {
     Teaching teaching = teachingRepository.findById(id)
                           .orElseThrow(() -> new NotFoundException("Teaching not found"));
 
-    teachingMapper.updateToEntity(teaching, request);
+    Series series = request.getSeriesId() != null 
+                      ? seriesRepository.findById(request.getSeriesId())
+                          .orElseThrow(() -> new NotFoundException("Series not found"))
+                      : null;
+
+    teachingMapper.updateToEntity(teaching, request, series);
 
     return teachingMapper.toDto(teaching);
   }
@@ -80,9 +93,8 @@ public class TeachingService {
   @Transactional
   public void deleteTeachingById(Long id) {
     
-    if (!teachingRepository.existsById(id)) {
-      throw new NotFoundException("Teaching not found");
-    }
+    Teaching teaching = teachingRepository.findById(id)
+                          .orElseThrow(() -> new NotFoundException("Teaching not found"));
     
     teachingRepository.deleteById(id);
   }

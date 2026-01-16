@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +44,7 @@ public class SeriesController {
 
   @GetMapping("/{id}")
   public ResponseEntity<SuccessResponse<SeriesResponse>> getSeriesById(
-      @PathVariable @NotNull @Positive Long id
+      @PathVariable @Positive Long id
   ) {
     SeriesResponse response = seriesService.getSeriesById(id);
 
@@ -66,7 +65,7 @@ public class SeriesController {
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<SeriesResponse>> updateSeries(
-    @PathVariable @NotNull @Positive Long id,
+    @PathVariable @Positive Long id,
     @RequestBody @Valid SeriesRequest request
   ) {
     SeriesResponse response = seriesService.updateSeries(id, request);
@@ -77,7 +76,7 @@ public class SeriesController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<SuccessResponse<Void>> deleteSeries(
-    @PathVariable @NotNull @Positive Long id
+    @PathVariable @Positive Long id
   ) {
     seriesService.deleteSeries(id);
 
