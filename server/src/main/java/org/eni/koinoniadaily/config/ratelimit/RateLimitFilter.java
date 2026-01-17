@@ -2,6 +2,7 @@ package org.eni.koinoniadaily.config.ratelimit;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import org.eni.koinoniadaily.utils.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,15 @@ public class RateLimitFilter extends OncePerRequestFilter {
   
   private final ObjectMapper objectMapper;
   private final RateLimitBucketService bucketService;
+  private static final Set<String> SENSITIVE_ENDPOINTS = Set.of(
+    "/api/auth/login",
+    "/api/auth/register",
+    "/api/auth/verify-email",
+    "/api/auth/request-otp",
+    "/api/auth/forgot-password",
+    "/api/auth/reset-password",
+    "/api/auth/refresh-token"
+  );
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -50,13 +60,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     String uri = request.getRequestURI();
 
-    return uri.startsWith("/api/auth/login") ||
-           uri.startsWith("/api/auth/register") ||
-           uri.startsWith("/api/auth/verify-email") ||
-           uri.startsWith("/api/auth/request-otp") ||
-           uri.startsWith("/api/auth/forgot-password") ||
-           uri.startsWith("/api/auth/reset-password") ||
-           uri.startsWith("/api/auth/refresh-token");
+    return SENSITIVE_ENDPOINTS.stream().anyMatch(uri::startsWith);
   }
 
   private void sendRateLimitExceededResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -65,7 +69,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
                             .success(false)
                             .status(HttpStatus.TOO_MANY_REQUESTS.value())
                             .error(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase())
-                            .message("Too many request. Please try again later.")
+                            .message("Too many requests. Please try again later.")
                             .path(request.getRequestURI())
                             .timestamp(LocalDateTime.now())
                             .build();     
