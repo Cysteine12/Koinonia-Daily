@@ -86,7 +86,7 @@ public class AuthService {
   }
 
   @Transactional
-	public void verifyEmail(VerifyEmailDto request) {
+  public void verifyEmail(VerifyEmailDto request) {
 
 		User user = userRepository.findByEmail(request.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
@@ -100,10 +100,10 @@ public class AuthService {
     user.setVerified(true);
 
     publisher.publishEvent(new UserRegisteredEvent(user.getEmail(), user.getFirstName()));
-	}
+  }
 
   @Transactional
-	public void requestOtp(RequestOtpDto request) {
+  public void requestOtp(RequestOtpDto request) {
     
 		User user = userRepository.findByEmail(request.getEmail())
                   .orElseThrow(() -> new NotFoundException("User not found"));
@@ -115,7 +115,7 @@ public class AuthService {
     String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);
 
     publisher.publishEvent(new EmailVerificationRequestedEvent(user.getEmail(), user.getFirstName(), otp));
-	}
+  }
 
   @Transactional
   public void forgotPassword(ForgotPasswordDto request) {

@@ -1,16 +1,16 @@
 package org.eni.koinoniadaily.modules.token;
 
-
-import org.springframework.stereotype.Component;
-
 import java.security.SecureRandom;
 
-@Component
-public class TokenUtil {
+public final class TokenUtil {
 
-  private final SecureRandom random = new SecureRandom();
+  private TokenUtil() {
+    
+  }
 
-  public String generateOtp() {
+  private static final SecureRandom random = new SecureRandom();
+
+  public static String generateOtp() {
     
     StringBuilder sb = new StringBuilder();
 

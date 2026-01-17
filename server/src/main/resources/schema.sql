@@ -13,3 +13,5 @@ CREATE TABLE IF NOT EXISTS test_table (
 -- DROP TABLE IF EXISTS series CASCADE;
 
 -- ALTER TABLE series RENAME COLUMN title TO name;
+
+-- alter table if exists tokens RENAME column "'type'" TO type;

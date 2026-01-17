@@ -1,5 +1,6 @@
 package org.eni.koinoniadaily.config;
 
+import org.eni.koinoniadaily.config.ratelimit.RateLimitFilter;
 import org.eni.koinoniadaily.modules.auth.JpaUserDetailsService;
 
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
   private final JpaUserDetailsService userDetailsService;
+  private final RateLimitFilter rateLimitFilter;
   private final JwtFilter jwtFilter;
   
   @Bean
@@ -35,7 +37,8 @@ public class SecurityConfig {
                                     .requestMatchers("/api/auth/**").permitAll()
                                     .anyRequest().authenticated())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAfter(jwtFilter, RateLimitFilter.class)
             .userDetailsService(userDetailsService)
             .build();
   }

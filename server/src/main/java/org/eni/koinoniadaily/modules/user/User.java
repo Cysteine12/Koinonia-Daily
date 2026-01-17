@@ -72,6 +72,5 @@ public class User extends BaseEntity {
     if (this.role == null) {
       this.role = UserRole.USER;
     }
-
   }
 }
