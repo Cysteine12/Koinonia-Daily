@@ -4,9 +4,10 @@ import java.time.Duration;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RateLimitPolicy {
   
   public static Bucket ipBucket() {

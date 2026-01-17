@@ -4,6 +4,10 @@ import java.security.SecureRandom;
 
 public final class TokenUtil {
 
+  private TokenUtil() {
+    
+  }
+
   private static final SecureRandom random = new SecureRandom();
 
   public static String generateOtp() {

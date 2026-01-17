@@ -27,7 +27,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     
-    String clientIP = getClientIP(request);
+    String clientIP = request.getRemoteAddr();
 
     String ipBucketKey = "ip:" + clientIP;
 
@@ -44,15 +44,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
     }
     
     filterChain.doFilter(request, response);
-  }
-
-  private String getClientIP(HttpServletRequest request) {
-
-    String header = request.getHeader("X-Forwarded-For");
-    if (header == null) {
-      return request.getRemoteAddr();
-    }
-    return header.split(",")[0].trim();
   }
 
   private boolean isSensitiveEndpoint(HttpServletRequest request) {
