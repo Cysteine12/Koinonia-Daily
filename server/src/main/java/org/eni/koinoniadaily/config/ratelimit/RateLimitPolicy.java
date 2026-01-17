@@ -13,7 +13,7 @@ public final class RateLimitPolicy {
 
     Bandwidth bandwidth = Bandwidth.builder()
                             .capacity(100)
-                            .refillGreedy(1100, Duration.ofMinutes(1))
+                            .refillGreedy(100, Duration.ofMinutes(1))
                             .build();
 
     return Bucket.builder()
