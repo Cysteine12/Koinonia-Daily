@@ -18,11 +18,10 @@ import lombok.RequiredArgsConstructor;
 public class TokenService {
 
   private final TokenRepository tokenRepository;
-  private final TokenUtil tokenUtil;
   private final JwtService jwtService;
   private static final int OTP_EXPIRATION_MINUTES = 15;
-  private static final long ACCESS_TOKEN_EXPIRATION_MS = Duration.ofDays(7).toMillis();
-  private static final long REFRESH_TOKEN_EXPIRATION_MS = Duration.ofDays(31).toMillis();
+  private static final long ACCESS_TOKEN_EXPIRATION_MS = Duration.ofDays(1).toMillis();
+  private static final long REFRESH_TOKEN_EXPIRATION_MS = Duration.ofDays(14).toMillis();
 
   private void create(String email, String value, TokenType type, LocalDateTime expiresAt) {
 
@@ -40,7 +39,7 @@ public class TokenService {
   @Transactional
   public String generateAndSaveOtp(String email, TokenType type) {
 
-    String otp = tokenUtil.generateOtp();
+    String otp = TokenUtil.generateOtp();
 
     create(email, otp, type, LocalDateTime.now().plusMinutes(OTP_EXPIRATION_MINUTES));
     

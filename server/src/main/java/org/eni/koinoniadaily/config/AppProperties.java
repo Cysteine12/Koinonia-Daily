@@ -16,6 +16,7 @@ public class AppProperties {
   private int version = 1;
 
   @NotBlank(message = "JWT secret not set in env")
+  @Size(min = 32, message = "JWT secret must be at least 32 characters")
   private String jwtSecret;
 
   @NotBlank(message = "Seeder user password not set in env")

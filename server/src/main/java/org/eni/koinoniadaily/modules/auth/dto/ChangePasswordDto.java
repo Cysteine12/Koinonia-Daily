@@ -10,10 +10,10 @@ import lombok.Setter;
 public class ChangePasswordDto {
   
   @NotBlank(message = "Current password is required")
-  @Size(min = 8, message = "Minimum password length of 8 required")
+  @Size(min = 8, max = 72, message = "Minimum password length of 8 required")
   private String currentPassword;
 
   @NotBlank(message = "New password is required")
-  @Size(min = 8, message = "Minimum password length of 8 required")
+  @Size(min = 8, max = 72, message = "Minimum password length of 8 required")
   private String newPassword;
 }
