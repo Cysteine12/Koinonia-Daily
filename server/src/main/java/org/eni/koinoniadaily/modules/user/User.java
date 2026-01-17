@@ -67,6 +67,11 @@ public class User extends BaseEntity {
   @Builder.Default
   private List<BookmarkCategory> bookmarkCategories = new ArrayList<>();
 
+  /**
+   * Ensures the user has a default role before the entity is persisted.
+   *
+   * Invoked as a JPA PrePersist lifecycle callback; if `role` is `null` it is set to `UserRole.USER`.
+   */
   @PrePersist
   public void prePersist() {
     if (this.role == null) {

@@ -6,6 +6,11 @@ public final class TokenUtil {
 
   private static final SecureRandom random = new SecureRandom();
 
+  /**
+   * Generates a six-digit numeric one-time password (OTP) as a string.
+   *
+   * @return a 6-character string consisting of digits '0' through '9'
+   */
   public static String generateOtp() {
     
     StringBuilder sb = new StringBuilder();

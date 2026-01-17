@@ -23,6 +23,14 @@ public class TokenService {
   private static final long ACCESS_TOKEN_EXPIRATION_MS = Duration.ofDays(1).toMillis();
   private static final long REFRESH_TOKEN_EXPIRATION_MS = Duration.ofDays(14).toMillis();
 
+  /**
+   * Persist a new unused Token entity with the given email, value, type, and expiration.
+   *
+   * @param email     the owner email address for the token
+   * @param value     the token value (e.g., OTP, JTI)
+   * @param type      the token's purpose/type
+   * @param expiresAt the date and time when the token becomes invalid
+   */
   private void create(String email, String value, TokenType type, LocalDateTime expiresAt) {
 
     Token token = Token.builder()
@@ -36,6 +44,15 @@ public class TokenService {
     tokenRepository.save(token);
   }
   
+  /**
+   * Generates a one-time password (OTP), saves it as a Token record for the given email and type, and returns the OTP value.
+   *
+   * The saved token is marked unused and set to expire after the service's OTP expiration window.
+   *
+   * @param email the recipient email address associated with the OTP
+   * @param type the TokenType to assign to the generated OTP
+   * @return the generated OTP string
+   */
   @Transactional
   public String generateAndSaveOtp(String email, TokenType type) {
 

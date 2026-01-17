@@ -66,6 +66,15 @@ public class AuthService {
     publisher.publishEvent(new EmailVerificationRequestedEvent(user.getEmail(), user.getFirstName(), otp));
   }
   
+  /**
+   * Authenticates the given credentials and issues a new pair of access and refresh tokens.
+   *
+   * The method verifies that the authenticated user's email is confirmed before issuing tokens.
+   *
+   * @param payload the login request containing the user's email and password
+   * @return a LoginResponse containing the issued access token and refresh token
+   * @throws UnauthorizedException if the authenticated user's email is not verified
+   */
   @Transactional
   public LoginResponse login(LoginRequest payload) {
 
@@ -85,6 +94,13 @@ public class AuthService {
             .build();
   }
 
+  /**
+   * Verifies a user's email by consuming the provided OTP and marking the account as verified.
+   *
+   * @param request contains the user's email and the one-time password (OTP) to verify
+   * @throws NotFoundException   if no user exists for the provided email
+   * @throws ValidationException if the user is already verified
+   */
   @Transactional
   public void verifyEmail(VerifyEmailDto request) {
 
@@ -102,6 +118,13 @@ public class AuthService {
     publisher.publishEvent(new UserRegisteredEvent(user.getEmail(), user.getFirstName()));
   }
 
+  /**
+   * Generates a verification one-time password (OTP) for the given email and publishes an email verification event.
+   *
+   * @param request the request containing the user's email to which the OTP will be sent
+   * @throws NotFoundException if no user exists with the provided email
+   * @throws ValidationException if the user has already been verified
+   */
   @Transactional
   public void requestOtp(RequestOtpDto request) {
     
@@ -117,6 +140,12 @@ public class AuthService {
     publisher.publishEvent(new EmailVerificationRequestedEvent(user.getEmail(), user.getFirstName(), otp));
   }
 
+  /**
+   * Generates a one-time password for changing the user's password and publishes an event containing the OTP.
+   *
+   * @param request the DTO containing the user's email to receive the password reset OTP
+   * @throws NotFoundException if no user exists with the provided email
+   */
   @Transactional
   public void forgotPassword(ForgotPasswordDto request) {
     
