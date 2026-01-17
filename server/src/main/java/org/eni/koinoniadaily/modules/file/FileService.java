@@ -62,7 +62,7 @@ public class FileService {
 
   public void deleteObject(String objectKey) {
 
-    if (!objectKey.startsWith("thumbnails/") || objectKey.contains("../")) {
+    if (objectKey == null || !objectKey.startsWith("thumbnails/") || objectKey.contains("../")) {
       throw new ValidationException("Invalid object key");
     }
 
