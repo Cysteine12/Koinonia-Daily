@@ -17,6 +17,7 @@ public class RateLimitBucketService {
 
   public boolean consume(String key, Supplier<Bucket> bucketSupplier) {
 
+    @SuppressWarnings("unused")
     Bucket bucket = cache.get(key, k -> bucketSupplier.get());
 
     return bucket.tryConsume(1);
