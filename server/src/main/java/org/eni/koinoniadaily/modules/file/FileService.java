@@ -5,11 +5,11 @@ import java.time.Duration;
 import java.util.UUID;
 
 import org.eni.koinoniadaily.config.AppProperties;
+import org.eni.koinoniadaily.exceptions.ValidationException;
 import org.eni.koinoniadaily.modules.file.dto.PresignedUploadUrlRequest;
 import org.eni.koinoniadaily.modules.file.dto.PresignedUploadUrlResponse;
 import org.springframework.stereotype.Service;
 
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
@@ -34,7 +34,7 @@ public class FileService {
     PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                                           .bucket(props.getAws().getS3BucketName())
                                           .key(objectKey)
-                                          .contentType(request.getContentType())
+                                          .contentType(getContentType(request.getFileExtension()))
                                           .acl(ObjectCannedACL.PUBLIC_READ)
                                           .build();
 
@@ -55,12 +55,13 @@ public class FileService {
             .presignedUrl(presignedUrl.toString())
             .publicUrl(objectUrl.toString())
             .key(objectKey)
+            .requiredHeaders(presignedRequest.signedHeaders())
             .build();
   }
 
   public void deleteObject(String objectKey) {
 
-    if (!objectKey.startsWith("thumbnails/")) {
+    if (!objectKey.startsWith("thumbnails/") || objectKey.contains("../")) {
       throw new ValidationException("Invalid object key");
     }
 
@@ -70,5 +71,21 @@ public class FileService {
                                     .build();
 
     s3Client.deleteObject(request);
+  }
+
+  private String getContentType(String fileExtension) {
+    switch (fileExtension.toLowerCase()) {
+      case "jpg":
+      case "jpeg":
+        return "image/jpeg";
+      case "png":
+        return "image/png";
+      case "gif":
+        return "image/gif";
+      case "webp":
+        return "image/webp";
+      default:
+        throw new ValidationException("Unsupported file extension");
+    }
   }
 }
