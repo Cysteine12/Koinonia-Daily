@@ -37,8 +37,8 @@ public class SecurityConfig {
                                     .requestMatchers("/api/auth/**").permitAll()
                                     .anyRequest().authenticated())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(rateLimitFilter, JwtFilter.class)
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAfter(jwtFilter, RateLimitFilter.class)
             .userDetailsService(userDetailsService)
             .build();
   }
