@@ -11,7 +11,7 @@ public class PresignedUploadUrlRequest {
   
   @NotBlank(message = "File extension is required")
   @Pattern(
-      regexp = "^(jpg|jpeg|png|gif|webp)$", 
+      regexp = "(?i)^(jpg|jpeg|png|gif|webp)$", 
       message = "Invalid file extension. Allowed extensions are: jpg, jpeg, png, gif, webp"
   )
   private String fileExtension;
