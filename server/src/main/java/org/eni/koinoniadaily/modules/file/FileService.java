@@ -2,6 +2,7 @@ package org.eni.koinoniadaily.modules.file;
 
 import java.net.URL;
 import java.time.Duration;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.eni.koinoniadaily.config.AppProperties;
@@ -74,18 +75,13 @@ public class FileService {
   }
 
   private String getContentType(String fileExtension) {
-    switch (fileExtension.toLowerCase()) {
-      case "jpg":
-      case "jpeg":
-        return "image/jpeg";
-      case "png":
-        return "image/png";
-      case "gif":
-        return "image/gif";
-      case "webp":
-        return "image/webp";
-      default:
-        throw new ValidationException("Unsupported file extension");
-    }
+    
+    return switch (fileExtension.toLowerCase(Locale.ROOT)) {
+      case "jpg", "jpeg" -> "image/jpeg";
+      case "png" -> "image/png";
+      case "gif" -> "image/gif";
+      case "webp" -> "image/webp";
+      default -> "application/octet-stream";
+    };
   }
 }
