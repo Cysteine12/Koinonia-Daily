@@ -40,7 +40,7 @@
       <options>
         <dsn>${sentryDsn}</dsn>
         <environment>${sentryEnvironment}</environment>
-        <release>${appName}@${project.version}</release>
+        <!-- <release>${appName}@${project.version}</release> -->
         <serverName>${HOSTNAME}</serverName>
         <attachStacktrace>true</attachStacktrace>
         <sendDefaultPii>false</sendDefaultPii>
