@@ -1,0 +1,91 @@
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+  <springProperty scope="context" name="appName" source="spring.application.name"/>
+  <springProperty scope="context" name="sentryDsn" source="sentry.dsn"/>
+  <springProperty scope="context" name="sentryEnvironment" source="sentry.environment"/>
+  <springProperty scope="context" name="projectVersion" source="info.build.version" defaultValue="unknown" />
+
+  <!-- Development Profile: Human readable console output -->
+  <springProfile name="development">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [%cyan(%thread)] %yellow(%logger{36}) - %msg%n</pattern>
+      </encoder>
+    </appender>
+
+    <logger name="org.eni.koinoniadaily" level="DEBUG"/>
+    <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="org.springframework.security" level="DEBUG"/>
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+    <logger name="software.amazon.awssdk" level="WARN"/>
+    <logger name="io.sentry" level="WARN"/>
+    <logger name="com.github.ben-manes.caffeine" level="WARN"/>
+    <logger name="com.bucket4j" level="WARN"/>
+
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+
+  <!-- Production Profile: JSON structured logs with Sentry -->
+  <springProfile name="production">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{requestId}] [%X{userId}] %logger{36} - %msg%n</pattern>
+      </encoder>
+    </appender>
+
+    <appender name="SENTRY" class="io.sentry.logback.SentryAppender">
+      <options>
+        <dsn>${sentryDsn}</dsn>
+        <environment>${sentryEnvironment}</environment>
+        <release>${appName}@${projectVersion}</release>
+        <serverName>${HOSTNAME}</serverName>
+        <attachStacktrace>true</attachStacktrace>
+        <sendDefaultPii>false</sendDefaultPii>
+      </options>
+      <minimumEventLevel>ERROR</minimumEventLevel>
+      <minimumBreadcrumbLevel>INFO</minimumBreadcrumbLevel>
+    </appender>
+
+    <!-- Async Wrapper for Sentry to avoid blocking -->
+    <appender name="ASYNC_SENTRY" class="ch.qos.logback.classic.AsyncAppender">
+      <appender-ref ref="SENTRY"/>
+      <queueSize>512</queueSize>
+      <discardingThreshold>0</discardingThreshold>
+      <neverBlock>true</neverBlock>
+    </appender>
+
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="ASYNC_SENTRY"/>
+    </root>
+
+    <logger name="org.eni.koinoniadaily" level="INFO"/>
+    <logger name="org.springframework.web" level="WARN"/>
+    <logger name="org.springframework.security" level="INFO"/>
+    <logger name="org.hibernate.SQL" level="WARN"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="WARN"/>
+    <logger name="software.amazon.awssdk" level="WARN"/>
+    <logger name="io.sentry" level="WARN"/>
+    <logger name="com.github.ben-manes.caffeine" level="WARN"/>
+    <logger name="com.bucket4j" level="WARN"/>
+  </springProfile>
+
+  <!-- Test Profile: Minimal logging -->
+  <springProfile name="test">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      </encoder>
+    </appender>
+
+    <root level="WARN">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <logger name="org.eni.koinoniadaily" level="INFO"/>
+  </springProfile>
+</configuration>
