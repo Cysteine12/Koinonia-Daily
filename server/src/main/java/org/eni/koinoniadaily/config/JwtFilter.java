@@ -38,7 +38,6 @@ public class JwtFilter extends OncePerRequestFilter {
   private final ObjectMapper objectMapper;
 
   private static final String USER_ID_MDC_KEY = "userId";
-  private static final String USER_EMAIL_MDC_KEY = "userEmail";
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -60,7 +59,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
       if (userDetails instanceof UserPrincipal principal) {
         MDC.put(USER_ID_MDC_KEY, String.valueOf(principal.getId()));
-        MDC.put(USER_EMAIL_MDC_KEY, principal.getEmail());
       }
 
       UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

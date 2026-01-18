@@ -4,6 +4,7 @@
   <springProperty scope="context" name="appName" source="spring.application.name"/>
   <springProperty scope="context" name="sentryDsn" source="sentry.dsn"/>
   <springProperty scope="context" name="sentryEnvironment" source="sentry.environment"/>
+  <springProperty scope="context" name="projectVersion" source="info.build.version" defaultValue="unknown" />
 
   <!-- Development Profile: Human readable console output -->
   <springProfile name="development">
@@ -32,7 +33,7 @@
   <springProfile name="production">
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
       <encoder>
-        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{requestId}] [%X{userId}] [%X{userEmail}] %logger{36} - %msg%n</pattern>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{requestId}] [%X{userId}] %logger{36} - %msg%n</pattern>
       </encoder>
     </appender>
 
@@ -40,7 +41,7 @@
       <options>
         <dsn>${sentryDsn}</dsn>
         <environment>${sentryEnvironment}</environment>
-        <!-- <release>${appName}@${project.version}</release> -->
+        <release>${appName}@${projectVersion}</release>
         <serverName>${HOSTNAME}</serverName>
         <attachStacktrace>true</attachStacktrace>
         <sendDefaultPii>false</sendDefaultPii>
