@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 
 import org.eni.koinoniadaily.exceptions.UnauthorizedException;
 import org.eni.koinoniadaily.modules.auth.JwtService;
+import org.eni.koinoniadaily.modules.auth.UserPrincipal;
 import org.eni.koinoniadaily.modules.auth.dto.JwtPayload;
 import org.eni.koinoniadaily.modules.token.TokenType;
 import org.eni.koinoniadaily.utils.ErrorResponse;
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,6 +37,9 @@ public class JwtFilter extends OncePerRequestFilter {
   private final UserDetailsService userDetailsService;
   private final ObjectMapper objectMapper;
 
+  private static final String USER_ID_MDC_KEY = "userId";
+  private static final String USER_EMAIL_MDC_KEY = "userEmail";
+
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
@@ -52,6 +57,11 @@ public class JwtFilter extends OncePerRequestFilter {
       JwtPayload jwtPayload = jwtService.validateAndExtractPayload(token, TokenType.ACCESS_TOKEN);
 
       UserDetails userDetails = userDetailsService.loadUserByUsername(jwtPayload.getSubject());
+
+      if (userDetails instanceof UserPrincipal principal) {
+        MDC.put(USER_ID_MDC_KEY, String.valueOf(principal.getId()));
+        MDC.put(USER_EMAIL_MDC_KEY, principal.getEmail());
+      }
 
       UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
