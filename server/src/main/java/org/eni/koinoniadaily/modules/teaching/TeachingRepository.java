@@ -18,4 +18,6 @@ public interface TeachingRepository extends JpaRepository<Teaching, Long> {
   List<TeachingWithoutMessageProjection> findAllByCollectionsId(Long collectionId);
 
   Page<TeachingWithoutMessageProjection> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+
+  boolean existsByTranscriptId(Long id);
 }
