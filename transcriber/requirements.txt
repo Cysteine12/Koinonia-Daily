@@ -7,7 +7,7 @@ colorama==0.4.6
 coloredlogs==15.0.1
 ctranslate2==4.6.1
 faster-whisper==1.2.1
-filelock==3.19.1
+filelock==3.20.3
 flatbuffers==25.9.23
 fsspec==2025.9.0
 h11==0.16.0
