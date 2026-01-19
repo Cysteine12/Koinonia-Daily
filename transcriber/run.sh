@@ -17,12 +17,21 @@ if [ ! -d "$VENV_DIR" ]; then
     python -m venv "$VENV_DIR"
 
     echo "Activating virtual environment and installing dependencies..."
-    source "$VENV_DIR/Scripts/activate"
+    
+    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+      source "$VENV_DIR/Scripts/activate"
+    else 
+      source "$VENV_DIR/bin/activate"
+    fi
     pip install --upgrade pip
     pip install -r requirements.txt
 else
     echo "Activating existing virtual environment..."
-    source "$VENV_DIR/Scripts/activate"
+    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+      source "$VENV_DIR/Scripts/activate"
+    else 
+      source "$VENV_DIR/bin/activate"
+    fi
 fi
 
 # Check if audio file argument is provided

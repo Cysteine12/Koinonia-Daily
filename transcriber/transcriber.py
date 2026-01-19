@@ -1,12 +1,3 @@
-# from faster_whisper import WhisperModel
-
-# model = WhisperModel("base", device="cpu", compute_type="int8")
-
-# segments, info = model.transcribe("audio.m4a")
-
-# for seg in segments:
-# 	print(seg.text)
-
 import sys
 import os
 from pathlib import Path
@@ -34,7 +25,7 @@ def transcribe_audio(audio_path):
 
 		# Transcribe audio file
 		print("Starting transcription...")
-		segments, info = model.transcribe(audio_path)
+		segments, _info = model.transcribe(audio_path)
 
 		# Convert generator to list to get total segments
 		segments = list(segments)
@@ -44,12 +35,12 @@ def transcribe_audio(audio_path):
 			for seg in tqdm(segments, desc="Transcribing", unit="segment"):
 				f.write(seg.text.strip() + "\n")
 
-		print(f"\nTranscription completed successfully!'")
+		print("\nTranscription completed successfully!")
 		print(f"Output saved to '{output_file}'")
 		print(f"Total segments processed: {len(segments)}")
 
 	except Exception as e:
-		print(f"An error occurred during transcription: {e}")
+		print(f"An error occurred during transcription: ({type(e).__name__}): {e}")
 		sys.exit(1)
 
 if __name__ == "__main__":
