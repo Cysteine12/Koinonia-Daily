@@ -14,5 +14,5 @@ public class TranscriptRequest {
   private String title;
 
   @NotBlank(message = "Message is required")
-  private String Message;
+  private String message;
 }

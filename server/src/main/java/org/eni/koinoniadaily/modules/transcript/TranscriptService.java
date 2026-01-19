@@ -1,6 +1,8 @@
 package org.eni.koinoniadaily.modules.transcript;
 
 import org.eni.koinoniadaily.exceptions.NotFoundException;
+import org.eni.koinoniadaily.exceptions.ValidationException;
+import org.eni.koinoniadaily.modules.teaching.TeachingRepository;
 import org.eni.koinoniadaily.modules.transcript.dto.TranscriptPageResponse;
 import org.eni.koinoniadaily.modules.transcript.dto.TranscriptRequest;
 import org.eni.koinoniadaily.modules.transcript.dto.TranscriptResponse;
@@ -18,9 +20,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TranscriptService {
-  
 
   private final TranscriptRepository transcriptRepository;
+  private final TeachingRepository teachingRepository;
   private final TranscriptMapper transcriptMapper;
   private static final String UPDATED_AT = "updatedAt";
 
@@ -75,9 +77,14 @@ public class TranscriptService {
   @Transactional
   public void deleteTranscript(Long id) {
 
-    Transcript transcript = transcriptRepository.findById(id)
-                              .orElseThrow(() -> new NotFoundException("Transcript not found"));
+    if (!transcriptRepository.existsById(id)) {
+      throw new NotFoundException("Transcript not found");
+    }
 
-    transcriptRepository.delete(transcript);
+    if (teachingRepository.existsByTranscriptId(id)) {
+      throw new ValidationException("Transcript with associated teaching can't be deleted");
+    }
+
+    transcriptRepository.deleteById(id);
   }
 }

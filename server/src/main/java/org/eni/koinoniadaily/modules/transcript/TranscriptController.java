@@ -45,7 +45,7 @@ public class TranscriptController {
     return ResponseEntity.ok(SuccessResponse.data(response));
   }
 
-  @GetMapping
+  @GetMapping("/search")
   public ResponseEntity<SuccessResponse<PageResponse<TranscriptPageResponse>>> searchTranscripts(
       @RequestParam @NotBlank String q,
       @RequestParam(defaultValue = "0") @PositiveOrZero int page,
