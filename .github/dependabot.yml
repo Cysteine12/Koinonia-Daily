@@ -76,7 +76,9 @@ updates:
       react-native:
         patterns:
           - "react-native"
+          - "react-native-*"
           - "@react-native-*"
         update-types:
           - "minor"
           - "patch"
+          
