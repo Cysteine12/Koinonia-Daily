@@ -54,12 +54,11 @@ jobs:
     - name: Expo config validation
       run: npx expo config --type public
 
-    - name: debug git tracked files
-      run: git ls-files 
+    - name: Clean Expo internal files
+      run: rm -rf .expo
 
     - name: Expo doctor
       run: CI=1 npx expo-doctor
-      continue-on-error: true
 
   preview:
     name: Run Mobile Preview Build
