@@ -204,7 +204,7 @@ jobs:
       uses: aquasecurity/trivy-action@0.20.0
       with:
         image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
-        severity: 'CRITICAL, HIGH'
+        severity: 'CRITICAL,HIGH'
         exit-code: '1'
         format: sarif
         output: trivy-image-results.sarif
@@ -218,11 +218,7 @@ jobs:
         
     - name: Push Docker Image
       if: success()
-      uses: docker/build-push-action@v6
-      with:
-        context: ./server
-        file: ./server/Dockerfile
-        push: true
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
+      run: |
+        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:latest
