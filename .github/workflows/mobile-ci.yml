@@ -1,0 +1,110 @@
+name: Mobile CI Checks
+
+on:
+  push:
+    branches: ["main", "develop"]
+    paths:
+      - "mobile/**"
+  pull_request:
+    branches: ["main", "develop"]
+    paths:
+      - "mobile/**"
+
+jobs:
+  checks:
+    name: Run Mobile CI Checks
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: mobile
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Typescript check
+      run: npx tsc --noEmit
+
+    - name: Lint
+      run: npx expo lint
+
+    - name: Expo config validation
+      run: npx expo config --type public
+
+    - name: Expo doctor
+      run: npx expo doctor --non-interactive
+
+  preview:
+    name: Run Mobile Preview Build
+    runs-on: ubuntu-latest
+    needs: [checks]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+
+    defaults:
+      run:
+        working-directory: mobile
+
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Publish Expo OTA update
+      run: |
+        npx expo prebuild --check
+        npx eas update --branch preview --message "develop: ${{ github.sha }}" --non-interactive
+
+  production:
+    name: Run Mobile Production Build
+    runs-on: ubuntu-latest
+    needs: [checks]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    defaults:
+      run:
+        working-directory: mobile
+
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Publish Expo OTA update
+      run: |
+        npx expo prebuild --check
+        npx eas update --branch production --message "production: ${{ github.sha }}" --non-interactive
+
+    - name: Build production apps
+      run: npx eas build --platform all --profile production --non-interactive
