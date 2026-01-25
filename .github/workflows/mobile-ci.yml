@@ -103,7 +103,8 @@ jobs:
       run: npm install -g eas-cli
 
     - name: Publish Expo OTA update
-      run: eas update --branch preview --message "preview: $GITHUB_SHA" --non-interactive
+      run: |
+        eas update --branch preview --message "preview: ${{ github.sha }}" --non-interactive
 
   production:
     name: Run Mobile Production Build
@@ -148,7 +149,8 @@ jobs:
       run: npm install -g eas-cli
 
     - name: Publish Expo OTA update
-      run: eas update --branch production --message "production: $GITHUB_SHA" --non-interactive --no-wait
+      run: |
+        eas update --branch production --message "production: ${{ github.sha }}" --non-interactive --no-wait
 
     - name: Build production apps
       run: eas build --platform all --profile production --non-interactive
