@@ -8,9 +8,13 @@
     "scheme": "koinoniadaily",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "platforms": ["android", "ios"],
+    "platforms": [
+      "android",
+      "ios"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.eni.koinoniadaily"
     },
     "android": {
       "adaptiveIcon": {
