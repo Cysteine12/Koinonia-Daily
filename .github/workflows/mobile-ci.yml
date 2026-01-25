@@ -55,7 +55,7 @@ jobs:
       run: npx expo config --type public
 
     - name: Expo doctor
-      run: CI=1 npx expo-doctor@10.8.2
+      run: CI=1 npx expo-doctor
 
   preview:
     name: Run Mobile Preview Build
