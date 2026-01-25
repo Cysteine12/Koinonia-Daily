@@ -3,8 +3,8 @@ import { getAccountProfile } from './api';
 
 const useAccountProfile = () => {
   return useQuery({
-    queryFn: () => getAccountProfile(),
-    queryKey: ['account-profile'],
+    queryFn: getAccountProfile,
+    queryKey: ['account.profile'],
   });
 };
 

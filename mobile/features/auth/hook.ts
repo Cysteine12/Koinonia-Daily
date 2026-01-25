@@ -38,11 +38,11 @@ const useLogin = () => {
       router.replace('/home');
     },
     onError: (data: AxiosError<ApiResponse>) => {
-      if (data.response?.data.message === 'verify-email') {
+      if (data.response?.data?.message === 'verify-email') {
         router.push('/verify-email');
         return;
       }
-      Alert.alert('Login failed', data.response?.data.message || data.message);
+      Alert.alert('Login failed', data.response?.data?.message || data.message);
     },
   });
 };

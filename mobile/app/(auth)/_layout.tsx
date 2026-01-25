@@ -8,8 +8,8 @@ const GuestLayout = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) return router.replace('/home');
-  }, [isAuthenticated]);
+    if (isAuthenticated) router.replace('/home');
+  }, [isAuthenticated, router]);
 
   return (
     <Stack screenOptions={screenOptions}>
