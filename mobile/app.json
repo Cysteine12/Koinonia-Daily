@@ -54,6 +54,12 @@
         "projectId": "c2b8c664-dde8-408d-b1b2-59a742047f51"
       }
     },
-    "owner": "koinonia-daily"
+    "owner": "koinonia-daily",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c2b8c664-dde8-408d-b1b2-59a742047f51"
+    }
   }
 }
