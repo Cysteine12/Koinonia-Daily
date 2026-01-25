@@ -11,6 +11,10 @@ on:
     paths:
       - "server/**"
       - ".github/workflows/server-ci.yml"
+
+concurrency:
+  group: server-ci-${{ github.ref }}
+  cancel-in-progress: true
   
 jobs:
   build-and-test:
