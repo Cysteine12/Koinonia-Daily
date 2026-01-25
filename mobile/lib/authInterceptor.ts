@@ -6,19 +6,24 @@ type AuthHandlers = {
   onLogout: () => Promise<void>;
 };
 
-let isRefreshing = false;
-let refreshSubscribers: ((token: string) => void)[] = [];
-
-const subscribeTokenRefresh = (cb: (token: string) => void) => {
-  refreshSubscribers.push(cb);
-};
-
-const notifySubscribers = (token: string) => {
-  refreshSubscribers.forEach((cb) => cb(token));
-  refreshSubscribers = [];
-};
-
 export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHandlers) => {
+  let isRefreshing = false;
+  let refreshSubscribers: { resolve: (token: string) => void; reject: (err: unknown) => void }[] = [];
+
+  const subscribeTokenRefresh = (resolve: (token: string) => void, reject: (err: unknown) => void) => {
+    refreshSubscribers.push({ resolve, reject });
+  };
+
+  const notifySubscribers = (token: string) => {
+    refreshSubscribers.forEach(({ resolve }) => resolve(token));
+    refreshSubscribers = [];
+  };
+
+  const rejectSubscribers = (err: unknown) => {
+    refreshSubscribers.forEach(({ reject }) => reject(err));
+    refreshSubscribers = [];
+  };
+
   const reqInterceptor = client.interceptors.request.use((config) => {
     const accessToken = handlers.getAccessToken();
     if (accessToken) {
@@ -32,17 +37,15 @@ export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHand
     async (error) => {
       const originalRequest = error.config;
 
-      const refreshToken = await handlers.refreshToken();
-
-      if (error.response?.status === 401 && refreshToken && !originalRequest._retry) {
+      if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
 
         if (isRefreshing) {
-          return new Promise((resolve) => {
+          return new Promise((resolve, reject) => {
             subscribeTokenRefresh((token) => {
               originalRequest.headers.Authorization = `Bearer ${token}`;
               resolve(client(originalRequest));
-            });
+            }, reject);
           });
         }
         isRefreshing = true;
@@ -56,6 +59,7 @@ export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHand
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return client(originalRequest);
         } catch (err) {
+          rejectSubscribers(err);
           await handlers.onLogout();
           isRefreshing = false;
           return Promise.reject(err);

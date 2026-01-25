@@ -10,8 +10,9 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { StyleSheet } from 'react-native';
 import { AuthProvider } from '@/features/auth/auth-context';
 
+const queryClient = new QueryClient();
+
 export default function RootLayout() {
-  const queryClient = new QueryClient();
   const colorScheme = useColorScheme();
 
   return (

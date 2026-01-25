@@ -2,13 +2,12 @@ import API from '@/lib/api';
 import { attachAuthInterceptors } from '@/lib/authInterceptor';
 import { deleteSecure, getSecure, saveSecure } from '@/lib/storage';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { useAccountProfile } from '../account/hook';
-import { User } from '../user/types';
 import { router } from 'expo-router';
+import axios from 'axios';
 
 type AuthContextType = {
   token: string | null;
-  login: (acccessToken: string, refreshToken: string) => Promise<void>;
+  login: (accessToken: string, refreshToken: string) => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
 };
@@ -16,28 +15,25 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const { data: userData, refetch } = useAccountProfile();
   const interceptorCleanup = useRef<() => void>(null);
+  const tokenRef = useRef<string | null>(null);
+
+  const initialized = useRef<boolean | null>(null);
 
   useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
     (async () => {
       const token = await getSecure('accessToken');
       if (token) setToken(token);
-      if (!user) refetch();
     })();
   }, []);
-
-  useEffect(() => {
-    if (userData?.data) setUser(userData.data);
-  }, [userData]);
 
   const login = async (accessToken: string, refreshToken: string) => {
     setToken(accessToken);
     await saveSecure('accessToken', accessToken);
     await saveSecure('refreshToken', refreshToken);
-    refetch();
   };
 
   const logout = async () => {
@@ -49,29 +45,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const refreshToken = async (): Promise<string> => {
     const refresh = await getSecure('refreshToken');
     if (!refresh) {
-      // redirect to login
       router.replace('/login');
+      throw new Error('No refresh token available');
     }
 
-    const { data } = await API.post('/api/auth/refresh-token', {
+    const { data } = await axios.post('/api/auth/refresh-token', {
       refreshToken: refresh,
     });
 
     setToken(data.accessToken);
+    await saveSecure('accessToken', data.accessToken);
     await saveSecure('refreshToken', data.refreshToken);
 
     return data.accessToken;
   };
 
   useEffect(() => {
+    tokenRef.current = token;
+  }, [token]);
+
+  useEffect(() => {
     interceptorCleanup.current = attachAuthInterceptors(API, {
-      getAccessToken: () => token,
+      getAccessToken: () => tokenRef.current,
       refreshToken,
       onLogout: logout,
     });
 
     return () => interceptorCleanup.current?.();
-  }, [token]);
+  }, []);
 
   return (
     <AuthContext.Provider
