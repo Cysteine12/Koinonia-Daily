@@ -94,7 +94,9 @@ jobs:
       run: npm ci
 
     - name: Check OTA safety
-      run: npx expo prebuild --check
+      run: |
+        npx expo prebuild --no-install
+        git diff --exit-code
 
     - name: Publish Expo OTA update
       run: |
