@@ -97,6 +97,7 @@ jobs:
       run: |
         npx expo prebuild --no-install
         git diff --exit-code
+      continue-on-error: false
 
     - name: Install EAS CLI
       run: npm install -g eas-cli
@@ -138,7 +139,10 @@ jobs:
       run: npm ci
 
     - name: Check OTA safety
-      run: npx expo prebuild --check
+      run: |
+        npx expo prebuild --no-install
+        git diff --exit-code
+      continue-on-error: false
 
     - name: Install EAS CLI
       run: npm install -g eas-cli
