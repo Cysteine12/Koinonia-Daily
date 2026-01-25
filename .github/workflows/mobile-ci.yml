@@ -98,9 +98,11 @@ jobs:
         npx expo prebuild --no-install
         git diff --exit-code
 
+    - name: Install EAS CLI
+      run: npm install -g eas-cli
+
     - name: Publish Expo OTA update
-      run: |
-        npx eas update --branch preview --message "preview: ${{ github.sha }}" --non-interactive
+      run: eas update --branch preview --message "preview: ${{ github.sha }}" --non-interactive
 
   production:
     name: Run Mobile Production Build
@@ -138,9 +140,11 @@ jobs:
     - name: Check OTA safety
       run: npx expo prebuild --check
 
+    - name: Install EAS CLI
+      run: npm install -g eas-cli
+
     - name: Publish Expo OTA update
-      run: |
-        npx eas update --branch production --message "production: ${{ github.sha }}" --non-interactive --no-wait
+      run: eas update --branch production --message "production: ${{ github.sha }}" --non-interactive --no-wait
 
     - name: Build production apps
-      run: npx eas build --platform all --profile production --non-interactive
+      run: eas build --platform all --profile production --non-interactive
