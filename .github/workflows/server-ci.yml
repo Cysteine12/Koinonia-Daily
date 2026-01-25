@@ -191,21 +191,21 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     
-    - name: Build and Push Docker Image
-      uses: docker/build-push-action@v4
+    - name: Build Docker Image (local)
+      uses: docker/build-push-action@v6
       with:
         context: ./server
         file: ./server/Dockerfile
-        push: true
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
+        push: false
+        load: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
       
     - name: Scan Docker Image with Trivy
       uses: aquasecurity/trivy-action@0.20.0
       with:
         image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
         severity: 'CRITICAL, HIGH'
+        exit-code: '1'
         format: sarif
         output: trivy-image-results.sarif
 
@@ -216,3 +216,13 @@ jobs:
         sarif_file: trivy-image-results.sarif
         category: "Trivy Docker Image Scan"
         
+    - name: Push Docker Image
+      if: success()
+      uses: docker/build-push-action@v6
+      with:
+        context: ./server
+        file: ./server/Dockerfile
+        push: true
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:latest
+          ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
