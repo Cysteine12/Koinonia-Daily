@@ -6,4 +6,10 @@ const API = axios.create({
   timeout: 30000,
 });
 
+export const refreshClient = axios.create({
+  baseURL: API.defaults.baseURL,
+  headers: { 'Content-Type': 'application/json' },
+  timeout: 30000,
+})
+
 export default API;

@@ -5,44 +5,24 @@ import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
 import { Separator } from '@/components/reusables/ui/separator';
 import { Text } from '@/components/reusables/ui/text';
-import { useLogin } from '@/features/auth/hook';
-import { loginSchema } from '@/features/auth/schema';
-import { useForm } from '@tanstack/react-form';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
+import React from 'react';
+import { Pressable, ScrollView, TextInput, View } from 'react-native';
 
-const Login = () => {
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const { mutate: login, isPending } = useLogin();
+const Register = () => {
+  const passwordInputRef = React.useRef<TextInput>(null);
 
-  const form = useForm({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-    validators: {
-      onSubmit: ({ value }) => {
-        const result = loginSchema.safeParse(value);
-        const fieldErrors: Record<string, string> = {};
-        if (!result.success) {
-          result.error.issues.forEach((issue) => {
-            if (issue.path[0]) {
-              fieldErrors[issue.path[0].toString()] = issue.message;
-            }
-          });
-          setErrors(fieldErrors);
-          return;
-        }
-        setErrors({});
-        login(value);
-      },
-    },
-  });
+  function onEmailSubmitEditing() {
+    passwordInputRef.current?.focus();
+  }
 
-  const handleSocialSignIn = (type: string) => {
+  function onSubmit() {
+    // TODO: Submit form and navigate to protected screen if successful
+  }
+
+  function handleSocialSignIn(type: string) {
     // TODO
-  };
+  }
 
   return (
     <ScrollView
@@ -54,13 +34,21 @@ const Login = () => {
         <View className="gap-6">
           <Card className="border-border/0 sm:border-border shadow-none sm:shadow-sm sm:shadow-black/5">
             <CardHeader>
-              <CardTitle className="text-center text-primary text-xl sm:text-left">Sign in to your app</CardTitle>
+              <CardTitle className="text-center text-primary text-xl sm:text-left">Create your account</CardTitle>
               <CardDescription className="text-center sm:text-left">
-                Welcome back! Please sign in to continue
+                Welcome! Please fill in the details to get started.
               </CardDescription>
             </CardHeader>
             <CardContent className="gap-6">
               <View className="gap-6">
+                <View className="gap-1.5">
+                  <Label htmlFor="email">First name</Label>
+                  <Input id="firstName" onSubmitEditing={() => {}} returnKeyType="next" submitBehavior="submit" />
+                </View>
+                <View className="gap-1.5">
+                  <Label htmlFor="lastName">Last name</Label>
+                  <Input id="lastName" onSubmitEditing={() => {}} returnKeyType="next" submitBehavior="submit" />
+                </View>
                 <View className="gap-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -69,44 +57,31 @@ const Login = () => {
                     keyboardType="email-address"
                     autoComplete="email"
                     autoCapitalize="none"
-                    // value={form.state.values.email}
-                    onChangeText={(text) => form.setFieldValue('email', text)}
+                    onSubmitEditing={onEmailSubmitEditing}
                     returnKeyType="next"
                     submitBehavior="submit"
                   />
-                  {errors?.email && <Text className="text-sm text-destructive">{errors?.email}</Text>}
                 </View>
                 <View className="gap-1.5">
                   <View className="flex-row items-center">
                     <Label htmlFor="password">Password</Label>
-                    <Button
-                      variant="link"
-                      size="sm"
-                      className="web:h-fit ml-auto h-4 px-1 py-0 sm:h-4"
-                      onPress={() => {
-                        // TODO: Navigate to forgot password screen
-                      }}
-                    >
-                      <Text className="font-normal leading-4">Forgot your password?</Text>
-                    </Button>
                   </View>
                   <Input
+                    ref={passwordInputRef}
                     id="password"
                     secureTextEntry
                     returnKeyType="send"
-                    // value={form.getFieldValue('password')}
-                    onChangeText={(text) => form.setFieldValue('password', text)}
+                    onSubmitEditing={onSubmit}
                   />
-                  {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
                 </View>
-                <Button className="w-full" onPress={form.handleSubmit}>
-                  {isPending ? <ActivityIndicator /> : <Text>Continue</Text>}
+                <Button className="w-full" onPress={onSubmit}>
+                  <Text>Continue</Text>
                 </Button>
               </View>
               <Text className="text-center text-sm">
-                Don&apos;t have an account?{' '}
-                <Pressable onPress={() => router.push('/register')}>
-                  <Text className="text-sm text-primary leading-4">Sign up</Text>
+                Already have an account?{' '}
+                <Pressable onPress={() => router.push('/login')}>
+                  <Text className="text-sm underline underline-offset-4">Sign in</Text>
                 </Pressable>
               </Text>
               <View className="flex-row items-center">
@@ -122,5 +97,4 @@ const Login = () => {
     </ScrollView>
   );
 };
-
-export default Login;
+export default Register;
