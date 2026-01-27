@@ -1,7 +1,7 @@
 import { Stack, useRouter } from 'expo-router';
+import { useEffect } from 'react';
 import { useAuth } from '../../features/auth/auth-context';
 import { screenOptions } from '../_layout';
-import { useEffect } from 'react';
 
 const GuestLayout = () => {
   const { isAuthenticated } = useAuth();
@@ -13,8 +13,9 @@ const GuestLayout = () => {
 
   return (
     <Stack screenOptions={screenOptions}>
-      <Stack.Screen name="login" options={{ title: 'Login' }} />
-      <Stack.Screen name="verify-email" options={{ title: 'Verify Email' }} />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="register" options={{ headerShown: false }} />
+      <Stack.Screen name="verify-email" options={{ headerShown: false }} />
     </Stack>
   );
 };

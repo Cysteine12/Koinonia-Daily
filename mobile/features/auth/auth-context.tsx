@@ -1,9 +1,9 @@
-import API from '@/lib/api';
+import API, { refreshClient } from '@/lib/api';
 import { attachAuthInterceptors } from '@/lib/authInterceptor';
 import { deleteSecure, getSecure, saveSecure } from '@/lib/storage';
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { router } from 'expo-router';
-import axios from 'axios';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { TokenType } from './types';
 
 type AuthContextType = {
   token: string | null;
@@ -16,7 +16,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
-  const interceptorCleanup = useRef<() => void>(null);
+  const interceptorCleanup = useRef<(() => void) | null>(null);
   const tokenRef = useRef<string | null>(null);
 
   const initialized = useRef<boolean | null>(null);
@@ -25,37 +25,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (initialized.current) return;
     initialized.current = true;
     (async () => {
-      const token = await getSecure('accessToken');
+      const token = await getSecure(TokenType.ACCESS_TOKEN);
       if (token) setToken(token);
     })();
   }, []);
 
   const login = async (accessToken: string, refreshToken: string) => {
     setToken(accessToken);
-    await saveSecure('accessToken', accessToken);
-    await saveSecure('refreshToken', refreshToken);
+    await saveSecure(TokenType.ACCESS_TOKEN, accessToken);
+    await saveSecure(TokenType.REFRESH_TOKEN, refreshToken);
   };
 
   const logout = async () => {
     setToken(null);
-    await deleteSecure('accessToken');
-    await deleteSecure('refreshToken');
+    await deleteSecure(TokenType.ACCESS_TOKEN);
+    await deleteSecure(TokenType.REFRESH_TOKEN);
   };
 
   const refreshToken = async (): Promise<string> => {
-    const refresh = await getSecure('refreshToken');
+    const refresh = await getSecure(TokenType.REFRESH_TOKEN);
     if (!refresh) {
       router.replace('/login');
       throw new Error('No refresh token available');
     }
 
-    const { data } = await axios.post('/api/auth/refresh-token', {
+    const { data } = await refreshClient.post('/api/auth/refresh-token', {
       refreshToken: refresh,
     });
 
     setToken(data.accessToken);
-    await saveSecure('accessToken', data.accessToken);
-    await saveSecure('refreshToken', data.refreshToken);
+    await saveSecure(TokenType.ACCESS_TOKEN, data.accessToken);
+    await saveSecure(TokenType.REFRESH_TOKEN, data.refreshToken);
 
     return data.accessToken;
   };
