@@ -52,7 +52,7 @@ const Login = () => {
                     keyboardType="email-address"
                     autoComplete="email"
                     autoCapitalize="none"
-                    // value={form.state.values.email}
+                    value={form.email}
                     onChangeText={(text) => handleChange('email', text)}
                     returnKeyType="next"
                     submitBehavior="submit"
@@ -77,6 +77,7 @@ const Login = () => {
                     id="password"
                     secureTextEntry
                     returnKeyType="send"
+                    value={form.password}
                     onChangeText={(text) => handleChange('password', text)}
                   />
                   {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
