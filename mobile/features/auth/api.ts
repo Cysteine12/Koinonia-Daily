@@ -1,5 +1,5 @@
 import API from '@/lib/api';
-import { LoginSchema, RegisterSchema } from './schema';
+import type { LoginSchema, LogoutSchema, RegisterSchema } from './schema';
 
 const register = async (payload: RegisterSchema) => {
   const { data } = await API.post(`/api/auth/register`, payload);
@@ -11,9 +11,10 @@ const login = async (payload: LoginSchema) => {
   return data;
 };
 
-const logout = async () => {
-  const { data } = await API.post(`/api/auth/logout`);
+const logout = async (payload: LogoutSchema) => {
+  const { data } = await API.post(`/api/auth/logout`, payload);
   return data;
 };
 
-export { register, login, logout };
+export { login, logout, register };
+

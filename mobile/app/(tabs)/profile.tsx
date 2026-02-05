@@ -1,5 +1,5 @@
-import { ThemedView } from '@/components/themed-view';
+import Profile from '@/screens/profile/profile';
 
 export default function ProfileScreen() {
-  return <ThemedView style={{ flex: 1 }}></ThemedView>;
+  return <Profile />;
 }
