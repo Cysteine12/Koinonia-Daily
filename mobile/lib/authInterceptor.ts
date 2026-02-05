@@ -1,4 +1,4 @@
-import { AxiosInstance } from 'axios';
+import { type AxiosInstance } from 'axios';
 
 type AuthHandlers = {
   getAccessToken: () => string | null;
@@ -37,7 +37,16 @@ export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHand
     async (error) => {
       const originalRequest = error.config;
 
-      if (error.response?.status === 401 && !originalRequest._retry) {
+      // Log only during development
+      if (__DEV__) {
+        console.log('API Error:', error.response?.data || error.message);
+      }
+
+      if (
+        error.response?.status === 401 &&
+        error.response?.data?.message === 'Expired token' &&
+        !originalRequest._retry
+      ) {
         originalRequest._retry = true;
 
         if (isRefreshing) {

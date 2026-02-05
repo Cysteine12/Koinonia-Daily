@@ -23,4 +23,11 @@ const verifyEmailSchema = z.object({
 
 export type VerifyEmailSchema = z.infer<typeof verifyEmailSchema>;
 
-export { loginSchema, registerSchema, verifyEmailSchema };
+const logoutSchema = z.object({
+  refreshToken: z.string({ error: 'Refresh token is required' }),
+});
+
+export type LogoutSchema = z.infer<typeof logoutSchema>;
+
+export { loginSchema, logoutSchema, registerSchema, verifyEmailSchema };
+

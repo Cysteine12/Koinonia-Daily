@@ -1,11 +1,11 @@
-import { login, logout, register } from './api';
+import type { ApiResponse } from '@/lib/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LoginSchema, RegisterSchema } from './schema';
 import { AxiosError } from 'axios';
 import { useRouter } from 'expo-router';
-import { useAuth } from './auth-context';
 import { Alert } from 'react-native';
-import { ApiResponse } from '@/lib/types';
+import { login, logout, register } from './api';
+import { useAuth } from './auth-context';
+import type { LoginSchema, LogoutSchema, RegisterSchema } from './schema';
 
 const useRegister = () => {
   const queryClient = useQueryClient();
@@ -53,7 +53,7 @@ const useLogout = () => {
   const { logout: authLogout } = useAuth();
 
   return useMutation({
-    mutationFn: () => logout(),
+    mutationFn: (payload: LogoutSchema) => logout(payload),
     onSuccess: (data: ApiResponse) => {
       queryClient.invalidateQueries({ queryKey: ['auth'] });
 
@@ -68,4 +68,5 @@ const useLogout = () => {
   });
 };
 
-export { useRegister, useLogin, useLogout };
+export { useLogin, useLogout, useRegister };
+

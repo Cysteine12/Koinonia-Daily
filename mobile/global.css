@@ -10,7 +10,7 @@
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: '#6A5CA3';
+    --primary: #6a5ca3;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
@@ -28,6 +28,15 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+
+    --gold-500: 45 66% 52%;
+    --gold-600: 45 60% 44%;
+    --gold-700: 45 71% 36%;
+    --gold-text: var(--gold-700);
+    --gold-icon: var(--gold-600);
+    --gold-button-start: 48 72% 65%;
+    --gold-button-mid: var(--gold-500);
+    --gold-button-end: var(--gold-600);
   }
 
   .dark:root {
@@ -37,7 +46,7 @@
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: '#6A5CA3';
+    --primary: #6a5ca3;
     --primary-foreground: 0 0% 9%;
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
@@ -54,5 +63,14 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    --gold-500: 48 70% 60%;
+    --gold-600: 48 80% 50%;
+    --gold-700: 45 71% 36%;
+    --gold-text: var(--gold-500);
+    --gold-icon: var(--gold-600);
+    --gold-button-start: var(--gold-600);
+    --gold-button-mid: var(--gold-500);
+    --gold-button-end: var(--gold-700);
   }
 }
