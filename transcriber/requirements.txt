@@ -28,7 +28,7 @@ numpy==2.3.3
 onnxruntime==1.23.2
 packaging==25.0
 pillow==11.3.0
-protobuf==6.33.1
+protobuf==6.33.5
 pyreadline3==3.5.4
 PyYAML==6.0.3
 regex==2025.11.3
