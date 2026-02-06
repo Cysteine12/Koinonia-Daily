@@ -1,5 +1,5 @@
-import { ThemedView } from '@/components/themed-view';
+import VerifyEmail from '@/screens/auth/verify-email';
 
 export default function VerifyEmailScreen() {
-  return <ThemedView style={{ flex: 1 }}></ThemedView>;
+  return <VerifyEmail />;
 }

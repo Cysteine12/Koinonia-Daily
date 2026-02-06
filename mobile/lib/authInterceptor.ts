@@ -1,4 +1,5 @@
-import { type AxiosInstance } from 'axios';
+import { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios';
+import type { ErrorResponse } from './types';
 
 type AuthHandlers = {
   getAccessToken: () => string | null;
@@ -15,12 +16,16 @@ export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHand
   };
 
   const notifySubscribers = (token: string) => {
-    refreshSubscribers.forEach(({ resolve }) => resolve(token));
+    for (const { resolve } of refreshSubscribers) {
+      resolve(token);
+    }
     refreshSubscribers = [];
   };
 
   const rejectSubscribers = (err: unknown) => {
-    refreshSubscribers.forEach(({ reject }) => reject(err));
+    for (const { reject } of refreshSubscribers) {
+      reject(err);
+    }
     refreshSubscribers = [];
   };
 
@@ -34,8 +39,8 @@ export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHand
 
   const resInterceptor = client.interceptors.response.use(
     (response) => response,
-    async (error) => {
-      const originalRequest = error.config;
+    async (error: AxiosError<ErrorResponse>) => {
+      const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
       // Log only during development
       if (__DEV__) {
@@ -51,8 +56,8 @@ export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHand
 
         if (isRefreshing) {
           return new Promise((resolve, reject) => {
-            subscribeTokenRefresh((token) => {
-              originalRequest.headers.Authorization = `Bearer ${token}`;
+            subscribeTokenRefresh((newAccessToken) => {
+              originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
               resolve(client(originalRequest));
             }, reject);
           });
@@ -69,8 +74,8 @@ export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHand
           return client(originalRequest);
         } catch (err) {
           rejectSubscribers(err);
-          await handlers.onLogout();
           isRefreshing = false;
+          await handlers.onLogout();
           return Promise.reject(err);
         }
       }

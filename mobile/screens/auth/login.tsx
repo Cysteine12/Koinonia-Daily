@@ -10,7 +10,7 @@ import { useLogin } from '@/features/auth/hook';
 import { type LoginSchema, loginSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
 import { router } from 'expo-router';
-import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
 
 const Login = () => {
   const { mutate: login, isPending } = useLogin();
@@ -20,7 +20,7 @@ const Login = () => {
       password: '',
     },
     schema: loginSchema,
-    onSubmit: () => login(form),
+    onSubmit: (data) => login(data),
   });
 
   const handleSocialSignIn = (type: string) => {
@@ -28,83 +28,90 @@ const Login = () => {
   };
 
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
-      keyboardDismissMode="interactive"
+    <KeyboardAvoidingView
+      className="flex-1"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
     >
-      <View className="w-full max-w-sm">
-        <View className="gap-6">
-          <Card className="bg-transparent border-0">
-            <CardHeader>
-              <CardTitle className="text-center text-gold-text text-xl sm:text-left">Sign in to your app</CardTitle>
-              <CardDescription className="text-center sm:text-left">
-                Welcome back! Please sign in to continue
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="gap-6">
-              <View className="gap-6">
-                <View className="gap-1.5">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    placeholder="m@example.com"
-                    keyboardType="email-address"
-                    autoComplete="email"
-                    autoCapitalize="none"
-                    value={form.email}
-                    onChangeText={(text) => handleChange('email', text)}
-                    returnKeyType="next"
-                    submitBehavior="submit"
-                  />
-                  {errors?.email && <Text className="text-sm text-destructive">{errors?.email}</Text>}
-                </View>
-                <View className="gap-1.5">
-                  <View className="flex-row items-center">
-                    <Label htmlFor="password">Password</Label>
-                    <Button
-                      variant="link"
-                      size="sm"
-                      className="ml-auto h-4 px-1 py-0 sm:h-4"
-                      onPress={() => {
-                        // TODO: Navigate to forgot password screen
-                      }}
-                    >
-                      <Text className="text-gold-text font-normal leading-4">Forgot your password?</Text>
-                    </Button>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
+        keyboardDismissMode="interactive"
+      >
+        <View className="w-full max-w-sm">
+          <Image source={require('@/assets/images/logo.jpg')} className="size-24 rounded-full self-center" />
+          <View className="gap-6">
+            <Card className="bg-transparent border-0">
+              <CardHeader>
+                <CardTitle className="text-center text-gold-text text-xl sm:text-left">Sign in to your app</CardTitle>
+                <CardDescription className="text-center sm:text-left">
+                  Welcome back! Please sign in to continue
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="gap-6">
+                <View className="gap-6">
+                  <View className="gap-1.5">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      placeholder="m@example.com"
+                      keyboardType="email-address"
+                      autoComplete="email"
+                      autoCapitalize="none"
+                      value={form.email}
+                      onChangeText={(text) => handleChange('email', text)}
+                      returnKeyType="next"
+                      submitBehavior="submit"
+                    />
+                    {errors?.email && <Text className="text-sm text-destructive">{errors?.email}</Text>}
                   </View>
-                  <Input
-                    id="password"
-                    secureTextEntry
-                    returnKeyType="send"
-                    value={form.password}
-                    onChangeText={(text) => handleChange('password', text)}
-                  />
-                  {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
+                  <View className="gap-1.5">
+                    <View className="flex-row items-center">
+                      <Label htmlFor="password">Password</Label>
+                      <Button
+                        variant="link"
+                        size="sm"
+                        className="ml-auto h-4 px-1 py-0 sm:h-4"
+                        onPress={() => {
+                          // TODO: Navigate to forgot password screen
+                        }}
+                      >
+                        <Text className="text-gold-text font-normal leading-4">Forgot your password?</Text>
+                      </Button>
+                    </View>
+                    <Input
+                      id="password"
+                      secureTextEntry
+                      returnKeyType="send"
+                      value={form.password}
+                      onChangeText={(text) => handleChange('password', text)}
+                    />
+                    {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
+                  </View>
+                  <GoldGradient>
+                    <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
+                      {isPending ? <ActivityIndicator color={'#ffffff'} /> : <Text>Continue</Text>}
+                    </Button>
+                  </GoldGradient>
                 </View>
-                <GoldGradient>
-                  <Button className="bg-transparent w-full" onPress={handleSubmit}>
-                    {isPending ? <ActivityIndicator color={'#ffffff'} /> : <Text>Continue</Text>}
-                  </Button>
-                </GoldGradient>
-              </View>
-              <Text className="text-center text-sm">
-                Don&apos;t have an account?{' '}
-                <Pressable onPress={() => router.push('/register')}>
-                  <Text className="text-sm text-gold-text leading-4">Sign up</Text>
-                </Pressable>
-              </Text>
-              <View className="flex-row items-center">
-                <Separator className="flex-1" />
-                <Text className="text-muted-foreground px-4 text-sm">or</Text>
-                <Separator className="flex-1" />
-              </View>
-              <SocialConnections handleSocialSignIn={handleSocialSignIn} />
-            </CardContent>
-          </Card>
+                <Text className="text-center text-sm">
+                  Don&apos;t have an account?{' '}
+                  <Pressable onPress={() => router.push('/register')}>
+                    <Text className="text-sm text-gold-text leading-4">Sign up</Text>
+                  </Pressable>
+                </Text>
+                <View className="flex-row items-center">
+                  <Separator className="flex-1" />
+                  <Text className="text-muted-foreground px-4 text-sm">or</Text>
+                  <Separator className="flex-1" />
+                </View>
+                <SocialConnections handleSocialSignIn={handleSocialSignIn} />
+              </CardContent>
+            </Card>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

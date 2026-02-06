@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import type { ZodObject } from 'zod';
 
-interface UseAppFormProps<T> {
+interface UseAppFormProps<T extends Record<string, any>> {
   data: T;
   schema: ZodObject;
-  onSubmit: () => void;
+  onSubmit: (data: T) => void;
 }
 
 const useForm = <T extends Record<string, any>>({ data, schema, onSubmit }: UseAppFormProps<T>) => {
@@ -22,20 +22,21 @@ const useForm = <T extends Record<string, any>>({ data, schema, onSubmit }: UseA
     const result = schema.safeParse(form);
 
     if (!result.success) {
+      const newErrors: Partial<Record<keyof T, string>> = {};
       result.error.issues.forEach((issue) => {
         if (issue.path[0]) {
           const key = issue.path[0].toString() as keyof T;
-          setErrors((prev) => ({
-            ...prev,
-            [key]: issue.message,
-          }));
+          if (!newErrors[key]) {
+            newErrors[key] = issue.message;
+          }
         }
       });
+      setErrors(newErrors);
       return;
     }
     setErrors({});
 
-    onSubmit();
+    onSubmit(result.data as T);
   };
 
   return { form, errors, handleChange, handleSubmit };
