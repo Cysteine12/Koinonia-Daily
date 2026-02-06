@@ -1,20 +1,32 @@
 import API from '@/lib/api';
-import type { LoginSchema, LogoutSchema, RegisterSchema } from './schema';
+import type { ApiResponse } from '@/lib/types';
+import type { LoginSchema, LogoutSchema, RegisterSchema, RequestOtpSchema, VerifyEmailSchema } from './schema';
+import type { LoginResponse } from './types';
 
-const register = async (payload: RegisterSchema) => {
+const register = async (payload: RegisterSchema): Promise<ApiResponse> => {
   const { data } = await API.post(`/api/auth/register`, payload);
   return data;
 };
 
-const login = async (payload: LoginSchema) => {
+const login = async (payload: LoginSchema): Promise<ApiResponse<LoginResponse>> => {
   const { data } = await API.post(`/api/auth/login`, payload);
   return data;
 };
 
-const logout = async (payload: LogoutSchema) => {
+const verifyEmail = async (payload: VerifyEmailSchema): Promise<ApiResponse> => {
+  const { data } = await API.post(`/api/auth/verify-email`, payload);
+  return data;
+};
+
+const requestOtp = async (payload: RequestOtpSchema): Promise<ApiResponse> => {
+  const { data } = await API.post(`/api/auth/request-otp`, payload);
+  return data;
+};
+
+const logout = async (payload: LogoutSchema): Promise<ApiResponse> => {
   const { data } = await API.post(`/api/auth/logout`, payload);
   return data;
 };
 
-export { login, logout, register };
+export { login, logout, register, requestOtp, verifyEmail };
 

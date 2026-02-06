@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import type { ClassValue } from 'clsx';
 import { LinearGradient } from 'expo-linear-gradient';
+import { cssInterop } from 'nativewind';
 import type React from 'react';
 import { useColorScheme } from 'react-native';
 
@@ -11,6 +12,10 @@ interface GoldGradientProps {
   end?: { x: number; y: number };
 }
 
+cssInterop(LinearGradient, {
+  className: { target: 'style' },
+});
+
 const GoldGradient = ({ children, className, start = { x: 0.2, y: 0 }, end = { x: 1, y: 1 } }: GoldGradientProps) => {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
@@ -20,15 +25,7 @@ const GoldGradient = ({ children, className, start = { x: 0.2, y: 0 }, end = { x
     : (['hsl(48 72% 65%)', 'hsl(45 66% 52%)', 'hsl(45 60% 44%)'] as const);
 
   return (
-    <LinearGradient
-      colors={colors}
-      style={{
-        borderRadius: 8,
-      }}
-      className={cn('rounded-md', className)}
-      start={start}
-      end={end}
-    >
+    <LinearGradient colors={colors} className={cn('rounded-md', className)} start={start} end={end}>
       {children}
     </LinearGradient>
   );

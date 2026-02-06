@@ -5,96 +5,145 @@ import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
 import { Separator } from '@/components/reusables/ui/separator';
 import { Text } from '@/components/reusables/ui/text';
+import GoldGradient from '@/components/ui/gold-gradient';
+import { useRegister } from '@/features/auth/hook';
+import { registerSchema, type RegisterSchema } from '@/features/auth/schema';
+import useForm from '@/hooks/use-app-form';
 import { router } from 'expo-router';
 import React from 'react';
-import { Pressable, ScrollView, TextInput, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
 
 const Register = () => {
-  const passwordInputRef = React.useRef<TextInput>(null);
-
-  function onEmailSubmitEditing() {
-    passwordInputRef.current?.focus();
-  }
-
-  function onSubmit() {
-    // TODO: Submit form and navigate to protected screen if successful
-  }
+  const { mutate: register, isPending } = useRegister();
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const { form, errors, handleChange, handleSubmit } = useForm<RegisterSchema>({
+    data: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    },
+    schema: registerSchema,
+    onSubmit: (data) => register(data),
+  });
 
   function handleSocialSignIn(type: string) {
     // TODO
   }
 
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
-      keyboardDismissMode="interactive"
+    <KeyboardAvoidingView
+      className="flex-1"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
     >
-      <View className="w-full max-w-sm">
-        <View className="gap-6">
-          <Card className="border-border/0 sm:border-border shadow-none sm:shadow-sm sm:shadow-black/5">
-            <CardHeader>
-              <CardTitle className="text-center text-primary text-xl sm:text-left">Create your account</CardTitle>
-              <CardDescription className="text-center sm:text-left">
-                Welcome! Please fill in the details to get started.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="gap-6">
-              <View className="gap-6">
-                <View className="gap-1.5">
-                  <Label htmlFor="email">First name</Label>
-                  <Input id="firstName" onSubmitEditing={() => {}} returnKeyType="next" submitBehavior="submit" />
-                </View>
-                <View className="gap-1.5">
-                  <Label htmlFor="lastName">Last name</Label>
-                  <Input id="lastName" onSubmitEditing={() => {}} returnKeyType="next" submitBehavior="submit" />
-                </View>
-                <View className="gap-1.5">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    placeholder="m@example.com"
-                    keyboardType="email-address"
-                    autoComplete="email"
-                    autoCapitalize="none"
-                    onSubmitEditing={onEmailSubmitEditing}
-                    returnKeyType="next"
-                    submitBehavior="submit"
-                  />
-                </View>
-                <View className="gap-1.5">
-                  <View className="flex-row items-center">
-                    <Label htmlFor="password">Password</Label>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
+        keyboardDismissMode="interactive"
+      >
+        <View className="w-full max-w-sm">
+          <View className="gap-6">
+            <Card className="bg-transparent border-0">
+              <CardHeader>
+                <CardTitle className="text-gold-text text-center text-xl sm:text-left">Create your account</CardTitle>
+                <CardDescription className="text-center sm:text-left">
+                  Welcome! Please fill in the details to get started.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="gap-6">
+                <View className="gap-6">
+                  <View className="gap-1.5">
+                    <Label htmlFor="firstName">First name</Label>
+                    <Input
+                      id="firstName"
+                      autoComplete="given-name"
+                      value={form.firstName}
+                      onChangeText={(text) => handleChange('firstName', text)}
+                      returnKeyType="next"
+                      submitBehavior="submit"
+                    />
+                    {errors.firstName && <Text className="text-red-500 text-sm">{errors.firstName}</Text>}
                   </View>
-                  <Input
-                    ref={passwordInputRef}
-                    id="password"
-                    secureTextEntry
-                    returnKeyType="send"
-                    onSubmitEditing={onSubmit}
-                  />
+                  <View className="gap-1.5">
+                    <Label htmlFor="lastName">Last name</Label>
+                    <Input
+                      id="lastName"
+                      autoComplete="family-name"
+                      value={form.lastName}
+                      onChangeText={(text) => handleChange('lastName', text)}
+                      returnKeyType="next"
+                      submitBehavior="submit"
+                    />
+                    {errors.lastName && <Text className="text-red-500 text-sm">{errors.lastName}</Text>}
+                  </View>
+                  <View className="gap-1.5">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      placeholder="m@example.com"
+                      keyboardType="email-address"
+                      autoComplete="email"
+                      autoCapitalize="none"
+                      value={form.email}
+                      onChangeText={(text) => handleChange('email', text)}
+                      returnKeyType="next"
+                      submitBehavior="submit"
+                    />
+                    {errors.email && <Text className="text-red-500 text-sm">{errors.email}</Text>}
+                  </View>
+                  <View className="gap-1.5">
+                    <View className="flex-row items-center">
+                      <Label htmlFor="password">Password</Label>
+                    </View>
+                    <Input
+                      id="password"
+                      secureTextEntry
+                      returnKeyType="send"
+                      value={form.password}
+                      onChangeText={(text) => handleChange('password', text)}
+                    />
+                    {errors.password && <Text className="text-red-500 text-sm">{errors.password}</Text>}
+                  </View>
+                  <View className="gap-1.5">
+                    <View className="flex-row items-center">
+                      <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    </View>
+                    <Input
+                      id="confirmPassword"
+                      secureTextEntry
+                      returnKeyType="send"
+                      value={confirmPassword}
+                      onChangeText={(text) => setConfirmPassword(text)}
+                    />
+                    {confirmPassword.length >= 8 && form.password.length >= 8 && confirmPassword !== form.password && (
+                      <Text className="text-red-500 text-sm">Passwords do not match</Text>
+                    )}
+                  </View>
+                  <GoldGradient>
+                    <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
+                      {isPending ? <ActivityIndicator color={'#ffffff'} /> : <Text>Continue</Text>}
+                    </Button>
+                  </GoldGradient>
                 </View>
-                <Button className="w-full" onPress={onSubmit}>
-                  <Text>Continue</Text>
-                </Button>
-              </View>
-              <Text className="text-center text-sm">
-                Already have an account?{' '}
-                <Pressable onPress={() => router.push('/login')}>
-                  <Text className="text-sm underline underline-offset-4">Sign in</Text>
-                </Pressable>
-              </Text>
-              <View className="flex-row items-center">
-                <Separator className="flex-1" />
-                <Text className="text-muted-foreground px-4 text-sm">or</Text>
-                <Separator className="flex-1" />
-              </View>
-              <SocialConnections handleSocialSignIn={handleSocialSignIn} />
-            </CardContent>
-          </Card>
+                <Text className="text-center text-sm">
+                  Already have an account?{' '}
+                  <Pressable onPress={() => router.push('/login')}>
+                    <Text className="text-sm text-gold-text leading-4">Sign in</Text>
+                  </Pressable>
+                </Text>
+                <View className="flex-row items-center">
+                  <Separator className="flex-1" />
+                  <Text className="text-muted-foreground px-4 text-sm">or</Text>
+                  <Separator className="flex-1" />
+                </View>
+                <SocialConnections handleSocialSignIn={handleSocialSignIn} />
+              </CardContent>
+            </Card>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 export default Register;
