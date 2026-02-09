@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-@Profile("development")
+@Profile("dev")
 @Component
 @RequiredArgsConstructor
 public class AppSeeder implements CommandLineRunner {
