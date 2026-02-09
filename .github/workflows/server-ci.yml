@@ -55,9 +55,9 @@ jobs:
       run: mvn clean package
       env:
         SPRING_PROFILES_ACTIVE: test
-	SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/koinonia_daily
-	SPRING_DATASOURCE_USERNAME: test
-	SPRING_DATASOURCE_PASSWORD: test
+        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/koinonia_daily
+        SPRING_DATASOURCE_USERNAME: test
+        SPRING_DATASOURCE_PASSWORD: test
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     - name: Upload test results
