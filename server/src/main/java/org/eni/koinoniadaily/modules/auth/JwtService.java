@@ -26,7 +26,7 @@ public final class JwtService {
   private final Key key;
   private static final String TOKEN_TYPE_KEY = "token_type";
 
-  public JwtService(@Value("${jwt.secret}") String secret) {
+  public JwtService(@Value("${app.jwt-secret}") String secret) {
 
     if (secret == null || secret.trim().isEmpty()) {
       throw new IllegalArgumentException("JWT secret cannot be null or empty");
