@@ -29,7 +29,7 @@ jobs:
       postgres:
         image: postgres:17
         env:
-          POSTGRES_DB: koinonia_test
+          POSTGRES_DB: koinonia_daily
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
         ports:
@@ -55,6 +55,9 @@ jobs:
       run: mvn clean package
       env:
         SPRING_PROFILES_ACTIVE: test
+	SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/koinonia_daily
+	SPRING_DATASOURCE_USERNAME: test
+	SPRING_DATASOURCE_PASSWORD: test
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     - name: Upload test results
