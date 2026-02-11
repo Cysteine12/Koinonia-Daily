@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.auth;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -26,8 +26,8 @@ public class UserPrincipal implements UserDetails {
   private final String photoUrl;
   private final UserRole role;
   private final boolean isVerified;
-  private final LocalDateTime createdAt;
-  private final LocalDateTime updatedAt;
+  private final Instant createdAt;
+  private final Instant updatedAt;
 
   private final String password;
   private final String username;

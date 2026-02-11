@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.collection.projection;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import org.eni.koinoniadaily.modules.teaching.projection.TeachingWithoutMessageProjection;
@@ -15,9 +15,9 @@ public interface CollectionWithTeachingsProjection {
 
   String getThumbnailUrl();
 
-  LocalDateTime getCreatedAt();
+  Instant getCreatedAt();
 
-  LocalDateTime getUpdatedAt();
+  Instant getUpdatedAt();
 
   List<TeachingWithoutMessageProjection> getTeachings();
 }

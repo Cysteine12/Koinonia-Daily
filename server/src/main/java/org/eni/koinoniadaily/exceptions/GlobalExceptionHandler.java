@@ -14,7 +14,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import jakarta.persistence.OptimisticLockException;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
                             .error(status.getReasonPhrase())
                             .message(message)
                             .path(((ServletWebRequest) request).getRequest().getRequestURI())
-                            .timestamp(LocalDateTime.now())
+                            .timestamp(Instant.now())
                             .build();
                         
     return new ResponseEntity<>(error, status);

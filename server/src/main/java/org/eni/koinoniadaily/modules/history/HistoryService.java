@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.history;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Optional;
 
 import org.eni.koinoniadaily.exceptions.NotFoundException;
@@ -53,7 +53,7 @@ public class HistoryService {
 
     if (existingHistory.isPresent()) {
       
-      existingHistory.get().setUpdatedAt(LocalDateTime.now());
+      existingHistory.get().setUpdatedAt(Instant.now());
     } else {
       User user = userRepository.getReferenceById(userId);
       

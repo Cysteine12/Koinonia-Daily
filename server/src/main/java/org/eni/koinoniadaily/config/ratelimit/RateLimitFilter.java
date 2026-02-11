@@ -1,7 +1,7 @@
 package org.eni.koinoniadaily.config.ratelimit;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Set;
 
 import org.eni.koinoniadaily.utils.ErrorResponse;
@@ -71,7 +71,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
                             .error(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase())
                             .message("Too many requests. Please try again later.")
                             .path(request.getRequestURI())
-                            .timestamp(LocalDateTime.now())
+                            .timestamp(Instant.now())
                             .build();     
     
     response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());

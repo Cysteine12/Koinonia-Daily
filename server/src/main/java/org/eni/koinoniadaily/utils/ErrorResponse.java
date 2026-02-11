@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.utils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -15,5 +15,5 @@ public class ErrorResponse extends ApiResponse {
   
   private final String path;
   
-  private final LocalDateTime timestamp;
+  private final Instant timestamp;
 }

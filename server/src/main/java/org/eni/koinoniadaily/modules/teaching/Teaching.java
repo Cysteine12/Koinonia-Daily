@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.teaching;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +77,7 @@ public class Teaching extends BaseEntity {
   private Integer seriesPart;
 
   @Column(nullable = false)
-  private LocalDateTime taughtAt;
+  private Instant taughtAt;
 
   @ManyToMany(mappedBy = "teachings")
   @Builder.Default

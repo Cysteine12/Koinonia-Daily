@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.history.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,11 +19,11 @@ public class HistoryResponse {
 
   private String teachingThumbnailUrl;
 
-  private LocalDateTime teachingTaughtAt;
+  private Instant teachingTaughtAt;
 
   private boolean isMarkedRead;
 
-  private LocalDateTime createdAt;
+  private Instant createdAt;
 
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
 }

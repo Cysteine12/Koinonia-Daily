@@ -1,6 +1,7 @@
 package org.eni.koinoniadaily.config;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.eni.koinoniadaily.modules.teaching.Teaching;
@@ -72,7 +73,7 @@ public class AppSeeder implements CommandLineRunner {
             .tags("faith,supernatural,kingdom")
             .type(TeachingType.SUNDAY_SERVICE)
             .summary("This series we are going to look into the dynamics of faith in establishing the ordinances of the kingdom here on earth.")
-            .taughtAt(LocalDateTime.now().minusDays(14))
+            .taughtAt(Instant.now().minus(14, ChronoUnit.DAYS))
             .build(),
           Teaching.builder()
             .title("Commanding the Supernatural Part 2")
@@ -84,7 +85,7 @@ public class AppSeeder implements CommandLineRunner {
             .tags("faith,supernatural,kingdom")
             .type(TeachingType.SUNDAY_SERVICE)
             .summary("In this message we continue to explore the dynamics of faith in establishing the ordinances of the kingdom here on earth.")
-            .taughtAt(LocalDateTime.now().minusDays(7))
+            .taughtAt(Instant.now().minus(7, ChronoUnit.DAYS))
             .build()
       );
       teachingRepository.saveAll(teachings);
