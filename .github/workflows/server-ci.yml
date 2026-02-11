@@ -209,12 +209,12 @@ jobs:
         load: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
       
-    - name: Scan Docker Image with Trivy
+    - name: Scan Docker Image with Trivy (Sarif)
       uses: aquasecurity/trivy-action@0.20.0
       with:
         image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
         severity: 'CRITICAL,HIGH'
-        exit-code: '1'
+        exit-code: '0'
         format: sarif
         output: trivy-image-results.sarif
 
@@ -224,6 +224,14 @@ jobs:
       with:
         sarif_file: trivy-image-results.sarif
         category: "Trivy Docker Image Scan"
+
+    - name: Scan Docker Image with Trivy (Table)
+      uses: aquasecurity/trivy-action@0.20.0
+      with:
+        image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
+        severity: 'CRITICAL,HIGH'
+        exit-code: '1'
+        format: table
         
     - name: Push Docker Image
       if: success()

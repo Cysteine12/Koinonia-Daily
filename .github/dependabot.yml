@@ -3,8 +3,7 @@ updates:
   - package-ecosystem: "maven"
     directory: "/server"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "monthly"
       time: "09:00"
 
     target-branch: "develop"
@@ -45,8 +44,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/mobile"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "monthly"
       time: "10:00"
 
     target-branch: "develop"

@@ -14,7 +14,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Development stage
-FROM build as development
+FROM build AS development
 
 ENV SPRING_PROFILES_ACTIVE=dev
 
