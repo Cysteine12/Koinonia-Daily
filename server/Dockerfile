@@ -16,7 +16,7 @@ RUN mvn clean package -DskipTests
 # Development stage
 FROM build as development
 
-ENV SPRING_PROFILES_ACTIVE=development
+ENV SPRING_PROFILES_ACTIVE=dev
 
 EXPOSE 8080
 
@@ -32,6 +32,8 @@ RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 COPY --from=build --chown=appuser:appgroup /app/target/*-SNAPSHOT.jar app.jar
 
 USER appuser
+
+ENV SPRING_PROFILES_ACTIVE=prod
 
 EXPOSE 8080
 
