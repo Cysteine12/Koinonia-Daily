@@ -17,7 +17,7 @@ updates:
       - "security"
       
     commit-message:
-      prefix: "chore(deps)"
+      prefix: "chore"
       include: "scope"
     
     groups:
@@ -58,7 +58,7 @@ updates:
       - "security"
 
     commit-message:
-      prefix: "chore(deps)"
+      prefix: "chore"
       include: "scope"
 
     groups:
@@ -79,4 +79,7 @@ updates:
         update-types:
           - "minor"
           - "patch"
-          
+
+  - package-ecosystem: "pip"
+    directory: "/transcriber"
+    enabled: false
