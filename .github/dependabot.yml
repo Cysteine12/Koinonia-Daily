@@ -4,7 +4,6 @@ updates:
     directory: "/server"
     schedule:
       interval: "monthly"
-      day: "monday"
       time: "09:00"
 
     target-branch: "develop"
@@ -46,7 +45,6 @@ updates:
     directory: "/mobile"
     schedule:
       interval: "monthly"
-      day: "monday"
       time: "10:00"
 
     target-branch: "develop"
