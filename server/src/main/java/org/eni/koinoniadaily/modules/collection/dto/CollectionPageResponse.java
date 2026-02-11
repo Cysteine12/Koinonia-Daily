@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.collection.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +21,9 @@ public class CollectionPageResponse {
 
   private String thumbnailUrl;
   
-  private LocalDateTime createdAt;
+  private Instant createdAt;
   
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
 
   private Integer totalTeachings;
 }

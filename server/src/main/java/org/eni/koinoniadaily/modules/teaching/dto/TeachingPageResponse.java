@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.teaching.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 
@@ -31,9 +31,9 @@ public class TeachingPageResponse {
 
   private Integer seriesPart;
 
-  private LocalDateTime taughtAt;
+  private Instant taughtAt;
   
-  private LocalDateTime createdAt;
+  private Instant createdAt;
   
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
 }

@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.teaching.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 import org.hibernate.validator.constraints.URL;
@@ -48,5 +48,5 @@ public class TeachingRequest {
   private Integer seriesPart;
   
   @NotNull(message = "Record datetime is required")
-  private LocalDateTime taughtAt;
+  private Instant taughtAt;
 }

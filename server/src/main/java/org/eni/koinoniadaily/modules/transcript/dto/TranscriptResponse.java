@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.transcript.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +15,7 @@ public class TranscriptResponse {
   
   private String message;
   
-  private LocalDateTime createdAt;
+  private Instant createdAt;
 
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
 }

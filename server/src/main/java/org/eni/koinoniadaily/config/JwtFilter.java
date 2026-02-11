@@ -1,7 +1,7 @@
 package org.eni.koinoniadaily.config;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.eni.koinoniadaily.exceptions.UnauthorizedException;
 import org.eni.koinoniadaily.modules.auth.JwtService;
@@ -77,7 +77,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                       .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
                                       .message(ex.getMessage())
                                       .path(request.getRequestURI())
-                                      .timestamp(LocalDateTime.now())
+                                      .timestamp(Instant.now())
                                       .build();
 
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

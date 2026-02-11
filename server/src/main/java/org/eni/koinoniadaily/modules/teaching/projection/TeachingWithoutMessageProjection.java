@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.teaching.projection;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 
@@ -26,9 +26,9 @@ public interface TeachingWithoutMessageProjection {
 
   Integer getSeriesPart();
 
-  LocalDateTime getTaughtAt();
+  Instant getTaughtAt();
   
-  LocalDateTime getCreatedAt();
+  Instant getCreatedAt();
   
-  LocalDateTime getUpdatedAt();
+  Instant getUpdatedAt();
 }

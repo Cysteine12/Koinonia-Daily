@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.collection.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import org.eni.koinoniadaily.modules.teaching.projection.TeachingWithoutMessageProjection;
@@ -20,9 +20,9 @@ public class CollectionResponse {
 
   private String thumbnailUrl;
 
-  private LocalDateTime createdAt;
+  private Instant createdAt;
 
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
 
   private List<TeachingWithoutMessageProjection> teachings;
 }

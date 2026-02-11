@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.account.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.eni.koinoniadaily.modules.user.UserRole;
 
@@ -23,7 +23,7 @@ public class AccountProfileResponse {
 
   private UserRole role;
 
-  private LocalDateTime createdAt;
+  private Instant createdAt;
 
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
 }

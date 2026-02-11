@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.token;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.eni.koinoniadaily.entity.BaseEntity;
 
@@ -39,12 +39,12 @@ public class Token extends BaseEntity {
   private boolean isUsed = false;
 
   @Column(nullable = false)
-  private LocalDateTime expiresAt;
+  private Instant expiresAt;
 
   @Version
   private Long version;
 
   public boolean isExpired() {
-    return LocalDateTime.now().isAfter(expiresAt);
+    return Instant.now().isAfter(expiresAt);
   }
 }

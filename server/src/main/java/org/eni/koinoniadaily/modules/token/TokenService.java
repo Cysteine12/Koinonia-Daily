@@ -1,7 +1,8 @@
 package org.eni.koinoniadaily.modules.token;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import org.eni.koinoniadaily.modules.auth.JwtService;
@@ -23,7 +24,7 @@ public class TokenService {
   private static final long ACCESS_TOKEN_EXPIRATION_MS = Duration.ofDays(1).toMillis();
   private static final long REFRESH_TOKEN_EXPIRATION_MS = Duration.ofDays(14).toMillis();
 
-  private void create(String email, String value, TokenType type, LocalDateTime expiresAt) {
+  private void create(String email, String value, TokenType type, Instant expiresAt) {
 
     Token token = Token.builder()
                     .email(email)
@@ -41,7 +42,7 @@ public class TokenService {
 
     String otp = TokenUtil.generateOtp();
 
-    create(email, otp, type, LocalDateTime.now().plusMinutes(OTP_EXPIRATION_MINUTES));
+    create(email, otp, type, Instant.now().plus(OTP_EXPIRATION_MINUTES, ChronoUnit.MINUTES));
     
     return otp;
   }
@@ -90,7 +91,7 @@ public class TokenService {
     String accessToken = jwtService.generateToken(email, ACCESS_TOKEN_EXPIRATION_MS, TokenType.ACCESS_TOKEN, null);
     String refreshToken = jwtService.generateToken(email, REFRESH_TOKEN_EXPIRATION_MS, TokenType.REFRESH_TOKEN, jti);
 
-    create(email, jti, TokenType.REFRESH_TOKEN, LocalDateTime.now().plus(Duration.ofMillis(REFRESH_TOKEN_EXPIRATION_MS)));
+    create(email, jti, TokenType.REFRESH_TOKEN, Instant.now().plus(Duration.ofMillis(REFRESH_TOKEN_EXPIRATION_MS)));
 
     return new TokenPair(accessToken, refreshToken);
   }

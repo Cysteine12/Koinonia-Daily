@@ -1,6 +1,6 @@
 package org.eni.koinoniadaily.modules.transcript.projection;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public interface TranscriptWithoutMessageProjection {
 
@@ -8,7 +8,7 @@ public interface TranscriptWithoutMessageProjection {
 
   String getTitle();
   
-  LocalDateTime getCreatedAt();
+  Instant getCreatedAt();
   
-  LocalDateTime getUpdatedAt();  
+  Instant getUpdatedAt();  
 }
