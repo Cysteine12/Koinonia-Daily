@@ -69,7 +69,7 @@ CREATE TABLE teachings (
     audio_url VARCHAR(100) NOT NULL,
     video_url VARCHAR(100) NOT NULL,
     thumbnail_url VARCHAR(100) NOT NULL,
-    type VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL,
     tags VARCHAR(255) NOT NULL,
     series_part INTEGER,
     taught_at TIMESTAMPTZ NOT NULL,
@@ -183,5 +183,4 @@ CREATE INDEX idx_histories_user_id ON histories(user_id);
 CREATE INDEX idx_histories_teaching_id ON histories(teaching_id);
 
 -- Collection junction table indexes
-CREATE INDEX idx_collection_teachings_collection_id ON collection_teachings(collection_id);
 CREATE INDEX idx_collection_teachings_teaching_id ON collection_teachings(teaching_id);
