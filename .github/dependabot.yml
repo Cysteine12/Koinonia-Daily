@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "maven"
     directory: "/server"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       day: "monday"
       time: "09:00"
 
@@ -45,7 +45,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/mobile"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       day: "monday"
       time: "10:00"
 
