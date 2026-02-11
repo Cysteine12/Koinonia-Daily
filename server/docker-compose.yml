@@ -9,8 +9,18 @@ services:
     volumes:
       - .:/app
       - m2_cache:/root/.m2
-    env_file:
-      - .env
+    environment:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
+      - AWS_SES_FROM_EMAIL=${AWS_SES_FROM_EMAIL}
+      - SENTRY_DSN=${SENTRY_DSN}
+      - SEEDER_USER_PASSWORD=${SEEDER_USER_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
@@ -20,8 +30,10 @@ services:
     container_name: koinonia-daily-db
     ports:
       - "5432:5432"
-    env_file:
-      - .env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
