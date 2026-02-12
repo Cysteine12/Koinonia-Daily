@@ -71,6 +71,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
                             .error(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase())
                             .message("Too many requests. Please try again later.")
                             .path(request.getRequestURI())
+                            .errorCode("RATE_LIMIT_EXCEEDED")
                             .timestamp(Instant.now())
                             .build();     
     

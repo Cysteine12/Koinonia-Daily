@@ -57,7 +57,7 @@ public class BookmarkService {
     Optional<Bookmark> bookmark = bookmarkRepository.findByUserIdAndCategoryIdAndTeachingId(userId, request.getCategoryId(), request.getTeachingId());
 
     if (bookmark.isPresent()) {
-      throw new ValidationException("Teaching already added to the category");
+      throw new ValidationException("TEACHING_ALREADY_ADDED", "Teaching already added to the category");
     }
 
     User user = userRepository.getReferenceById(userId);

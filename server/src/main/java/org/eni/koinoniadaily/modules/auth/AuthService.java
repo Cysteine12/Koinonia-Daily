@@ -49,7 +49,7 @@ public class AuthService {
   public void register(RegisterRequest payload) {
 
     if (userRepository.existsByEmail(payload.getEmail()))  {
-      throw new ValidationException("This email already exists");
+      throw new ValidationException("USER_EMAIL_EXISTS", "This email already exists");
     }
 
     User user = User.builder()
@@ -92,7 +92,7 @@ public class AuthService {
                   .orElseThrow(() -> new NotFoundException("User not found"));
       
     if (user.isVerified()) {
-      throw new ValidationException("User is already verified");
+      throw new ValidationException("USER_ALREADY_VERIFIED", "User is already verified");
     }
     
     tokenService.consumeEmailOtp(user.getEmail(), request.getOtp());
@@ -109,7 +109,7 @@ public class AuthService {
                   .orElseThrow(() -> new NotFoundException("User not found"));
         
     if (user.isVerified()) {
-      throw new ValidationException("User is already verified");
+      throw new ValidationException("USER_ALREADY_VERIFIED", "User is already verified");
     }
 
     String otp = tokenService.generateAndSaveOtp(user.getEmail(), TokenType.VERIFY_EMAIL);

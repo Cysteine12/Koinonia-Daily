@@ -68,9 +68,9 @@ public final class JwtService {
             .parseSignedClaims(token)
             .getPayload();
     } catch (ExpiredJwtException e) {
-      throw new UnauthorizedException("Expired token");
+      throw new UnauthorizedException("Expired token", e);
     } catch (JwtException e) {
-      throw new UnauthorizedException("Invalid token");
+      throw new UnauthorizedException("Invalid token", e);
     }
   }
 
