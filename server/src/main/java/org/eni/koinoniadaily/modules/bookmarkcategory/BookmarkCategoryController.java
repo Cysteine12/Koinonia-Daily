@@ -24,7 +24,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/bookmark-categories")
+@RequestMapping("/api/v1/bookmark-categories")
 @RequiredArgsConstructor
 @Validated
 public class BookmarkCategoryController {

@@ -22,7 +22,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/histories")
+@RequestMapping("/api/v1/histories")
 @RequiredArgsConstructor
 @Validated
 public class HistoryController {

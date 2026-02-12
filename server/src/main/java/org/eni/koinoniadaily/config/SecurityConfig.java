@@ -33,8 +33,8 @@ public class SecurityConfig {
     return http
             .csrf(customizer -> customizer.disable())
             .authorizeHttpRequests(request -> request
-                                    .requestMatchers("/api/auth/profile", "/api/auth/change-password").authenticated()
-                                    .requestMatchers("/api/auth/**").permitAll()
+                                    .requestMatchers("/api/v1/auth/profile", "/api/v1/auth/change-password").authenticated()
+                                    .requestMatchers("/api/v1/auth/**").permitAll()
                                     .anyRequest().authenticated())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)

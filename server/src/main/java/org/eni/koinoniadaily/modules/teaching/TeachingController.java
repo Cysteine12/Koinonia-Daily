@@ -27,7 +27,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/teachings")
+@RequestMapping("/api/v1/teachings")
 @RequiredArgsConstructor
 @Validated
 public class TeachingController {

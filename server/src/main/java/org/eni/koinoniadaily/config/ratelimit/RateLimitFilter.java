@@ -24,13 +24,13 @@ public class RateLimitFilter extends OncePerRequestFilter {
   private final ObjectMapper objectMapper;
   private final RateLimitBucketService bucketService;
   private static final Set<String> SENSITIVE_ENDPOINTS = Set.of(
-    "/api/auth/login",
-    "/api/auth/register",
-    "/api/auth/verify-email",
-    "/api/auth/request-otp",
-    "/api/auth/forgot-password",
-    "/api/auth/reset-password",
-    "/api/auth/refresh-token"
+    "/api/v1/auth/login",
+    "/api/v1/auth/register",
+    "/api/v1/auth/verify-email",
+    "/api/v1/auth/request-otp",
+    "/api/v1/auth/forgot-password",
+    "/api/v1/auth/reset-password",
+    "/api/v1/auth/refresh-token"
   );
 
   @Override
