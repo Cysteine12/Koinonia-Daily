@@ -26,7 +26,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/series")
+@RequestMapping("/api/v1/series")
 @RequiredArgsConstructor
 @Validated
 public class SeriesController {
