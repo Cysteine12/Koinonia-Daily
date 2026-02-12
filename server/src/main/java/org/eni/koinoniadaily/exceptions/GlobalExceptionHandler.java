@@ -1,6 +1,5 @@
 package org.eni.koinoniadaily.exceptions;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.eni.koinoniadaily.utils.ErrorResponse;
@@ -30,6 +29,10 @@ public class GlobalExceptionHandler {
   private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
   private ResponseEntity<ErrorResponse> buildResponse(WebRequest request, String message, HttpStatus status, String errorCode) {
+    return buildResponse(request, message, status, errorCode, null);
+  }
+
+  private ResponseEntity<ErrorResponse> buildResponse(WebRequest request, String message, HttpStatus status, String errorCode, Object errors) {
     ErrorResponse error = ErrorResponse.builder()
                             .success(false)
                             .status(status.value())
@@ -37,6 +40,7 @@ public class GlobalExceptionHandler {
                             .message(message)
                             .path(((ServletWebRequest) request).getRequest().getRequestURI())
                             .errorCode(errorCode)
+                            .errors(errors)
                             .timestamp(Instant.now())
                             .build();
                         
@@ -59,19 +63,11 @@ public class GlobalExceptionHandler {
                                       .stream()
                                       .collect(Collectors.toMap(
                                           FieldError::getField,
-                                          FieldError::getDefaultMessage,
-                                          (existing, replacement) -> existing
+                                          error -> error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value",
+                                          (existing, replacement) -> existing + ";" + replacement
                                       ));
 
-    String message;
-    try {
-      message = objectMapper.writeValueAsString(errors);
-    } catch (JsonProcessingException e) {
-      logger.error("Error serializing validation errors", e);
-      return buildResponse(request, "Validation failed with multiple errors", HttpStatus.UNPROCESSABLE_ENTITY, "VALIDATION_ERROR");
-    }
-
-    return buildResponse(request, message, HttpStatus.UNPROCESSABLE_ENTITY, "VALIDATION_ERROR");
+    return buildResponse(request, "Validation failed", HttpStatus.UNPROCESSABLE_ENTITY, "VALIDATION_ERROR", errors);
   }
 
   // Handle runtime validation errors

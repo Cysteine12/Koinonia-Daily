@@ -5,7 +5,7 @@ import java.time.Instant;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
-//@Getter
+@Getter
 @SuperBuilder
 public class ErrorResponse extends ApiResponse {
   
@@ -16,6 +16,8 @@ public class ErrorResponse extends ApiResponse {
   private final String path;
 
   private final String errorCode;
+
+  private final Object errors;
 
   private final Instant timestamp;
 }
