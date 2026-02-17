@@ -66,11 +66,11 @@ public class Teaching extends BaseEntity {
   private String tags;
   
   @OneToOne
-  @JoinColumn(name = "transcriptId", nullable = true)
+  @JoinColumn(name = "transcript_id", nullable = true)
   private Transcript transcript;
   
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "seriesId", nullable = true)
+  @JoinColumn(name = "series_id", nullable = true)
   private Series series;
 
   @Column(nullable = true)

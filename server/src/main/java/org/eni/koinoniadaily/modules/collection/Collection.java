@@ -38,8 +38,8 @@ public class Collection extends BaseEntity {
   @ManyToMany
   @JoinTable(
       name = "collection_teachings",
-      joinColumns = @JoinColumn(name = "collectionId"),
-      inverseJoinColumns = @JoinColumn(name = "teachingId")
+      joinColumns = @JoinColumn(name = "collection_id"),
+      inverseJoinColumns = @JoinColumn(name = "teaching_id")
   )
   @Builder.Default
   private List<Teaching> teachings = new ArrayList<>();

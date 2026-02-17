@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @Table(
     name = "histories", 
     uniqueConstraints = @UniqueConstraint(
-        name = "unique_user_teaching", 
+        name = "histories_user_teaching_unique",
         columnNames = {"userId", "teachingId"}
     )
 )
@@ -32,11 +32,11 @@ import lombok.experimental.SuperBuilder;
 public class History extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "userId", nullable = false)
+  @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "teachingId", nullable = false)
+  @JoinColumn(name = "teaching_id", nullable = false)
   private Teaching teaching;
 
   @Column(nullable = false)

@@ -32,15 +32,15 @@ import lombok.experimental.SuperBuilder;
 public class Bookmark extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "userId", nullable = false)
+  @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "teachingId", nullable = false)
+  @JoinColumn(name = "teaching_id", nullable = false)
   private Teaching teaching;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "categoryId", nullable = false)
+  @JoinColumn(name = "category_id", nullable = false)
   private BookmarkCategory category;
 
   @Column(length = 500)
