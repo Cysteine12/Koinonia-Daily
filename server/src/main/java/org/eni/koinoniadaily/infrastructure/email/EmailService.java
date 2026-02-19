@@ -1,7 +1,7 @@
-package org.eni.koinoniadaily.infrastucture.email;
+package org.eni.koinoniadaily.infrastructure.email;
 
 import org.eni.koinoniadaily.config.AppProperties;
-import org.eni.koinoniadaily.infrastucture.email.providers.EmailProvider;
+import org.eni.koinoniadaily.infrastructure.email.providers.EmailProvider;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;

@@ -1,14 +1,17 @@
 package org.eni.koinoniadaily.config;
 
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "app")
 @Data
+@Validated
 public class AppProperties {
   
   private String name = "Koinonia-Daily";
@@ -28,7 +31,7 @@ public class AppProperties {
   private Mailtrap mailtrap = new Mailtrap();
 
   @Data
-  public static  class Email {
+  public static class Email {
 
     private String provider = "mailtrap";
 
@@ -58,7 +61,7 @@ public class AppProperties {
     @NotBlank(message = "Mailtrap host not set in env")
     private String host;
 
-    @NotBlank(message = "Mailtrap port not set in env")
+    @Positive(message = "Mailtrap port incorrect in env")
     private int port;
 
     @NotBlank(message = "Mailtrap username not set in env")

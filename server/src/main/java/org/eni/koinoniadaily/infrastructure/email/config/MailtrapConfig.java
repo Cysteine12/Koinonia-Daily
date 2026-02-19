@@ -1,4 +1,4 @@
-package org.eni.koinoniadaily.infrastucture.email.config;
+package org.eni.koinoniadaily.infrastructure.email.config;
 
 import lombok.RequiredArgsConstructor;
 import org.eni.koinoniadaily.config.AppProperties;

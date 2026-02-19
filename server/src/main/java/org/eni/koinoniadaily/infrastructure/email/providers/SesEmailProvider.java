@@ -1,4 +1,4 @@
-package org.eni.koinoniadaily.infrastucture.email.providers;
+package org.eni.koinoniadaily.infrastructure.email.providers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,9 +43,9 @@ public class SesEmailProvider implements EmailProvider {
               .build();
 
       sesClient.sendEmail(request);
-      log.info("Email sent successfully via SES to: {}", to);
+      log.info("Email sent successfully via SES");
     } catch (SesException e) {
-      log.error("Failed to send email via SES to: {}", to, e);
+      log.error("Failed to send email via SES", e);
       throw new RuntimeException("Failed to send email", e);
     }
   }
