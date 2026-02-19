@@ -2,6 +2,7 @@ package org.eni.koinoniadaily.infrastructure.email.config;
 
 import lombok.RequiredArgsConstructor;
 import org.eni.koinoniadaily.config.AppProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,9 @@ import java.util.Properties;
 public class MailtrapConfig {
 
   private final AppProperties props;
+
+  @Value("${spring.profiles.active}")
+  private final String activeProfile;
 
   @Bean
   public JavaMailSender javaMailSender() {
@@ -32,7 +36,7 @@ public class MailtrapConfig {
     javaMailProperties.put("mail.smtp.auth", "true");
     javaMailProperties.put("mail.smtp.starttls.enable", "true");
     javaMailProperties.put("mail.smtp.starttls.required", "true");
-    javaMailProperties.put("mail.debug", "false");
+    javaMailProperties.put("mail.debug", activeProfile == "prod" ? "false" : "true");
 
     return mailSender;
   }

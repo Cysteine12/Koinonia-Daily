@@ -1,5 +1,7 @@
 package org.eni.koinoniadaily.config;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
@@ -26,14 +28,17 @@ public class AppProperties {
   @Size(min = 8, message = "Seeder user password minimum length of 8 required")
   private String seederUserPassword;
 
+  @Valid
   private Email email = new Email();
+  @Valid
   private Aws aws = new Aws();
+  @Valid
   private Mailtrap mailtrap = new Mailtrap();
 
   @Data
-  @Validated
   public static class Email {
 
+    @Pattern(regexp = "ses|mailtrap", message = "Email provider must be 'ses' or 'mailtrap'")
     private String provider = "ses";
 
     @NotBlank(message = "Email address not set in env")
@@ -41,7 +46,6 @@ public class AppProperties {
   }
 
   @Data
-  @Validated
   public static class Aws {
 
     @NotBlank(message = "AWS access key not set in env")
@@ -58,7 +62,6 @@ public class AppProperties {
   }
 
   @Data
-  @Validated
   public static class Mailtrap {
 
     @NotBlank(message = "Mailtrap host not set in env")
