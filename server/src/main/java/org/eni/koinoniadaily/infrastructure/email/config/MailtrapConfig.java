@@ -17,6 +17,13 @@ public class MailtrapConfig {
 
   private final AppProperties props;
 
+  /**
+   * Create a JavaMailSender configured for Mailtrap using values from application properties.
+   *
+   * @return a JavaMailSender configured with Mailtrap host, port, username, and password,
+   *         and SMTP properties: protocol `smtp`, authentication enabled, STARTTLS enabled and required,
+   *         and debug enabled.
+   */
   @Bean
   public JavaMailSender javaMailSender() {
 

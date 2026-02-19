@@ -91,21 +91,38 @@ public class GlobalExceptionHandler {
     return buildResponse(request, ex.getMessage(), HttpStatus.UNAUTHORIZED, "UNAUTHORIZED");
   }
     
-  // Handle lock exceptions (for token) 
+  /**
+   * Handles optimistic lock conflicts raised when a resource is concurrently modified.
+   *
+   * @return ResponseEntity containing an ErrorResponse with HTTP status 409 CONFLICT,
+   *         message "Resource is currently locked. Please try again later.", and error code "RESOURCE_LOCKED".
+   */
   @ExceptionHandler(OptimisticLockException.class)
   public ResponseEntity<ErrorResponse> handleOptimisticLockException(OptimisticLockException ex, WebRequest request) {
 
     return buildResponse(request, "Resource is currently locked. Please try again later.", HttpStatus.CONFLICT, "RESOURCE_LOCKED");
   }
 
-  // Handle email sending exceptions
+  /**
+   * Handle EmailSendingException by returning a Service Unavailable error response.
+   *
+   * @param ex the EmailSendingException that was thrown
+   * @param request the current WebRequest used to determine request details
+   * @return a ResponseEntity containing an ErrorResponse with HTTP 503 (Service Unavailable) and error code "EMAIL_FAILED"
+   */
   @ExceptionHandler(EmailSendingException.class)
   public ResponseEntity<ErrorResponse> handleEmailSendingException(EmailSendingException ex, WebRequest request) {
 
     return buildResponse(request, "Unable to send email at the moment. Please try again later.", HttpStatus.SERVICE_UNAVAILABLE, "EMAIL_FAILED");
   }
 
-  // Handle all other exceptions (catch-all)
+  /**
+   * Handles all uncaught exceptions and produces a standardized 500 Internal Server Error response.
+   *
+   * @param ex the uncaught exception
+   * @param request the current web request
+   * @return a ResponseEntity containing an ErrorResponse with HTTP status 500 and error code "INTERNAL_SERVER_ERROR"
+   */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, WebRequest request) {
 

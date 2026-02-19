@@ -23,6 +23,14 @@ public class MailtrapEmailProvider implements EmailProvider {
   private final JavaMailSender mailSender;
   private final AppProperties props;
 
+  /**
+   * Sends an HTML email to a single recipient using the configured Mailtrap JavaMailSender.
+   *
+   * @param to the recipient's email address
+   * @param subject the email subject line
+   * @param body the email body as HTML content
+   * @throws EmailSendingException if sending fails due to an underlying messaging or mail exception
+   */
   @Override
   public void send(String to, String subject, String body) {
     try {

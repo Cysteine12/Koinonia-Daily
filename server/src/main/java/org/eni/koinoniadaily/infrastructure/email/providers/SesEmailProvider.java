@@ -25,6 +25,14 @@ public class SesEmailProvider implements EmailProvider {
   private final SesClient sesClient;
   private final AppProperties props;
 
+  /**
+   * Sends an HTML email to the specified recipient using AWS SES.
+   *
+   * @param to      recipient email address
+   * @param subject subject line of the email
+   * @param body    HTML content of the email
+   * @throws EmailSendingException if sending the email via SES fails
+   */
   @Override
   public void send(String to, String subject, String body) {
     try {
