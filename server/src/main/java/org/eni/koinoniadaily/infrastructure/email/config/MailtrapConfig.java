@@ -31,6 +31,7 @@ public class MailtrapConfig {
     javaMailProperties.put("mail.transport.protocol", "smtp");
     javaMailProperties.put("mail.smtp.auth", "true");
     javaMailProperties.put("mail.smtp.starttls.enable", "true");
+    javaMailProperties.put("mail.smtp.starttls.required", "true");
     javaMailProperties.put("mail.debug", "false");
 
     return mailSender;

@@ -31,15 +31,17 @@ public class AppProperties {
   private Mailtrap mailtrap = new Mailtrap();
 
   @Data
+  @Validated
   public static class Email {
 
-    private String provider = "mailtrap";
+    private String provider = "ses";
 
     @NotBlank(message = "Email address not set in env")
     private String from;
   }
 
   @Data
+  @Validated
   public static class Aws {
 
     @NotBlank(message = "AWS access key not set in env")
@@ -56,6 +58,7 @@ public class AppProperties {
   }
 
   @Data
+  @Validated
   public static class Mailtrap {
 
     @NotBlank(message = "Mailtrap host not set in env")

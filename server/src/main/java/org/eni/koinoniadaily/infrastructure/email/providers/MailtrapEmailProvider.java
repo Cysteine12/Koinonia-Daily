@@ -37,8 +37,8 @@ public class MailtrapEmailProvider implements EmailProvider {
       mailSender.send(message);
       log.info("Email sent successfully via Mailtrap");
     } catch (MessagingException | MailException ex) {
-      log.error("Failed to send email via Mailtrap to", ex);
-      throw new EmailSendingException("Failed to send email", ex);
+      log.error("Failed to send email via Mailtrap to {}", to, ex);
+      throw new EmailSendingException("Failed to send email via Mailtrap", ex);
     }
   }
 }

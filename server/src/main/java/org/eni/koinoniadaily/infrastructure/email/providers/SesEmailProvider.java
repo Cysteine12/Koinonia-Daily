@@ -46,8 +46,8 @@ public class SesEmailProvider implements EmailProvider {
       sesClient.sendEmail(request);
       log.info("Email sent successfully via SES");
     } catch (SesException ex) {
-      log.error("Failed to send email via SES", ex);
-      throw new EmailSendingException("Failed to send email", ex);
+      log.error("Failed to send email via SES to {}", to, ex);
+      throw new EmailSendingException("Failed to send email via SES", ex);
     }
   }
 }
