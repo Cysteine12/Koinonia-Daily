@@ -3,6 +3,7 @@ package org.eni.koinoniadaily.infrastructure.email.providers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eni.koinoniadaily.config.AppProperties;
+import org.eni.koinoniadaily.exceptions.EmailSendingException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -44,9 +45,9 @@ public class SesEmailProvider implements EmailProvider {
 
       sesClient.sendEmail(request);
       log.info("Email sent successfully via SES");
-    } catch (SesException e) {
-      log.error("Failed to send email via SES", e);
-      throw new RuntimeException("Failed to send email", e);
+    } catch (SesException ex) {
+      log.error("Failed to send email via SES", ex);
+      throw new EmailSendingException("Failed to send email", ex);
     }
   }
 }

@@ -98,6 +98,13 @@ public class GlobalExceptionHandler {
     return buildResponse(request, "Resource is currently locked. Please try again later.", HttpStatus.CONFLICT, "RESOURCE_LOCKED");
   }
 
+  // Handle email sending exceptions
+  @ExceptionHandler(EmailSendingException.class)
+  public ResponseEntity<ErrorResponse> handleEmailSendingException(EmailSendingException ex, WebRequest request) {
+
+    return buildResponse(request, "Unable to send email at the moment. Please try again later.", HttpStatus.SERVICE_UNAVAILABLE, "EMAIL_FAILED");
+  }
+
   // Handle all other exceptions (catch-all)
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, WebRequest request) {

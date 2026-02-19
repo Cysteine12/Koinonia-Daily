@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eni.koinoniadaily.exceptions.EmailSendingException;
 import org.eni.koinoniadaily.config.AppProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -35,9 +36,9 @@ public class MailtrapEmailProvider implements EmailProvider {
 
       mailSender.send(message);
       log.info("Email sent successfully via Mailtrap");
-    } catch (MessagingException | MailException e) {
-      log.error("Failed to send email via Mailtrap to", e);
-      throw new RuntimeException("Failed to send email", e);
+    } catch (MessagingException | MailException ex) {
+      log.error("Failed to send email via Mailtrap to", ex);
+      throw new EmailSendingException("Failed to send email", ex);
     }
   }
 }
