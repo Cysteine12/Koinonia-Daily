@@ -4,7 +4,7 @@ import org.eni.koinoniadaily.modules.auth.events.EmailVerificationRequestedEvent
 import org.eni.koinoniadaily.modules.auth.events.PasswordChangedEvent;
 import org.eni.koinoniadaily.modules.auth.events.PasswordResetOtpGeneratedEvent;
 import org.eni.koinoniadaily.modules.auth.events.UserRegisteredEvent;
-import org.eni.koinoniadaily.services.EmailService;
+import org.eni.koinoniadaily.infrastucture.email.EmailService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
