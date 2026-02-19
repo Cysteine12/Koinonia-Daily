@@ -36,7 +36,7 @@ public class MailtrapConfig {
     javaMailProperties.put("mail.smtp.auth", "true");
     javaMailProperties.put("mail.smtp.starttls.enable", "true");
     javaMailProperties.put("mail.smtp.starttls.required", "true");
-    javaMailProperties.put("mail.debug", activeProfile == "prod" ? "false" : "true");
+    javaMailProperties.put("mail.debug", activeProfile.equals("prod") ? "false" : "true");
 
     return mailSender;
   }

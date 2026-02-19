@@ -1,14 +1,11 @@
 package org.eni.koinoniadaily.config;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "app")
@@ -41,7 +38,8 @@ public class AppProperties {
     @Pattern(regexp = "ses|mailtrap", message = "Email provider must be 'ses' or 'mailtrap'")
     private String provider = "ses";
 
-    @NotBlank(message = "Email address not set in env")
+    @jakarta.validation.constraints.Email(message = "Email 'from' address has an invalid format")
+    @NotBlank(message = "Email 'from' address not set in env")
     private String from;
   }
 
