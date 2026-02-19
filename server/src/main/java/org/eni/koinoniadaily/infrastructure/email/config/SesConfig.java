@@ -1,5 +1,7 @@
-package org.eni.koinoniadaily.config;
+package org.eni.koinoniadaily.infrastructure.email.config;
 
+import org.eni.koinoniadaily.config.AppProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,6 +12,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ses.SesClient;
 
 @Configuration
+@ConditionalOnProperty(name = "app.email.provider", havingValue = "ses", matchIfMissing = true)
 @RequiredArgsConstructor
 public class SesConfig {
 
