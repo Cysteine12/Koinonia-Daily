@@ -1,6 +1,5 @@
 package org.eni.koinoniadaily.exceptions;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.eni.koinoniadaily.utils.ErrorResponse;
 import org.slf4j.Logger;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
-  private final ObjectMapper objectMapper;
   private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
   private ResponseEntity<ErrorResponse> buildResponse(WebRequest request, String message, HttpStatus status, String errorCode) {

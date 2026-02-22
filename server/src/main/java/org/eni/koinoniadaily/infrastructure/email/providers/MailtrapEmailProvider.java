@@ -29,7 +29,7 @@ public class MailtrapEmailProvider implements EmailProvider {
       MimeMessage message = mailSender.createMimeMessage();
       MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-      helper.setFrom(props.getEmail().getFrom());
+      helper.setFrom(String.format("%s <%s>", props.getName(), props.getEmail().getFrom()));
       helper.setTo(to);
       helper.setSubject(subject);
       helper.setText(body, true);
