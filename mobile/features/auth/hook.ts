@@ -1,4 +1,4 @@
-import type { ApiResponse, ErrorResponse } from '@/lib/types';
+import type { ErrorResponse } from '@/lib/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useRouter } from 'expo-router';
@@ -50,10 +50,11 @@ const useLogin = () => {
       router.replace('/home');
     },
     onError: (data: AxiosError<ErrorResponse>) => {
-      if (data.response?.data?.message === 'Email verification required') {
+      if (data.response?.data?.code === 'USER_UNVERIFIED') {
         router.push('/verify-email');
         return;
       }
+      setCredentials(null);
       Alert.alert('Login failed', data.response?.data?.message || data.message);
     },
   });
@@ -70,6 +71,7 @@ const useVerifyEmail = () => {
       if (!credentials) {
         Alert.alert('Error', 'No credentials found for login');
         router.push('/login');
+        return;
       }
       login({ email: credentials.email, password: credentials.password });
     },
@@ -114,7 +116,7 @@ const useLogout = () => {
       authLogout();
       router.replace('/login');
     },
-    onError: (data: AxiosError<ApiResponse>) => {
+    onError: (data: AxiosError<ErrorResponse>) => {
       queryClient.clear();
       Alert.alert('Logout failed', data.response?.data?.message || data.message);
       authLogout();
@@ -124,4 +126,3 @@ const useLogout = () => {
 };
 
 export { useLogin, useLogout, useRegister, useRequestOtp, useVerifyEmail };
-

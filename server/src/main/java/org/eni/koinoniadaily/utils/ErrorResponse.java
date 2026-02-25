@@ -15,7 +15,7 @@ public class ErrorResponse extends ApiResponse {
   
   private final String path;
 
-  private final String errorCode;
+  private final String code;
 
   private final Object errors;
 

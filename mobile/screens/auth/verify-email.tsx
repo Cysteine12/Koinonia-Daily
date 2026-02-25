@@ -26,36 +26,35 @@ const VerifyEmail = () => {
     onSubmit: (data) => verifyEmail(data),
   });
 
+  const resetRequestOtpCountdown = () => setRequestOtpCountdown(60);
+
+  useEffect(() => {
+    resetRequestOtpCountdown();
+  }, []);
+
+  useEffect(() => {
+    if (data?.success) resetRequestOtpCountdown();
+  }, [data]);
+
+  useEffect(() => {
+    if (isRequestingOtp || requestOtpCountdown <= 0) return;
+
+    const id = setInterval(() => {
+      setRequestOtpCountdown((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+
+    return () => clearInterval(id);
+  }, [isRequestingOtp, requestOtpCountdown]);
+
   useEffect(() => {
     if (!credentials?.email) {
       router.replace('/register');
     }
   }, [credentials?.email, router]);
 
-  useEffect(() => {
-    startRequestOtpCountdown();
-  }, []);
-  useEffect(() => {
-    if (data?.success) {
-      startRequestOtpCountdown();
-    }
-  }, [data?.success]);
-
-  const startRequestOtpCountdown = () => {
-    setRequestOtpCountdown(60);
-    const requestOtpInterval = setInterval(() => {
-      if (isRequestingOtp) {
-        return;
-      }
-
-      if (requestOtpCountdown === 0) {
-        clearInterval(requestOtpInterval);
-      } else {
-        setRequestOtpCountdown((prev) => prev - 1);
-      }
-    }, 1000);
-    return () => clearInterval(requestOtpInterval);
-  };
+  if (!credentials?.email) {
+    return null;
+  }
 
   return (
     <KeyboardAvoidingView
@@ -111,7 +110,7 @@ const VerifyEmail = () => {
                     <Button
                       className="bg-transparent max-w-32"
                       onPress={handleSubmit}
-                      disabled={isPending || isRequestingOtp || requestOtpCountdown !== 0}
+                      disabled={isPending || isRequestingOtp}
                     >
                       {isPending ? <ActivityIndicator color={'#ffffff'} /> : <Text>Verify Email</Text>}
                     </Button>

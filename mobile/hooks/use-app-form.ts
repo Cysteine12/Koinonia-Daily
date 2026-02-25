@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import type { ZodObject } from 'zod';
+import type { ZodType } from 'zod';
 
-interface UseAppFormProps<T extends Record<string, any>> {
+interface UseAppFormProps<T extends Record<string, unknown>> {
   data: T;
-  schema: ZodObject;
+  schema: ZodType<T>;
   onSubmit: (data: T) => void;
 }
 
@@ -36,7 +36,7 @@ const useForm = <T extends Record<string, any>>({ data, schema, onSubmit }: UseA
     }
     setErrors({});
 
-    onSubmit(result.data as T);
+    onSubmit(result.data);
   };
 
   return { form, errors, handleChange, handleSubmit };

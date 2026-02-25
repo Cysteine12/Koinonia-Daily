@@ -101,19 +101,19 @@ const Login = () => {
                   <GoldGradient>
                     <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
                       {isPending ? (
-                        <ActivityIndicator color={colorScheme === 'light' ? '#ffffff' : '#000000'} />
+                        <ActivityIndicator color={colorScheme === 'dark' ? '#000000' : '#ffffff'} />
                       ) : (
                         <Text>Continue</Text>
                       )}
                     </Button>
                   </GoldGradient>
                 </View>
-                <Text className="text-center text-sm">
-                  Don&apos;t have an account?{' '}
-                  <Pressable onPress={() => router.push('/register')}>
+                <View className="flex-row items-center justify-center gap-1">
+                  <Text className="text-sm">Don&apos;t have an account? </Text>
+                  <Pressable onPress={() => router.push('/register')} accessibilityRole="link">
                     <Text className="text-sm text-gold-text leading-4">Sign up</Text>
                   </Pressable>
-                </Text>
+                </View>
                 <View className="flex-row items-center">
                   <Separator className="flex-1" />
                   <Text className="text-muted-foreground px-4 text-sm">or</Text>

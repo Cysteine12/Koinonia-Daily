@@ -74,7 +74,7 @@ public class AuthService {
 
     UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
     if (!principal.isVerified()) {
-      throw new UnauthorizedException("Email verification required");
+      throw new UnauthorizedException("USER_UNVERIFIED", "Email verification required");
     }
 
     TokenPair tokens = tokenService.generateAndSaveTokens(auth.getName());

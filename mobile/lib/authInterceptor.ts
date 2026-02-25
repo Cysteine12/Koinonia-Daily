@@ -49,7 +49,7 @@ export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHand
 
       if (
         error.response?.status === 401 &&
-        error.response?.data?.message === 'Expired token' &&
+        error.response?.data?.code === 'ExpiredJwtException' &&
         !originalRequest._retry
       ) {
         originalRequest._retry = true;

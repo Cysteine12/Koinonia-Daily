@@ -10,6 +10,7 @@ export type ErrorResponse = {
   error: string;
   message: string;
   path: string;
+  code: string;
   timestamp: string;
 };
 

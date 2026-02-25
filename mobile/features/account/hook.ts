@@ -4,7 +4,8 @@ import { getAccountProfile } from './api';
 const useAccountProfile = () => {
   return useQuery({
     queryFn: getAccountProfile,
-    queryKey: ['account.profile'],
+    queryKey: ['account-profile'],
+    staleTime: 5 * 60 * 1000,
   });
 };
 

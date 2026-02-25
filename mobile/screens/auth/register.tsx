@@ -33,7 +33,10 @@ const Register = () => {
       password: '',
     },
     schema: registerSchema,
-    onSubmit: (data) => register(data),
+    onSubmit: (data) => {
+      if (confirmPassword !== data.password) return;
+      register(data);
+    },
   });
 
   function handleSocialSignIn(type: string) {
@@ -130,7 +133,11 @@ const Register = () => {
                     )}
                   </View>
                   <GoldGradient>
-                    <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
+                    <Button
+                      className="bg-transparent w-full"
+                      onPress={handleSubmit}
+                      disabled={isPending || confirmPassword !== form.password}
+                    >
                       {isPending ? (
                         <ActivityIndicator color={colorScheme === 'light' ? '#ffffff' : '#000000'} />
                       ) : (

@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import type { LoginSchema } from './schema';
 
 type AuthState = {
-  credentials: any;
+  credentials: LoginSchema | null;
   setCredentials: (credentials: LoginSchema | null) => void;
 };
 

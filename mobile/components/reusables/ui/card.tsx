@@ -20,24 +20,11 @@ function CardHeader({ className, ...props }: ViewProps & React.RefAttributes<Vie
   return <View className={cn('flex flex-col gap-1.5 px-6', className)} {...props} />;
 }
 
-function CardTitle({
-  className,
-  ...props
-}: React.ComponentProps<typeof Text> & React.RefAttributes<Text>) {
-  return (
-    <Text
-      role="heading"
-      aria-level={3}
-      className={cn('font-semibold leading-none', className)}
-      {...props}
-    />
-  );
+function CardTitle({ className, ...props }: React.ComponentProps<typeof Text> & React.RefAttributes<Text>) {
+  return <Text role="heading" aria-level={3} className={cn('font-semibold leading-none', className)} {...props} />;
 }
 
-function CardDescription({
-  className,
-  ...props
-}: React.ComponentProps<typeof Text> & React.RefAttributes<Text>) {
+function CardDescription({ className, ...props }: React.ComponentProps<typeof Text> & React.RefAttributes<Text>) {
   return <Text className={cn('text-muted-foreground text-sm', className)} {...props} />;
 }
 

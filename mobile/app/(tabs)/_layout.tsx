@@ -4,8 +4,8 @@ import React, { useEffect } from 'react';
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuth } from '@/features/auth/auth-context';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -14,6 +14,10 @@ export default function TabLayout() {
   useEffect(() => {
     if (!isAuthenticated) router.replace('/login');
   }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <Tabs

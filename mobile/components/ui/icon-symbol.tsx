@@ -3,7 +3,7 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import type { SymbolViewProps, SymbolWeight } from 'expo-symbols';
 import type { ComponentProps } from 'react';
-import { type OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native';
+import type { OpaqueColorValue, StyleProp, TextStyle } from 'react-native';
 
 type IconMapping = Partial<Record<SymbolViewProps['name'], ComponentProps<typeof MaterialIcons>['name']>>;
 

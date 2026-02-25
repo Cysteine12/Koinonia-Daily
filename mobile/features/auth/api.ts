@@ -1,6 +1,14 @@
 import API from '@/lib/api';
 import type { ApiResponse } from '@/lib/types';
-import type { LoginSchema, LogoutSchema, RegisterSchema, RequestOtpSchema, VerifyEmailSchema } from './schema';
+import type {
+  ForgotPasswordSchema,
+  LoginSchema,
+  LogoutSchema,
+  RegisterSchema,
+  RequestOtpSchema,
+  ResetPasswordSchema,
+  VerifyEmailSchema,
+} from './schema';
 import type { LoginResponse } from './types';
 
 const register = async (payload: RegisterSchema): Promise<ApiResponse> => {
@@ -23,9 +31,19 @@ const requestOtp = async (payload: RequestOtpSchema): Promise<ApiResponse> => {
   return data;
 };
 
+const forgotPassword = async (payload: ForgotPasswordSchema): Promise<ApiResponse> => {
+  const { data } = await API.post(`/api/v1/auth/forgot-password`, payload);
+  return data;
+};
+
+const resetPassword = async (payload: ResetPasswordSchema): Promise<ApiResponse> => {
+  const { data } = await API.post(`/api/v1/auth/reset-password`, payload);
+  return data;
+};
+
 const logout = async (payload: LogoutSchema): Promise<ApiResponse> => {
   const { data } = await API.post(`/api/v1/auth/logout`, payload);
   return data;
 };
 
-export { login, logout, register, requestOtp, verifyEmail };
+export { forgotPassword, login, logout, register, requestOtp, resetPassword, verifyEmail };

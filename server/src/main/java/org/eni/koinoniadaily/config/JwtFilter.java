@@ -77,7 +77,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                       .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
                                       .message(ex.getMessage())
                                       .path(request.getRequestURI())
-                                      .errorCode(ex.getCause() != null ? ex.getCause().getClass().getSimpleName() : "UNAUTHORIZED")
+                                      .code(ex.getCause() != null ? ex.getCause().getClass().getSimpleName() : "UNAUTHORIZED")
                                       .timestamp(Instant.now())
                                       .build();
 

@@ -11,6 +11,10 @@ const GuestLayout = () => {
     if (isAuthenticated) router.replace('/home');
   }, [isAuthenticated, router]);
 
+  if (isAuthenticated) {
+    return null;
+  }
+
   return (
     <Stack screenOptions={screenOptions}>
       <Stack.Screen name="login" options={{ headerShown: false }} />

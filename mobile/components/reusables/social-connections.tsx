@@ -6,6 +6,7 @@ import { Image, Platform, View } from 'react-native';
 const SOCIAL_CONNECTION_STRATEGIES = [
   {
     type: 'oauth_google',
+    label: 'Continue with Google',
     source: { uri: 'https://img.clerk.com/static/google.png?width=160' },
     useTint: false,
   },
@@ -23,6 +24,7 @@ export function SocialConnections({ handleSocialSignIn }: { handleSocialSignIn: 
             variant="outline"
             size="sm"
             className="sm:flex-1"
+            accessibilityLabel={strategy.label}
             onPress={() => handleSocialSignIn(strategy.type)}
           >
             <Image

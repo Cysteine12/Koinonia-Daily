@@ -5,6 +5,11 @@
 
 import { Platform } from 'react-native';
 
+export const GOLD_GRADIENT = {
+  dark: ['hsl(48 80% 50%)', 'hsl(48 70% 60%)', 'hsl(45 71% 36%)'] as const,
+  light: ['hsl(48 72% 65%)', 'hsl(45 66% 52%)', 'hsl(45 60% 44%)'] as const,
+};
+
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 

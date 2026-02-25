@@ -1,3 +1,4 @@
+import { GOLD_GRADIENT } from '@/constants/theme';
 import { cn } from '@/lib/utils';
 import type { ClassValue } from 'clsx';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,9 +21,7 @@ const GoldGradient = ({ children, className, start = { x: 0.2, y: 0 }, end = { x
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
 
-  const colors = isDark
-    ? (['hsl(48 80% 50%)', 'hsl(48 70% 60%)', 'hsl(45 71% 36%)'] as const)
-    : (['hsl(48 72% 65%)', 'hsl(45 66% 52%)', 'hsl(45 60% 44%)'] as const);
+  const colors = isDark ? GOLD_GRADIENT.dark : GOLD_GRADIENT.light;
 
   return (
     <LinearGradient colors={colors} className={cn('rounded-md', className)} start={start} end={end}>
