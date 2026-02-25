@@ -10,9 +10,19 @@ import { useLogin } from '@/features/auth/hook';
 import { type LoginSchema, loginSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
 import { router } from 'expo-router';
-import { ActivityIndicator, Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  View,
+  useColorScheme,
+} from 'react-native';
 
 const Login = () => {
+  const colorScheme = useColorScheme();
   const { mutate: login, isPending } = useLogin();
   const { form, errors, handleChange, handleSubmit } = useForm<LoginSchema>({
     data: {
@@ -90,7 +100,11 @@ const Login = () => {
                   </View>
                   <GoldGradient>
                     <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
-                      {isPending ? <ActivityIndicator color={'#ffffff'} /> : <Text>Continue</Text>}
+                      {isPending ? (
+                        <ActivityIndicator color={colorScheme === 'light' ? '#ffffff' : '#000000'} />
+                      ) : (
+                        <Text>Continue</Text>
+                      )}
                     </Button>
                   </GoldGradient>
                 </View>

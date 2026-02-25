@@ -11,9 +11,18 @@ import { registerSchema, type RegisterSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
 import { router } from 'expo-router';
 import React from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  useColorScheme,
+  View,
+} from 'react-native';
 
 const Register = () => {
+  const colorScheme = useColorScheme();
   const { mutate: register, isPending } = useRegister();
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const { form, errors, handleChange, handleSubmit } = useForm<RegisterSchema>({
@@ -122,7 +131,11 @@ const Register = () => {
                   </View>
                   <GoldGradient>
                     <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
-                      {isPending ? <ActivityIndicator color={'#ffffff'} /> : <Text>Continue</Text>}
+                      {isPending ? (
+                        <ActivityIndicator color={colorScheme === 'light' ? '#ffffff' : '#000000'} />
+                      ) : (
+                        <Text>Continue</Text>
+                      )}
                     </Button>
                   </GoldGradient>
                 </View>

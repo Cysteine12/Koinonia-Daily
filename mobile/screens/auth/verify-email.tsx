@@ -8,14 +8,15 @@ import { verifyEmailSchema, type VerifyEmailSchema } from '@/features/auth/schem
 import { useAuthStore } from '@/features/auth/store';
 import useForm from '@/hooks/use-app-form';
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
 
 const VerifyEmail = () => {
   const router = useRouter();
   const { credentials } = useAuthStore();
   const { mutate: verifyEmail, isPending } = useVerifyEmail();
-  const { mutate: requestOtp, isPending: isRequestingOtp } = useRequestOtp();
+  const { mutate: requestOtp, isPending: isRequestingOtp, data } = useRequestOtp();
+  const [requestOtpCountdown, setRequestOtpCountdown] = useState(60);
   const { form, errors, handleChange, handleSubmit } = useForm<VerifyEmailSchema>({
     data: {
       email: credentials?.email || '',
@@ -30,6 +31,31 @@ const VerifyEmail = () => {
       router.replace('/register');
     }
   }, [credentials?.email, router]);
+
+  useEffect(() => {
+    startRequestOtpCountdown();
+  }, []);
+  useEffect(() => {
+    if (data?.success) {
+      startRequestOtpCountdown();
+    }
+  }, [data?.success]);
+
+  const startRequestOtpCountdown = () => {
+    setRequestOtpCountdown(60);
+    const requestOtpInterval = setInterval(() => {
+      if (isRequestingOtp) {
+        return;
+      }
+
+      if (requestOtpCountdown === 0) {
+        clearInterval(requestOtpInterval);
+      } else {
+        setRequestOtpCountdown((prev) => prev - 1);
+      }
+    }, 1000);
+    return () => clearInterval(requestOtpInterval);
+  };
 
   return (
     <KeyboardAvoidingView
@@ -69,17 +95,23 @@ const VerifyEmail = () => {
                     <Pressable
                       onPress={() => requestOtp()}
                       className="mt-4 self-center"
-                      disabled={isPending || isRequestingOtp}
+                      disabled={isPending || isRequestingOtp || requestOtpCountdown !== 0}
                     >
-                      <Text className="text-sm text-gold-text">Resend code</Text>
-                      {isRequestingOtp && <ActivityIndicator className="flex ml-2" size="small" color="#9d7c1b" />}
+                      <Text className="text-sm text-gold-text">
+                        Resend code
+                        {isRequestingOtp ? (
+                          <ActivityIndicator className="flex ml-2" size="small" color="#9d7c1b" />
+                        ) : (
+                          ![0, 60].includes(requestOtpCountdown) && `(${requestOtpCountdown})`
+                        )}
+                      </Text>
                     </Pressable>
                   </View>
                   <GoldGradient className="flex-1 self-center">
                     <Button
                       className="bg-transparent max-w-32"
                       onPress={handleSubmit}
-                      disabled={isPending || isRequestingOtp}
+                      disabled={isPending || isRequestingOtp || requestOtpCountdown !== 0}
                     >
                       {isPending ? <ActivityIndicator color={'#ffffff'} /> : <Text>Verify Email</Text>}
                     </Button>

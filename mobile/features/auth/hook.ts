@@ -91,8 +91,9 @@ const useRequestOtp = () => {
       }
       return requestOtp({ email: credentials.email });
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       Alert.alert('OTP Sent', 'A new OTP has been sent to your email.');
+      return data;
     },
     onError: (data: AxiosError<ErrorResponse>) => {
       Alert.alert('Request OTP failed', data.response?.data?.message || data.message);
