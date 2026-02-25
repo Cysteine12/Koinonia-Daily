@@ -63,6 +63,17 @@ public class RateLimitFilter extends OncePerRequestFilter {
     return SENSITIVE_ENDPOINTS.stream().anyMatch(uri::startsWith);
   }
 
+  /**
+   * Sends a 429 (Too Many Requests) JSON error response for the provided request.
+   *
+   * The response payload contains a standardized ErrorResponse with fields:
+   * success=false, status=429, error reason, message, request path, code="RATE_LIMIT_EXCEEDED",
+   * and a timestamp. The HTTP status and Content-Type are set on the response before writing.
+   *
+   * @param request  the incoming HTTP request whose URI is included in the error payload
+   * @param response the HTTP response used to set status, content type, and write the JSON body
+   * @throws IOException if writing the JSON response fails
+   */
   private void sendRateLimitExceededResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     ErrorResponse error = ErrorResponse.builder()

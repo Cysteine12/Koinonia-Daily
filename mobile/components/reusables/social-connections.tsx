@@ -12,6 +12,12 @@ const SOCIAL_CONNECTION_STRATEGIES = [
   },
 ];
 
+/**
+ * Renders social sign-in buttons for the configured strategies and delegates selection to the provided handler.
+ *
+ * @param handleSocialSignIn - Called with the strategy `type` when a social button is pressed.
+ * @returns A View containing one button per social strategy; each button displays the provider icon and invokes `handleSocialSignIn` with that strategy's `type` when pressed.
+ */
 export function SocialConnections({ handleSocialSignIn }: { handleSocialSignIn: (type: string) => void }) {
   const { colorScheme } = useColorScheme();
 

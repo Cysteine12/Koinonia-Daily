@@ -12,6 +12,13 @@ import { AuthProvider } from '@/features/auth/auth-context';
 
 const queryClient = new QueryClient();
 
+/**
+ * Provides the application's root layout including global providers, theming, navigation, status bar, and portal host.
+ *
+ * Renders React Query and authentication providers, applies a theme based on the system color scheme, and defines the top-level navigation screens "(auth)", "(tabs)", and "+not-found".
+ *
+ * @returns The root React element for the application's layout.
+ */
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 

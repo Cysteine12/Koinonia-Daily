@@ -39,6 +39,13 @@ const Register = () => {
     },
   });
 
+  /**
+   * Initiates a social sign-in flow for the given provider.
+   *
+   * Currently a placeholder and not implemented.
+   *
+   * @param type - Identifier of the social provider (e.g., `"google"`, `"apple"`, `"facebook"`)
+   */
   function handleSocialSignIn(type: string) {
     // TODO
   }

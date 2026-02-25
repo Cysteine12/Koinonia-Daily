@@ -1,6 +1,13 @@
 import { cn } from '@/lib/utils';
 import { Platform, TextInput, type TextInputProps } from 'react-native';
 
+/**
+ * A styled TextInput that applies shared base styles, augments styling for non-editable state, and adds platform-specific placeholder and focus classes.
+ *
+ * @param className - Additional class names to append to the computed input classes
+ * @param props - All other TextInput props (and ref attributes) which are passed through to the underlying TextInput
+ * @returns The rendered TextInput element with computed, platform-aware classes
+ */
 function Input({ className, ...props }: TextInputProps & React.RefAttributes<TextInput>) {
   return (
     <TextInput

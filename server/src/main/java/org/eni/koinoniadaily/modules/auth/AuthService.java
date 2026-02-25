@@ -66,6 +66,13 @@ public class AuthService {
     publisher.publishEvent(new EmailVerificationRequestedEvent(user.getEmail(), user.getFirstName(), otp));
   }
   
+  /**
+   * Authenticate the provided credentials and issue a new access and refresh token pair.
+   *
+   * @param payload the login credentials containing email and password
+   * @return a LoginResponse containing the issued access token and refresh token
+   * @throws UnauthorizedException if the user exists but their email is not verified
+   */
   @Transactional
   public LoginResponse login(LoginRequest payload) {
 

@@ -26,10 +26,29 @@ public class GlobalExceptionHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+  /**
+   * Builds a ResponseEntity containing an ErrorResponse populated with the given message, HTTP status, and code, with no additional errors.
+   *
+   * @param request the current web request (used to extract request path)
+   * @param message the human-readable error message to include in the response
+   * @param status the HTTP status to return
+   * @param code an application-specific error code to include in the response
+   * @return a ResponseEntity wrapping an ErrorResponse with the provided fields and no errors payload
+   */
   private ResponseEntity<ErrorResponse> buildResponse(WebRequest request, String message, HttpStatus status, String code) {
     return buildResponse(request, message, status, code, null);
   }
 
+  /**
+   * Builds a ResponseEntity containing an ErrorResponse populated from the request and provided details.
+   *
+   * @param request the current web request (used to extract the request URI)
+   * @param message a human-readable message describing the error
+   * @param status the HTTP status to apply to both the response and the ErrorResponse
+   * @param code an application-specific error code to include in the ErrorResponse
+   * @param errors optional additional error details to include in the ErrorResponse; may be null
+   * @return a ResponseEntity wrapping the constructed ErrorResponse with the given HTTP status
+   */
   private ResponseEntity<ErrorResponse> buildResponse(WebRequest request, String message, HttpStatus status, String code, Object errors) {
     ErrorResponse error = ErrorResponse.builder()
                             .success(false)
@@ -82,7 +101,11 @@ public class GlobalExceptionHandler {
     return buildResponse(request, "Invalid credentials", HttpStatus.UNAUTHORIZED, "BAD_CREDENTIALS");
   }
     
-  // Handle unauthorized errors
+  /**
+   * Builds a 401 UNAUTHORIZED error response using the exception's message and code.
+   *
+   * @return a ResponseEntity containing an ErrorResponse with HTTP status 401, the exception message, and the exception's code
+   */
   @ExceptionHandler(UnauthorizedException.class)
   public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex, WebRequest request) {
 

@@ -39,6 +39,21 @@ public class JwtFilter extends OncePerRequestFilter {
 
   private static final String USER_ID_MDC_KEY = "userId";
 
+  /**
+   * Authenticates incoming HTTP requests using a JWT access token and populates the SecurityContext.
+   *
+   * If the Authorization header is absent or does not start with "Bearer ", the request is delegated to the next filter unchanged.
+   * When a valid access token is provided, the associated user details are loaded, the user's id is recorded in MDC under "userId"
+   * when available, and an authenticated SecurityContext is established for the request.
+   * If token validation or user lookup fails, the security context is cleared and a 401 JSON error response is written containing
+   * the fields: success, status, error, message, path, code, and timestamp.
+   *
+   * @param request the current HTTP request
+   * @param response the current HTTP response
+   * @param filterChain the filter chain to continue processing the request
+   * @throws ServletException if the request could not be handled
+   * @throws IOException if an I/O error occurs while writing the response
+   */
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {

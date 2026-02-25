@@ -13,6 +13,16 @@ type Props = PropsWithChildren<{
   headerBackgroundColor: { dark: string; light: string };
 }>;
 
+/**
+ * Render a scrollable view with a parallax header image.
+ *
+ * Renders an Animated.ScrollView whose header image scales and translates based on scroll position, and places the provided children below the header.
+ *
+ * @param children - Content to render below the header
+ * @param headerImage - React element to display inside the parallax header
+ * @param headerBackgroundColor - Object with `light` and `dark` color strings used as the header background per color scheme
+ * @returns A React element containing an animated scroll view with a parallax header and the provided content
+ */
 export default function ParallaxScrollView({ children, headerImage, headerBackgroundColor }: Props) {
   const backgroundColor = useThemeColor({}, 'background');
   const colorScheme = useColorScheme() ?? 'light';
