@@ -83,9 +83,7 @@ const Login = () => {
                         variant="link"
                         size="sm"
                         className="ml-auto h-4 px-1 py-0 sm:h-4"
-                        onPress={() => {
-                          // TODO: Navigate to forgot password screen
-                        }}
+                        onPress={() => router.push({ pathname: '/forgot-password', params: { email: form.email } })}
                       >
                         <Text className="text-gold-text font-normal leading-4">Forgot your password?</Text>
                       </Button>
