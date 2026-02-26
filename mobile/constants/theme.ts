@@ -5,6 +5,11 @@
 
 import { Platform } from 'react-native';
 
+export const GOLD_GRADIENT = {
+  dark: ['hsl(48 80% 50%)', 'hsl(48 70% 60%)', 'hsl(45 71% 36%)'] as const,
+  light: ['hsl(48 72% 65%)', 'hsl(45 66% 52%)', 'hsl(45 60% 44%)'] as const,
+};
+
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
@@ -25,6 +30,10 @@ export const Colors = {
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
   },
+  primary: '#6A5CA3',
+  lightPrimary: '#EDEAF5',
+  secondary: '#E6E2F3',
+  tertiary: '#E03971',
 };
 
 export const Fonts = Platform.select({
@@ -43,11 +52,5 @@ export const Fonts = Platform.select({
     serif: 'serif',
     rounded: 'normal',
     mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });

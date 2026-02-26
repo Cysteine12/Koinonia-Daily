@@ -68,9 +68,9 @@ public final class JwtService {
             .parseSignedClaims(token)
             .getPayload();
     } catch (ExpiredJwtException e) {
-      throw new UnauthorizedException("Expired token", e);
+      throw new UnauthorizedException("TOKEN_EXPIRED", "Expired token", e);
     } catch (JwtException e) {
-      throw new UnauthorizedException("Invalid token", e);
+      throw new UnauthorizedException("TOKEN_INVALID", "Invalid token", e);
     }
   }
 
@@ -80,7 +80,7 @@ public final class JwtService {
     String tokenType = claims.get(TOKEN_TYPE_KEY, String.class);
 
     if (!type.name().equals(tokenType)) {
-      throw new UnauthorizedException("Invalid token");
+      throw new UnauthorizedException("TOKEN_INVALID", "Invalid token");
     }
 
     return new JwtPayload(claims.getSubject(), claims.getId());

@@ -19,7 +19,7 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
+          DEFAULT: 'var(--primary)',
           foreground: 'hsl(var(--primary-foreground))',
         },
         secondary: {
@@ -46,6 +46,35 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+
+        gold: {
+          500: 'hsl(var(--gold-500))',
+          600: 'hsl(var(--gold-600))',
+          700: 'hsl(var(--gold-700))',
+          text: 'hsl(var(--gold-text))',
+          icon: 'hsl(var(--gold-icon))',
+          'button-start': 'hsl(var(--gold-button-start))',
+          'button-mid': 'hsl(var(--gold-button-mid))',
+          'button-end': 'hsl(var(--gold-button-end))',
+        },
+      },
+      backgroundImage: {
+        'gold-gradient': `linear-gradient(
+          135deg,
+          hsl(var(--gold-button-start)),
+          hsl(var(--gold-button-mid)),
+          hsl(var(--gold-button-end))
+        )`,
+      },
+      boxShadow: {
+        gold: '0 0 8px hsl(var(--gold-500) / 0.4)',
+        'gold-strong': '0 0 12px hsl(var(--gold-500) / 0.6)',
+      },
+      ringColor: {
+        gold: 'hsl(var(--gold-500))',
+      },
+      borderColor: {
+        gold: 'hsl(var(--gold-600))',
       },
       borderRadius: {
         lg: 'var(--radius)',

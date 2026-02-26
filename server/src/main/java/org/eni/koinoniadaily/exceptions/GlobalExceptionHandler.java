@@ -26,18 +26,18 @@ public class GlobalExceptionHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-  private ResponseEntity<ErrorResponse> buildResponse(WebRequest request, String message, HttpStatus status, String errorCode) {
-    return buildResponse(request, message, status, errorCode, null);
+  private ResponseEntity<ErrorResponse> buildResponse(WebRequest request, String message, HttpStatus status, String code) {
+    return buildResponse(request, message, status, code, null);
   }
 
-  private ResponseEntity<ErrorResponse> buildResponse(WebRequest request, String message, HttpStatus status, String errorCode, Object errors) {
+  private ResponseEntity<ErrorResponse> buildResponse(WebRequest request, String message, HttpStatus status, String code, Object errors) {
     ErrorResponse error = ErrorResponse.builder()
                             .success(false)
                             .status(status.value())
                             .error(status.getReasonPhrase())
                             .message(message)
                             .path(((ServletWebRequest) request).getRequest().getRequestURI())
-                            .errorCode(errorCode)
+                            .code(code)
                             .errors(errors)
                             .timestamp(Instant.now())
                             .build();
@@ -86,7 +86,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(UnauthorizedException.class)
   public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex, WebRequest request) {
 
-    return buildResponse(request, ex.getMessage(), HttpStatus.UNAUTHORIZED, "UNAUTHORIZED");
+    return buildResponse(request, ex.getMessage(), HttpStatus.UNAUTHORIZED, ex.getCode());
   }
     
   // Handle lock exceptions (for token) 

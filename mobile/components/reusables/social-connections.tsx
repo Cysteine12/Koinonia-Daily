@@ -1,0 +1,42 @@
+import { Button } from '@/components/reusables/ui/button';
+import { cn } from '@/lib/utils';
+import { useColorScheme } from 'nativewind';
+import { Image, Platform, View } from 'react-native';
+
+const SOCIAL_CONNECTION_STRATEGIES = [
+  {
+    type: 'oauth_google',
+    label: 'Continue with Google',
+    source: require('@/assets/images/google.png'),
+    useTint: false,
+  },
+];
+
+export function SocialConnections({ handleSocialSignIn }: { handleSocialSignIn: (type: string) => void }) {
+  const { colorScheme } = useColorScheme();
+
+  return (
+    <View className="gap-2 sm:flex-row sm:gap-3">
+      {SOCIAL_CONNECTION_STRATEGIES.map((strategy) => {
+        return (
+          <Button
+            key={strategy.type}
+            variant="outline"
+            size="sm"
+            className="sm:flex-1"
+            accessibilityLabel={strategy.label}
+            onPress={() => handleSocialSignIn(strategy.type)}
+          >
+            <Image
+              className={cn('size-4', strategy.useTint && Platform.select({ web: 'dark:invert' }))}
+              tintColor={Platform.select({
+                native: strategy.useTint ? (colorScheme === 'dark' ? 'white' : 'black') : undefined,
+              })}
+              source={strategy.source}
+            />
+          </Button>
+        );
+      })}
+    </View>
+  );
+}
