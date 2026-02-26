@@ -4,6 +4,7 @@ import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import GoldGradient from '@/components/ui/gold-gradient';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useLogin, useResetPassword } from '@/features/auth/hook';
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
@@ -125,9 +126,18 @@ const ResetPassword = () => {
         </View>
       </ScrollView>
       <BottomSheet isOpen={isModalOpen}>
-        <Text>Hello There</Text>
+        <View className="bg-green-100 w-16 h-16 rounded-full items-center justify-center self-center mb-4">
+          <IconSymbol name="checkmark.circle" size={24} color="#047857" />
+        </View>
+        <Text className="text-center">Password reset successfully!</Text>
         <Button className="bg-transparent w-full" onPress={handleCompleteModal}>
           <Text>Continue</Text>
+          <IconSymbol
+            name="arrow.forward"
+            size={16}
+            className="ml-2"
+            color={colorScheme === 'dark' ? '#000000' : '#ffffff'}
+          />
         </Button>
       </BottomSheet>
     </KeyboardAvoidingView>

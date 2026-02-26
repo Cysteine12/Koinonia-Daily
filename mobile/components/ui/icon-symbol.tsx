@@ -17,6 +17,8 @@ const MAPPING = {
   'paperplane.fill': 'send',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
+  'checkmark.circle': 'check',
+  'arrow.forward': 'arrow-forward',
 } satisfies IconMapping;
 
 type IconSymbolName = keyof typeof MAPPING;
@@ -31,12 +33,14 @@ export function IconSymbol({
   size = 24,
   color,
   style,
+  className = '',
 }: {
   name: IconSymbolName;
   size?: number;
   color: string | OpaqueColorValue;
   style?: StyleProp<TextStyle>;
   weight?: SymbolWeight;
+  className?: string;
 }) {
-  return <MaterialIcons color={color} size={size} name={MAPPING[name]} style={style} />;
+  return <MaterialIcons color={color} size={size} name={MAPPING[name]} style={style} className={className} />;
 }
