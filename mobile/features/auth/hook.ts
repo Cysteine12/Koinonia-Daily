@@ -3,9 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useRouter } from 'expo-router';
 import { Alert } from 'react-native';
-import { login, logout, register, requestOtp, verifyEmail } from './api';
+import { forgotPassword, login, logout, register, requestOtp, verifyEmail } from './api';
 import { useAuth } from './auth-context';
-import type { LoginSchema, LogoutSchema, RegisterSchema, VerifyEmailSchema } from './schema';
+import type { ForgotPasswordSchema, LoginSchema, LogoutSchema, RegisterSchema, VerifyEmailSchema } from './schema';
 import { useAuthStore } from './store';
 
 const useRegister = () => {
@@ -70,7 +70,6 @@ const useVerifyEmail = () => {
     mutationFn: (payload: VerifyEmailSchema) => verifyEmail(payload),
     onSuccess: (data) => {
       if (!credentials) {
-        Alert.alert('Error', 'No credentials found for login');
         router.push('/login');
         return;
       }
@@ -104,6 +103,20 @@ const useRequestOtp = () => {
   });
 };
 
+const useForgotPassword = () => {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (payload: ForgotPasswordSchema) => forgotPassword(payload),
+    onSuccess: (data) => {
+      router.replace('/reset-password');
+    },
+    onError: (data: AxiosError<ErrorResponse>) => {
+      Alert.alert('Request Failed', data.response?.data?.message || data.message);
+    },
+  });
+};
+
 const useLogout = () => {
   const queryClient = useQueryClient();
   const { logout: authLogout } = useAuth();
@@ -123,4 +136,5 @@ const useLogout = () => {
   });
 };
 
-export { useLogin, useLogout, useRegister, useRequestOtp, useVerifyEmail };
+export { useForgotPassword, useLogin, useLogout, useRegister, useRequestOtp, useVerifyEmail };
+
