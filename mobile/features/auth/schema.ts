@@ -62,6 +62,5 @@ export {
   registerSchema,
   requestOtpSchema,
   resetPasswordSchema,
-  verifyEmailSchema
+  verifyEmailSchema,
 };
-
