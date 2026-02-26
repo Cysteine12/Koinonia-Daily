@@ -10,6 +10,8 @@ import { useLogin } from '@/features/auth/hook';
 import { type LoginSchema, loginSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
 import { router } from 'expo-router';
+import { useRef } from 'react';
+import type { TextInput } from 'react-native';
 import {
   ActivityIndicator,
   Image,
@@ -32,6 +34,8 @@ const Login = () => {
     schema: loginSchema,
     onSubmit: (data) => login(data),
   });
+
+  const passwordRef = useRef<TextInput>(null);
 
   const handleSocialSignIn = (type: string) => {
     // TODO
@@ -68,11 +72,12 @@ const Login = () => {
                       keyboardType="email-address"
                       autoComplete="email"
                       autoCapitalize="none"
+                      returnKeyType="next"
+                      submitBehavior="submit"
                       editable={!isPending}
                       value={form.email}
                       onChangeText={(text) => handleChange('email', text)}
-                      returnKeyType="next"
-                      submitBehavior="submit"
+                      onSubmitEditing={() => passwordRef.current?.focus()}
                     />
                     {errors?.email && <Text className="text-sm text-destructive">{errors?.email}</Text>}
                   </View>
@@ -95,6 +100,7 @@ const Login = () => {
                       editable={!isPending}
                       value={form.password}
                       onChangeText={(text) => handleChange('password', text)}
+                      ref={passwordRef}
                     />
                     {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
                   </View>
