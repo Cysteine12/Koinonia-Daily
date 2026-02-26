@@ -9,22 +9,22 @@ import useForm from '@/hooks/use-app-form';
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import {
-    ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    Text,
-    useColorScheme,
-    View,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  useColorScheme,
+  View,
 } from 'react-native';
 
 const ForgotPassword = () => {
   const colorScheme = useColorScheme();
-  const { email } = useLocalSearchParams<{ email: string }>();
+  const { email } = useLocalSearchParams<{ email?: string }>();
   const { mutate: forgotPassword, isPending } = useForgotPassword();
   const { form, errors, handleChange, handleSubmit } = useForm<ForgotPasswordSchema>({
     data: {
-      email,
+      email: email ?? '',
     },
     schema: forgotPasswordSchema,
     onSubmit: (data) => forgotPassword(data),
@@ -45,10 +45,10 @@ const ForgotPassword = () => {
           <View className="gap-6">
             <Card className="bg-transparent border-0">
               <CardHeader>
-                <CardTitle className="text-center text-gold-text text-xl sm:text-left">Sign in to your app</CardTitle>
+                <CardTitle className="text-center text-gold-text text-xl sm:text-left">Forgot Password</CardTitle>
                 <CardDescription className="text-center sm:text-left">
-                  Yeah! It happens. We&apos;ve got your back. Simply supply your registered email below and you&apos;ll be
-                  set to go.
+                  Yeah! It happens. We&apos;ve got your back. Simply supply your registered email below and you&apos;ll
+                  be set to go.
                 </CardDescription>
               </CardHeader>
               <CardContent className="gap-6">

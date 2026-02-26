@@ -108,8 +108,8 @@ const useForgotPassword = () => {
 
   return useMutation({
     mutationFn: (payload: ForgotPasswordSchema) => forgotPassword(payload),
-    onSuccess: (data) => {
-      router.replace('/reset-password');
+    onSuccess: (data, variables) => {
+      router.replace({ pathname: '/reset-password', params: { email: variables.email } });
     },
     onError: (data: AxiosError<ErrorResponse>) => {
       Alert.alert('Request Failed', data.response?.data?.message || data.message);
@@ -137,4 +137,3 @@ const useLogout = () => {
 };
 
 export { useForgotPassword, useLogin, useLogout, useRegister, useRequestOtp, useVerifyEmail };
-
