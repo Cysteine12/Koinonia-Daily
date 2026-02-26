@@ -4,7 +4,7 @@ const registerSchema = z.object({
   firstName: z
     .string({ error: 'First name is invalid' })
     .min(2, 'First name is invalid')
-    .max(50, 'Firstname length cannot exceed 50 characters'),
+    .max(50, 'First name length cannot exceed 50 characters'),
   lastName: z
     .string({ error: 'Last name is invalid' })
     .min(2, 'Last name is invalid')
@@ -56,9 +56,12 @@ const logoutSchema = z.object({
 export type LogoutSchema = z.infer<typeof logoutSchema>;
 
 export {
-  forgotPasswordSchema, loginSchema,
+  forgotPasswordSchema,
+  loginSchema,
   logoutSchema,
   registerSchema,
-  requestOtpSchema, resetPasswordSchema, verifyEmailSchema
+  requestOtpSchema,
+  resetPasswordSchema,
+  verifyEmailSchema
 };
 

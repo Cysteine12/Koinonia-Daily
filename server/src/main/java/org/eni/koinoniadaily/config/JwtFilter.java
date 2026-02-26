@@ -71,13 +71,18 @@ public class JwtFilter extends OncePerRequestFilter {
       
       SecurityContextHolder.clearContext();
 
+      String code = "UNAUTHORIZED";
+      if (ex instanceof UnauthorizedException uae) {
+        code = uae.getCode();
+      }
+
       ErrorResponse errorResponse = ErrorResponse.builder()
                                       .success(false)
                                       .status(HttpStatus.UNAUTHORIZED.value())
                                       .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
                                       .message(ex.getMessage())
                                       .path(request.getRequestURI())
-                                      .code(ex.getCode() != null ? ex.getCode() : "UNAUTHORIZED")
+                                      .code(code)
                                       .timestamp(Instant.now())
                                       .build();
 
