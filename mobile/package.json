@@ -8,7 +8,7 @@
     "ios": "expo run:ios",
     "lint": "expo lint",
     "prettier:check": "prettier --check \"**/*.{js,ts,jsx,tsx,json,md}\"",
-    "prettier:fix": "prettier --write"
+    "prettier:fix": "prettier --write \"**/*.{js,ts,jsx,tsx,json,md}\""
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",

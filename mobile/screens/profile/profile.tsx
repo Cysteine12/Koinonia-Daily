@@ -5,7 +5,6 @@ import { useAuth } from '@/features/auth/auth-context';
 import { useLogout } from '@/features/auth/hook';
 import { TokenType } from '@/features/auth/types';
 import { getSecure } from '@/lib/storage';
-import { router } from 'expo-router';
 
 const Profile = () => {
   const { mutate: logout } = useLogout();
@@ -15,8 +14,7 @@ const Profile = () => {
     const refreshToken = await getSecure(TokenType.REFRESH_TOKEN);
 
     if (!refreshToken) {
-      authLogout();
-      return router.replace('/login');
+      return authLogout();
     }
     logout({ refreshToken });
   };

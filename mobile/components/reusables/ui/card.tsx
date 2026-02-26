@@ -21,7 +21,15 @@ function CardHeader({ className, ...props }: ViewProps & React.RefAttributes<Vie
 }
 
 function CardTitle({ className, ...props }: React.ComponentProps<typeof Text> & React.RefAttributes<Text>) {
-  return <Text role="heading" aria-level={3} className={cn('font-semibold leading-none', className)} {...props} />;
+  return (
+    <Text
+      role="heading"
+      accessibilityRole="header"
+      aria-level={3}
+      className={cn('font-semibold leading-none', className)}
+      {...props}
+    />
+  );
 }
 
 function CardDescription({ className, ...props }: React.ComponentProps<typeof Text> & React.RefAttributes<Text>) {

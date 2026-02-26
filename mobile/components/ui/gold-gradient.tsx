@@ -1,6 +1,5 @@
 import { GOLD_GRADIENT } from '@/constants/theme';
 import { cn } from '@/lib/utils';
-import type { ClassValue } from 'clsx';
 import { LinearGradient } from 'expo-linear-gradient';
 import { cssInterop } from 'nativewind';
 import type React from 'react';
@@ -8,7 +7,7 @@ import { useColorScheme } from 'react-native';
 
 interface GoldGradientProps {
   children: React.ReactNode;
-  className?: ClassValue;
+  className?: string;
   start?: { x: number; y: number };
   end?: { x: number; y: number };
 }

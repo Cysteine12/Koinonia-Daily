@@ -74,7 +74,7 @@ public class AuthService {
 
     UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
     if (!principal.isVerified()) {
-      throw new UnauthorizedException("USER_UNVERIFIED", "Email verification required");
+      throw new UnauthorizedException("USER_NOT_VERIFIED", "Email verification required");
     }
 
     TokenPair tokens = tokenService.generateAndSaveTokens(auth.getName());
@@ -155,7 +155,7 @@ public class AuthService {
 
     boolean isMatch = passwordEncoder.matches(request.getCurrentPassword(), user.getPassword());
     if (!isMatch) {
-      throw new UnauthorizedException("Incorrect password");
+      throw new UnauthorizedException("PASSWORD_INCORRECT", "Incorrect password");
     }
 
     String newPassword = passwordEncoder.encode(request.getNewPassword());

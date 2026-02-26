@@ -21,4 +21,9 @@ public class UnauthorizedException extends RuntimeException {
     super(message, cause);
     this.code = "UNAUTHORIZED";
   }
+
+  public UnauthorizedException(String code, String message, Throwable cause) {
+    super(message, cause);
+    this.code = code;
+  }
 }

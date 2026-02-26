@@ -39,11 +39,11 @@ const VerifyEmail = () => {
   useEffect(() => {
     if (isRequestingOtp || requestOtpCountdown <= 0) return;
 
-    const id = setInterval(() => {
+    const id = setTimeout(() => {
       setRequestOtpCountdown((prev) => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
 
-    return () => clearInterval(id);
+    return () => clearTimeout(id);
   }, [isRequestingOtp, requestOtpCountdown]);
 
   useEffect(() => {
@@ -83,6 +83,7 @@ const VerifyEmail = () => {
                       id="otp"
                       placeholder="Enter 6-digit code"
                       keyboardType="number-pad"
+                      editable={!isPending}
                       value={form.otp}
                       onChangeText={(text) => handleChange('otp', text)}
                       returnKeyType="done"

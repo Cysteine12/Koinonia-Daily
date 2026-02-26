@@ -40,12 +40,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(null);
     await deleteSecure(TokenType.ACCESS_TOKEN);
     await deleteSecure(TokenType.REFRESH_TOKEN);
+    router.replace('/login');
   };
 
   const refreshToken = async (): Promise<string> => {
     const refresh = await getSecure(TokenType.REFRESH_TOKEN);
     if (!refresh) {
-      router.replace('/login');
+      await logout();
       throw new Error('No refresh token available');
     }
 

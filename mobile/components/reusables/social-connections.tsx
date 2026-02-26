@@ -7,7 +7,7 @@ const SOCIAL_CONNECTION_STRATEGIES = [
   {
     type: 'oauth_google',
     label: 'Continue with Google',
-    source: { uri: 'https://img.clerk.com/static/google.png?width=160' },
+    source: require('@/assets/images/google.png'),
     useTint: false,
   },
 ];

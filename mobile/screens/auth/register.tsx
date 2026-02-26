@@ -10,13 +10,14 @@ import { useRegister } from '@/features/auth/hook';
 import { registerSchema, type RegisterSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   Pressable,
   ScrollView,
+  TextInput,
   useColorScheme,
   View,
 } from 'react-native';
@@ -38,6 +39,11 @@ const Register = () => {
       register(data);
     },
   });
+
+  const lastNameRef = useRef<TextInput>(null);
+  const emailRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInput>(null);
+  const confirmPasswordRef = useRef<TextInput>(null);
 
   function handleSocialSignIn(type: string) {
     // TODO
@@ -70,10 +76,11 @@ const Register = () => {
                     <Input
                       id="firstName"
                       autoComplete="given-name"
+                      editable={!isPending}
                       value={form.firstName}
                       onChangeText={(text) => handleChange('firstName', text)}
                       returnKeyType="next"
-                      submitBehavior="submit"
+                      onSubmitEditing={() => lastNameRef.current?.focus()}
                     />
                     {errors.firstName && <Text className="text-red-500 text-sm">{errors.firstName}</Text>}
                   </View>
@@ -82,10 +89,12 @@ const Register = () => {
                     <Input
                       id="lastName"
                       autoComplete="family-name"
+                      editable={!isPending}
                       value={form.lastName}
                       onChangeText={(text) => handleChange('lastName', text)}
                       returnKeyType="next"
-                      submitBehavior="submit"
+                      ref={lastNameRef}
+                      onSubmitEditing={() => emailRef.current?.focus()}
                     />
                     {errors.lastName && <Text className="text-red-500 text-sm">{errors.lastName}</Text>}
                   </View>
@@ -97,10 +106,12 @@ const Register = () => {
                       keyboardType="email-address"
                       autoComplete="email"
                       autoCapitalize="none"
+                      editable={!isPending}
                       value={form.email}
                       onChangeText={(text) => handleChange('email', text)}
                       returnKeyType="next"
-                      submitBehavior="submit"
+                      ref={emailRef}
+                      onSubmitEditing={() => passwordRef.current?.focus()}
                     />
                     {errors.email && <Text className="text-red-500 text-sm">{errors.email}</Text>}
                   </View>
@@ -112,8 +123,11 @@ const Register = () => {
                       id="password"
                       secureTextEntry
                       returnKeyType="send"
+                      editable={!isPending}
                       value={form.password}
                       onChangeText={(text) => handleChange('password', text)}
+                      ref={passwordRef}
+                      onSubmitEditing={() => confirmPasswordRef.current?.focus()}
                     />
                     {errors.password && <Text className="text-red-500 text-sm">{errors.password}</Text>}
                   </View>
@@ -125,10 +139,13 @@ const Register = () => {
                       id="confirmPassword"
                       secureTextEntry
                       returnKeyType="send"
+                      submitBehavior="submit"
+                      editable={!isPending}
                       value={confirmPassword}
                       onChangeText={(text) => setConfirmPassword(text)}
+                      ref={confirmPasswordRef}
                     />
-                    {confirmPassword.length >= 8 && form.password.length >= 8 && confirmPassword !== form.password && (
+                    {confirmPassword.length > 0 && form.password.length > 0 && confirmPassword !== form.password && (
                       <Text className="text-red-500 text-sm">Passwords do not match</Text>
                     )}
                   </View>
@@ -146,12 +163,12 @@ const Register = () => {
                     </Button>
                   </GoldGradient>
                 </View>
-                <Text className="text-center text-sm">
-                  Already have an account?{' '}
-                  <Pressable onPress={() => router.push('/login')}>
+                <View className="flex-row items-center justify-center gap-1">
+                  <Text className="text-sm">Already have an account? </Text>
+                  <Pressable onPress={() => router.push('/login')} accessibilityRole="link">
                     <Text className="text-sm text-gold-text leading-4">Sign in</Text>
                   </Pressable>
-                </Text>
+                </View>
                 <View className="flex-row items-center">
                   <Separator className="flex-1" />
                   <Text className="text-muted-foreground px-4 text-sm">or</Text>

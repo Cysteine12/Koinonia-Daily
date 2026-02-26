@@ -68,6 +68,7 @@ const Login = () => {
                       keyboardType="email-address"
                       autoComplete="email"
                       autoCapitalize="none"
+                      editable={!isPending}
                       value={form.email}
                       onChangeText={(text) => handleChange('email', text)}
                       returnKeyType="next"
@@ -93,6 +94,7 @@ const Login = () => {
                       id="password"
                       secureTextEntry
                       returnKeyType="send"
+                      editable={!isPending}
                       value={form.password}
                       onChangeText={(text) => handleChange('password', text)}
                     />

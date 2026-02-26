@@ -40,17 +40,18 @@ const useLogin = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['auth'] });
+
+      setCredentials(null);
       if (!data.data) {
         return Alert.alert('Server Error', 'No response data');
       }
 
-      setCredentials(null);
       authLogin(data.data.accessToken, data.data.refreshToken);
 
       router.replace('/home');
     },
     onError: (data: AxiosError<ErrorResponse>) => {
-      if (data.response?.data?.code === 'USER_UNVERIFIED') {
+      if (data.response?.data?.code === 'USER_NOT_VERIFIED') {
         router.push('/verify-email');
         return;
       }
@@ -105,7 +106,6 @@ const useRequestOtp = () => {
 
 const useLogout = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const { logout: authLogout } = useAuth();
 
   return useMutation({
@@ -114,13 +114,11 @@ const useLogout = () => {
       queryClient.clear();
 
       authLogout();
-      router.replace('/login');
     },
     onError: (data: AxiosError<ErrorResponse>) => {
       queryClient.clear();
       Alert.alert('Logout failed', data.response?.data?.message || data.message);
       authLogout();
-      router.replace('/login');
     },
   });
 };

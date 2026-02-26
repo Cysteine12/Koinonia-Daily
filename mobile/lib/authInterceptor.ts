@@ -40,7 +40,7 @@ export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHand
   const resInterceptor = client.interceptors.response.use(
     (response) => response,
     async (error: AxiosError<ErrorResponse>) => {
-      const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+      const originalRequest = error.config as (InternalAxiosRequestConfig & { _retry?: boolean }) | undefined;
 
       // Log only during development
       if (__DEV__) {
@@ -49,7 +49,8 @@ export const attachAuthInterceptors = (client: AxiosInstance, handlers: AuthHand
 
       if (
         error.response?.status === 401 &&
-        error.response?.data?.code === 'ExpiredJwtException' &&
+        error.response?.data?.code === 'TOKEN_EXPIRED' &&
+        originalRequest &&
         !originalRequest._retry
       ) {
         originalRequest._retry = true;
