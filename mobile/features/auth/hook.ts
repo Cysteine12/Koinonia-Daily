@@ -3,9 +3,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useRouter } from 'expo-router';
 import { Alert } from 'react-native';
-import { forgotPassword, login, logout, register, requestOtp, verifyEmail } from './api';
+import { forgotPassword, login, logout, register, requestOtp, resetPassword, verifyEmail } from './api';
 import { useAuth } from './auth-context';
-import type { ForgotPasswordSchema, LoginSchema, LogoutSchema, RegisterSchema, VerifyEmailSchema } from './schema';
+import type {
+  ForgotPasswordSchema,
+  LoginSchema,
+  LogoutSchema,
+  RegisterSchema,
+  ResetPasswordSchema,
+  VerifyEmailSchema,
+} from './schema';
 import { useAuthStore } from './store';
 
 const useRegister = () => {
@@ -62,19 +69,9 @@ const useLogin = () => {
 };
 
 const useVerifyEmail = () => {
-  const { mutate: login } = useLogin();
-  const { credentials } = useAuthStore();
-  const router = useRouter();
-
   return useMutation({
     mutationFn: (payload: VerifyEmailSchema) => verifyEmail(payload),
-    onSuccess: (data) => {
-      if (!credentials) {
-        router.push('/login');
-        return;
-      }
-      login({ email: credentials.email, password: credentials.password });
-    },
+    onSuccess: (data) => data,
     onError: (data: AxiosError<ErrorResponse>) => {
       Alert.alert('Verification failed', data.response?.data?.message || data.message);
     },
@@ -117,6 +114,16 @@ const useForgotPassword = () => {
   });
 };
 
+const useResetPassword = () => {
+  return useMutation({
+    mutationFn: (payload: ResetPasswordSchema) => resetPassword(payload),
+    onSuccess: (data) => data,
+    onError: (data: AxiosError<ErrorResponse>) => {
+      Alert.alert('Request failed', data.response?.data?.message || data.message);
+    },
+  });
+};
+
 const useLogout = () => {
   const queryClient = useQueryClient();
   const { logout: authLogout } = useAuth();
@@ -136,4 +143,5 @@ const useLogout = () => {
   });
 };
 
-export { useForgotPassword, useLogin, useLogout, useRegister, useRequestOtp, useVerifyEmail };
+export { useForgotPassword, useLogin, useLogout, useRegister, useRequestOtp, useResetPassword, useVerifyEmail };
+

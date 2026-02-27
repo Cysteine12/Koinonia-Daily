@@ -74,7 +74,7 @@ const ForgotPassword = () => {
                       {isPending ? (
                         <ActivityIndicator color={colorScheme === 'dark' ? '#000000' : '#ffffff'} />
                       ) : (
-                        <Text>Continue</Text>
+                        <Text>Request Code</Text>
                       )}
                     </Button>
                   </GoldGradient>

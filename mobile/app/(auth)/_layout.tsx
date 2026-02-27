@@ -21,6 +21,7 @@ const GuestLayout = () => {
       <Stack.Screen name="register" options={{ headerShown: false }} />
       <Stack.Screen name="verify-email" options={{ headerShown: false }} />
       <Stack.Screen name="forgot-password" options={{ headerTitle: '', headerShown: true }} />
+      <Stack.Screen name="reset-password" options={{ headerTitle: '', headerShown: true }} />
     </Stack>
   );
 };

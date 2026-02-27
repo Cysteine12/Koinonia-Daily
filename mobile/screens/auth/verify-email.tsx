@@ -2,19 +2,34 @@ import { Button } from '@/components/reusables/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/reusables/ui/card';
 import { Input } from '@/components/reusables/ui/input';
 import { Text } from '@/components/reusables/ui/text';
+import { ThemedText } from '@/components/themed-text';
+import BottomSheet from '@/components/ui/bottom-sheet';
 import GoldGradient from '@/components/ui/gold-gradient';
-import { useRequestOtp, useVerifyEmail } from '@/features/auth/hook';
+import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Colors } from '@/constants/theme';
+import { useLogin, useRequestOtp, useVerifyEmail } from '@/features/auth/hook';
 import { verifyEmailSchema, type VerifyEmailSchema } from '@/features/auth/schema';
 import { useAuthStore } from '@/features/auth/store';
 import useForm from '@/hooks/use-app-form';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  View,
+  useColorScheme,
+} from 'react-native';
 
 const VerifyEmail = () => {
+  const colorScheme = useColorScheme();
   const router = useRouter();
+  const { mutate: login } = useLogin();
+  const [isModalOpen, setModalOpen] = useState(false);
   const { credentials } = useAuthStore();
-  const { mutate: verifyEmail, isPending } = useVerifyEmail();
+  const { mutate: verifyEmail, isPending, data: verifyEmailData } = useVerifyEmail();
   const { mutate: requestOtp, isPending: isRequestingOtp, data } = useRequestOtp();
   const [requestOtpCountdown, setRequestOtpCountdown] = useState(60);
   const { form, errors, handleChange, handleSubmit } = useForm<VerifyEmailSchema>({
@@ -45,6 +60,25 @@ const VerifyEmail = () => {
 
     return () => clearTimeout(id);
   }, [isRequestingOtp, requestOtpCountdown]);
+
+  useEffect(() => {
+    if (verifyEmailData?.success) {
+      setModalOpen(true);
+    }
+  }, [verifyEmailData]);
+
+  const handleCompleteModal = () => {
+    if (!credentials?.email || !credentials?.password) {
+      router.replace('/login');
+      return;
+    }
+    login(
+      { email: credentials.email, password: credentials.password },
+      {
+        onError: () => router.replace('/login'),
+      }
+    );
+  };
 
   useEffect(() => {
     if (!credentials?.email) {
@@ -109,7 +143,7 @@ const VerifyEmail = () => {
                   </View>
                   <GoldGradient className="flex-1 self-center">
                     <Button
-                      className="bg-transparent max-w-32"
+                      className="bg-transparent max-w-32 font-semibold"
                       onPress={handleSubmit}
                       disabled={isPending || isRequestingOtp}
                     >
@@ -122,6 +156,24 @@ const VerifyEmail = () => {
           </View>
         </View>
       </ScrollView>
+
+      <BottomSheet isOpen={isModalOpen} onClose={handleCompleteModal}>
+        <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
+          <IconSymbol
+            name="checkmark.circle"
+            size={40}
+            color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
+          />
+        </GoldGradient>
+        <ThemedText className="text-center text-2xl">Email verified successfully!</ThemedText>
+        <Button
+          className="mt-8 self-center bg-transparent w-full border border-gold items-center"
+          onPress={handleCompleteModal}
+        >
+          <Text className="font-semibold text-gold-text">Continue</Text>
+          <IconSymbol name="arrow.forward" size={16} className="text-gold-text" color={Colors.goldIcon} />
+        </Button>
+      </BottomSheet>
     </KeyboardAvoidingView>
   );
 };

@@ -34,6 +34,7 @@ export const Colors = {
   lightPrimary: '#EDEAF5',
   secondary: '#E6E2F3',
   tertiary: '#E03971',
+  goldIcon: 'hsl(48 80% 50%)',
 };
 
 export const Fonts = Platform.select({

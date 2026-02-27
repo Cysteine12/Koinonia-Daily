@@ -10,6 +10,8 @@ import { useLogin } from '@/features/auth/hook';
 import { type LoginSchema, loginSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
 import { router } from 'expo-router';
+import { useRef } from 'react';
+import type { TextInput } from 'react-native';
 import {
   ActivityIndicator,
   Image,
@@ -32,6 +34,8 @@ const Login = () => {
     schema: loginSchema,
     onSubmit: (data) => login(data),
   });
+
+  const passwordRef = useRef<TextInput>(null);
 
   const handleSocialSignIn = (type: string) => {
     // TODO
@@ -68,11 +72,12 @@ const Login = () => {
                       keyboardType="email-address"
                       autoComplete="email"
                       autoCapitalize="none"
+                      returnKeyType="next"
+                      submitBehavior="submit"
                       editable={!isPending}
                       value={form.email}
                       onChangeText={(text) => handleChange('email', text)}
-                      returnKeyType="next"
-                      submitBehavior="submit"
+                      onSubmitEditing={() => passwordRef.current?.focus()}
                     />
                     {errors?.email && <Text className="text-sm text-destructive">{errors?.email}</Text>}
                   </View>
@@ -80,9 +85,9 @@ const Login = () => {
                     <View className="flex-row items-center">
                       <Label htmlFor="password">Password</Label>
                       <Button
-                        variant="link"
+                        variant="ghost"
                         size="sm"
-                        className="ml-auto h-4 px-1 py-0 sm:h-4"
+                        className="ml-auto h-4 px-1 py-0 sm:h-4 no-underline"
                         onPress={() => router.push({ pathname: '/forgot-password', params: { email: form.email } })}
                       >
                         <Text className="text-gold-text font-normal leading-4">Forgot your password?</Text>
@@ -95,11 +100,13 @@ const Login = () => {
                       editable={!isPending}
                       value={form.password}
                       onChangeText={(text) => handleChange('password', text)}
+                      ref={passwordRef}
+                      onSubmitEditing={handleSubmit}
                     />
                     {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
                   </View>
                   <GoldGradient>
-                    <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
+                    <Button className="bg-transparent w-full font-semibold" onPress={handleSubmit} disabled={isPending}>
                       {isPending ? (
                         <ActivityIndicator color={colorScheme === 'dark' ? '#000000' : '#ffffff'} />
                       ) : (
