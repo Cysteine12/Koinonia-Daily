@@ -85,9 +85,9 @@ const Login = () => {
                     <View className="flex-row items-center">
                       <Label htmlFor="password">Password</Label>
                       <Button
-                        variant="link"
+                        variant="ghost"
                         size="sm"
-                        className="ml-auto h-4 px-1 py-0 sm:h-4"
+                        className="ml-auto h-4 px-1 py-0 sm:h-4 no-underline"
                         onPress={() => router.push({ pathname: '/forgot-password', params: { email: form.email } })}
                       >
                         <Text className="text-gold-text font-normal leading-4">Forgot your password?</Text>
@@ -101,6 +101,7 @@ const Login = () => {
                       value={form.password}
                       onChangeText={(text) => handleChange('password', text)}
                       ref={passwordRef}
+                      onSubmitEditing={handleSubmit}
                     />
                     {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
                   </View>

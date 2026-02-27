@@ -2,6 +2,7 @@ import { Button } from '@/components/reusables/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/reusables/ui/card';
 import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
+import { Text } from '@/components/reusables/ui/text';
 import { ThemedText } from '@/components/themed-text';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import GoldGradient from '@/components/ui/gold-gradient';
@@ -13,15 +14,7 @@ import useForm from '@/hooks/use-app-form';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, useColorScheme, View } from 'react-native';
 
 const ResetPassword = () => {
   const { mutate: login } = useLogin();
@@ -142,7 +135,7 @@ const ResetPassword = () => {
           onPress={handleCompleteModal}
         >
           <Text className="font-semibold text-gold-text">Continue</Text>
-          <IconSymbol name="arrow.forward" size={16} className="text-gold-text" color={Colors.icon} />
+          <IconSymbol name="arrow.forward" size={16} className="text-gold-text" color={Colors.goldIcon} />
         </Button>
       </BottomSheet>
     </KeyboardAvoidingView>

@@ -37,6 +37,7 @@ const BottomSheet = ({ children, isOpen, onClose, title }: BottomSheetProps) => 
           {/* Handle */}
           <View
             style={{
+              backgroundColor: Colors[colorScheme ?? 'light'].text,
               width: 40,
               height: 4,
               borderRadius: 2,
