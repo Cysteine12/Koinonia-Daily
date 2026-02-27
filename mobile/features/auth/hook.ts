@@ -69,19 +69,9 @@ const useLogin = () => {
 };
 
 const useVerifyEmail = () => {
-  const { mutate: login } = useLogin();
-  const { credentials } = useAuthStore();
-  const router = useRouter();
-
   return useMutation({
     mutationFn: (payload: VerifyEmailSchema) => verifyEmail(payload),
-    onSuccess: (data) => {
-      if (!credentials) {
-        router.push('/login');
-        return;
-      }
-      login({ email: credentials.email, password: credentials.password });
-    },
+    onSuccess: (data) => data,
     onError: (data: AxiosError<ErrorResponse>) => {
       Alert.alert('Verification failed', data.response?.data?.message || data.message);
     },

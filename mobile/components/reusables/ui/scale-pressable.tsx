@@ -2,9 +2,8 @@ import React, { useRef, type ReactNode } from 'react';
 import { Animated, Pressable } from 'react-native';
 
 const ScalePressable = ({
-  onPressIn: _,
-  onPressOut: __,
-  style,
+  onPressIn,
+  onPressOut,
   children,
   ...props
 }: React.ComponentProps<typeof Pressable> & React.RefAttributes<typeof Pressable>) => {
@@ -28,8 +27,18 @@ const ScalePressable = ({
     }).start();
   };
 
+  const handlePressIn: React.ComponentProps<typeof Pressable>['onPressIn'] = (event) => {
+    animateIn();
+    onPressIn?.(event);
+  };
+
+  const handlePressOut: React.ComponentProps<typeof Pressable>['onPressOut'] = (event) => {
+    animateOut();
+    onPressOut?.(event);
+  };
+
   return (
-    <Pressable onPressIn={animateIn} onPressOut={animateOut} style={style} {...props}>
+    <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut} {...props}>
       <Animated.View style={{ transform: [{ scale }] }}>{children as ReactNode}</Animated.View>
     </Pressable>
   );

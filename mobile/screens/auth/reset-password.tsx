@@ -45,7 +45,12 @@ const ResetPassword = () => {
       router.replace('/login');
       return;
     }
-    login({ email: form.email, password: form.password });
+    login(
+      { email: form.email, password: form.password },
+      {
+        onError: () => router.replace('/login'),
+      }
+    );
   };
 
   useEffect(() => {
@@ -113,7 +118,9 @@ const ResetPassword = () => {
                   <GoldGradient>
                     <Button className="bg-transparent w-full font-semibold" onPress={handleSubmit} disabled={isPending}>
                       {isPending ? (
-                        <ActivityIndicator color={colorScheme === 'dark' ? '#000000' : '#ffffff'} />
+                        <ActivityIndicator
+                          color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
+                        />
                       ) : (
                         <Text>Reset Password</Text>
                       )}
@@ -125,9 +132,14 @@ const ResetPassword = () => {
           </View>
         </View>
       </ScrollView>
+
       <BottomSheet isOpen={isModalOpen} onClose={handleCompleteModal}>
         <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
-          <IconSymbol name="checkmark.circle" size={40} color={colorScheme === 'dark' ? '#000000' : '#ffffff'} />
+          <IconSymbol
+            name="checkmark.circle"
+            size={40}
+            color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
+          />
         </GoldGradient>
         <ThemedText className="text-center text-2xl">Password reset successfully!</ThemedText>
         <Button
