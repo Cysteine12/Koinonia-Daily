@@ -2,9 +2,11 @@ import { Button } from '@/components/reusables/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/reusables/ui/card';
 import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
+import { ThemedText } from '@/components/themed-text';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import GoldGradient from '@/components/ui/gold-gradient';
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Colors } from '@/constants/theme';
 import { useLogin, useResetPassword } from '@/features/auth/hook';
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
@@ -12,13 +14,13 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 import {
-    ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    Text,
-    useColorScheme,
-    View,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  useColorScheme,
+  View,
 } from 'react-native';
 
 const ResetPassword = () => {
@@ -53,9 +55,14 @@ const ResetPassword = () => {
     login({ email: form.email, password: form.password });
   };
 
+  useEffect(() => {
+    if (!email) {
+      router.replace('/forgot-password');
+    }
+  }, [email]);
+
   if (!email) {
-    router.replace('/forgot-password');
-    return;
+    return null;
   }
 
   return (
@@ -81,11 +88,11 @@ const ResetPassword = () => {
               <CardContent className="gap-6">
                 <View className="gap-6">
                   <View className="gap-1.5">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">New Password</Label>
                     <Input
                       id="password"
                       secureTextEntry
-                      returnKeyType="send"
+                      returnKeyType="next"
                       editable={!isPending}
                       value={form.password}
                       onChangeText={(text) => handleChange('password', text)}
@@ -111,7 +118,7 @@ const ResetPassword = () => {
                     {errors?.otp && <Text className="text-sm text-destructive">{errors?.otp}</Text>}
                   </View>
                   <GoldGradient>
-                    <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
+                    <Button className="bg-transparent w-full font-semibold" onPress={handleSubmit} disabled={isPending}>
                       {isPending ? (
                         <ActivityIndicator color={colorScheme === 'dark' ? '#000000' : '#ffffff'} />
                       ) : (
@@ -125,19 +132,17 @@ const ResetPassword = () => {
           </View>
         </View>
       </ScrollView>
-      <BottomSheet isOpen={isModalOpen}>
-        <View className="bg-green-100 w-16 h-16 rounded-full items-center justify-center self-center mb-4">
-          <IconSymbol name="checkmark.circle" size={24} color="#047857" />
-        </View>
-        <Text className="text-center">Password reset successfully!</Text>
-        <Button className="bg-transparent w-full" onPress={handleCompleteModal}>
-          <Text>Continue</Text>
-          <IconSymbol
-            name="arrow.forward"
-            size={16}
-            className="ml-2"
-            color={colorScheme === 'dark' ? '#000000' : '#ffffff'}
-          />
+      <BottomSheet isOpen={isModalOpen} onClose={handleCompleteModal}>
+        <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
+          <IconSymbol name="checkmark.circle" size={40} color={colorScheme === 'dark' ? '#000000' : '#ffffff'} />
+        </GoldGradient>
+        <ThemedText className="text-center text-2xl">Password reset successfully!</ThemedText>
+        <Button
+          className="mt-8 self-center bg-transparent w-full border border-gold items-center"
+          onPress={handleCompleteModal}
+        >
+          <Text className="font-semibold text-gold-text">Continue</Text>
+          <IconSymbol name="arrow.forward" size={16} className="text-gold-text" color={Colors.icon} />
         </Button>
       </BottomSheet>
     </KeyboardAvoidingView>

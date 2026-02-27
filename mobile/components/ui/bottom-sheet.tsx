@@ -1,5 +1,6 @@
+import { Colors } from '@/constants/theme';
 import type { ReactNode } from 'react';
-import { Modal, Pressable, ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { Modal, Pressable, ScrollView, Text, useColorScheme, useWindowDimensions, View } from 'react-native';
 
 interface BottomSheetProps {
   children: ReactNode;
@@ -9,6 +10,7 @@ interface BottomSheetProps {
 }
 
 const BottomSheet = ({ children, isOpen, onClose, title }: BottomSheetProps) => {
+  const colorScheme = useColorScheme();
   const { height: SCREEN_HEIGHT } = useWindowDimensions();
 
   return (
@@ -23,7 +25,7 @@ const BottomSheet = ({ children, isOpen, onClose, title }: BottomSheetProps) => 
         {/* Sheet Content */}
         <View
           style={{
-            // backgroundColor: colors.containerBackground,
+            backgroundColor: Colors[colorScheme ?? 'light'].background,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
             paddingTop: 12,

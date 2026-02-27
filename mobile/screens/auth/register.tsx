@@ -151,7 +151,7 @@ const Register = () => {
                   </View>
                   <GoldGradient>
                     <Button
-                      className="bg-transparent w-full"
+                      className="bg-transparent w-full font-semibold"
                       onPress={handleSubmit}
                       disabled={isPending || confirmPassword !== form.password}
                     >

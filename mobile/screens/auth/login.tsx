@@ -105,7 +105,7 @@ const Login = () => {
                     {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
                   </View>
                   <GoldGradient>
-                    <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
+                    <Button className="bg-transparent w-full font-semibold" onPress={handleSubmit} disabled={isPending}>
                       {isPending ? (
                         <ActivityIndicator color={colorScheme === 'dark' ? '#000000' : '#ffffff'} />
                       ) : (

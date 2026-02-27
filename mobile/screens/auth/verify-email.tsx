@@ -109,7 +109,7 @@ const VerifyEmail = () => {
                   </View>
                   <GoldGradient className="flex-1 self-center">
                     <Button
-                      className="bg-transparent max-w-32"
+                      className="bg-transparent max-w-32 font-semibold"
                       onPress={handleSubmit}
                       disabled={isPending || isRequestingOtp}
                     >
