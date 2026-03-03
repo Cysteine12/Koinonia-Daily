@@ -26,7 +26,7 @@ import {
 const VerifyEmail = () => {
   const colorScheme = useColorScheme();
   const router = useRouter();
-  const { mutate: login } = useLogin();
+  const { mutate: login, isPending: isLoginPending } = useLogin();
   const [isModalOpen, setModalOpen] = useState(false);
   const { credentials } = useAuthStore();
   const { mutate: verifyEmail, isPending, data: verifyEmailData } = useVerifyEmail();
@@ -147,7 +147,7 @@ const VerifyEmail = () => {
                       onPress={handleSubmit}
                       disabled={isPending || isRequestingOtp}
                     >
-                      {isPending ? <ActivityIndicator color={'#ffffff'} /> : <Text>Verify Email</Text>}
+                      {isPending ? <ActivityIndicator /> : <Text className="text-black">Verify Email</Text>}
                     </Button>
                   </GoldGradient>
                 </View>
@@ -165,13 +165,22 @@ const VerifyEmail = () => {
             color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
           />
         </GoldGradient>
+
         <ThemedText className="text-center text-2xl">Email verified successfully!</ThemedText>
+
         <Button
-          className="mt-8 self-center bg-transparent w-full border border-gold items-center"
+          className="mt-8 self-center bg-transparent w-full border border-gold"
           onPress={handleCompleteModal}
+          disabled={isLoginPending}
         >
-          <Text className="font-semibold text-gold-text">Continue</Text>
-          <IconSymbol name="arrow.forward" size={16} className="text-gold-text" color={Colors.goldIcon} />
+          {isLoginPending ? (
+            <ActivityIndicator className="text-gold-text font-semibold" />
+          ) : (
+            <Text className="flex-row items-center gap-2 text-gold-text font-semibold">
+              <Text>Continue</Text>
+              <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
+            </Text>
+          )}
         </Button>
       </BottomSheet>
     </KeyboardAvoidingView>

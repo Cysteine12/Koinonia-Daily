@@ -17,7 +17,7 @@ import type { TextInput } from 'react-native';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, useColorScheme, View } from 'react-native';
 
 const ResetPassword = () => {
-  const { mutate: login } = useLogin();
+  const { mutate: login, isPending: isLoginPending } = useLogin();
   const colorScheme = useColorScheme();
   const [isModalOpen, setModalOpen] = useState(false);
   const { email } = useLocalSearchParams<{ email?: string }>();
@@ -84,8 +84,8 @@ const ResetPassword = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="gap-6">
-                <View className="gap-6">
-                  <View className="gap-1.5">
+                <View className="gap-1.5">
+                  <View className="gap-1.0">
                     <Label htmlFor="password">New Password</Label>
                     <Input
                       id="password"
@@ -96,7 +96,7 @@ const ResetPassword = () => {
                       onChangeText={(text) => handleChange('password', text)}
                       onSubmitEditing={() => otpRef.current?.focus()}
                     />
-                    {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
+                    <Text className="text-sm text-destructive">{errors.password}</Text>
                   </View>
 
                   <View className="gap-1.5">
@@ -113,17 +113,11 @@ const ResetPassword = () => {
                       maxLength={6}
                       ref={otpRef}
                     />
-                    {errors?.otp && <Text className="text-sm text-destructive">{errors?.otp}</Text>}
+                    <Text className="text-sm text-destructive">{errors.otp}</Text>
                   </View>
                   <GoldGradient>
                     <Button className="bg-transparent w-full font-semibold" onPress={handleSubmit} disabled={isPending}>
-                      {isPending ? (
-                        <ActivityIndicator
-                          color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
-                        />
-                      ) : (
-                        <Text>Reset Password</Text>
-                      )}
+                      {isPending ? <ActivityIndicator /> : <Text className="text-black">Reset Password</Text>}
                     </Button>
                   </GoldGradient>
                 </View>
@@ -141,13 +135,22 @@ const ResetPassword = () => {
             color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
           />
         </GoldGradient>
+
         <ThemedText className="text-center text-2xl">Password reset successfully!</ThemedText>
+
         <Button
-          className="mt-8 self-center bg-transparent w-full border border-gold items-center"
+          className="mt-8 self-center bg-transparent w-full border border-gold"
           onPress={handleCompleteModal}
+          disabled={isLoginPending}
         >
-          <Text className="font-semibold text-gold-text">Continue</Text>
-          <IconSymbol name="arrow.forward" size={16} className="text-gold-text" color={Colors.goldIcon} />
+          {isLoginPending ? (
+            <ActivityIndicator className="text-gold-text font-semibold" />
+          ) : (
+            <Text className="flex-row items-center gap-2 text-gold-text font-semibold">
+              <Text>Continue</Text>
+              <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
+            </Text>
+          )}
         </Button>
       </BottomSheet>
     </KeyboardAvoidingView>

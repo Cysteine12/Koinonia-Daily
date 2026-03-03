@@ -11,19 +11,9 @@ import { registerSchema, type RegisterSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
 import { router } from 'expo-router';
 import React, { useRef } from 'react';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  TextInput,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, TextInput, View } from 'react-native';
 
 const Register = () => {
-  const colorScheme = useColorScheme();
   const { mutate: register, isPending } = useRegister();
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const { form, errors, handleChange, handleSubmit } = useForm<RegisterSchema>({
@@ -70,8 +60,8 @@ const Register = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="gap-6">
-                <View className="gap-6">
-                  <View className="gap-1.5">
+                <View className="gap-1.5">
+                  <View className="gap-1.0">
                     <Label htmlFor="firstName">First name</Label>
                     <Input
                       id="firstName"
@@ -82,9 +72,9 @@ const Register = () => {
                       returnKeyType="next"
                       onSubmitEditing={() => lastNameRef.current?.focus()}
                     />
-                    {errors.firstName && <Text className="text-red-500 text-sm">{errors.firstName}</Text>}
+                    <Text className="text-red-500 text-sm">{errors.firstName}</Text>
                   </View>
-                  <View className="gap-1.5">
+                  <View className="gap-1.0">
                     <Label htmlFor="lastName">Last name</Label>
                     <Input
                       id="lastName"
@@ -96,9 +86,9 @@ const Register = () => {
                       ref={lastNameRef}
                       onSubmitEditing={() => emailRef.current?.focus()}
                     />
-                    {errors.lastName && <Text className="text-red-500 text-sm">{errors.lastName}</Text>}
+                    <Text className="text-red-500 text-sm">{errors.lastName}</Text>
                   </View>
-                  <View className="gap-1.5">
+                  <View className="gap-1.0">
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
@@ -113,9 +103,9 @@ const Register = () => {
                       ref={emailRef}
                       onSubmitEditing={() => passwordRef.current?.focus()}
                     />
-                    {errors.email && <Text className="text-red-500 text-sm">{errors.email}</Text>}
+                    <Text className="text-red-500 text-sm">{errors.email}</Text>
                   </View>
-                  <View className="gap-1.5">
+                  <View className="gap-1.0">
                     <View className="flex-row items-center">
                       <Label htmlFor="password">Password</Label>
                     </View>
@@ -129,9 +119,9 @@ const Register = () => {
                       ref={passwordRef}
                       onSubmitEditing={() => confirmPasswordRef.current?.focus()}
                     />
-                    {errors.password && <Text className="text-red-500 text-sm">{errors.password}</Text>}
+                    <Text className="text-red-500 text-sm">{errors.password}</Text>
                   </View>
-                  <View className="gap-1.5">
+                  <View className="gap-1.0">
                     <View className="flex-row items-center">
                       <Label htmlFor="confirmPassword">Confirm Password</Label>
                     </View>
@@ -145,9 +135,13 @@ const Register = () => {
                       onChangeText={(text) => setConfirmPassword(text)}
                       ref={confirmPasswordRef}
                     />
-                    {confirmPassword.length > 0 && form.password.length > 0 && confirmPassword !== form.password && (
-                      <Text className="text-red-500 text-sm">Passwords do not match</Text>
-                    )}
+                    <Text className="text-red-500 text-sm">
+                      {(confirmPassword.length > 0 &&
+                        form.password.length > 0 &&
+                        confirmPassword !== form.password &&
+                        'Passwords do not match') ||
+                        ''}
+                    </Text>
                   </View>
                   <GoldGradient>
                     <Button
@@ -155,20 +149,20 @@ const Register = () => {
                       onPress={handleSubmit}
                       disabled={isPending || confirmPassword !== form.password}
                     >
-                      {isPending ? (
-                        <ActivityIndicator color={colorScheme === 'light' ? '#ffffff' : '#000000'} />
-                      ) : (
-                        <Text>Continue</Text>
-                      )}
+                      {isPending ? <ActivityIndicator /> : <Text className="text-black">Continue</Text>}
                     </Button>
                   </GoldGradient>
                 </View>
-                <View className="flex-row items-center justify-center gap-1">
-                  <Text className="text-sm">Already have an account? </Text>
-                  <Pressable onPress={() => router.push('/login')} accessibilityRole="link">
-                    <Text className="text-sm text-gold-text leading-4">Sign in</Text>
-                  </Pressable>
-                </View>
+                <Button
+                  variant="outline"
+                  onPress={() => router.push('/login')}
+                  className="border-gold bg-transparent w-full font-semibold flex-row items-center justify-center gap-1"
+                >
+                  <Text className="text-sm leading-4">
+                    <Text>Already have an account? </Text>
+                    <Text className="text-gold-text">Sign in</Text>
+                  </Text>
+                </Button>
                 <View className="flex-row items-center">
                   <Separator className="flex-1" />
                   <Text className="text-muted-foreground px-4 text-sm">or</Text>

@@ -8,18 +8,9 @@ import { forgotPasswordSchema, type ForgotPasswordSchema } from '@/features/auth
 import useForm from '@/hooks/use-app-form';
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 
 const ForgotPassword = () => {
-  const colorScheme = useColorScheme();
   const { email } = useLocalSearchParams<{ email?: string }>();
   const { mutate: forgotPassword, isPending } = useForgotPassword();
   const { form, errors, handleChange, handleSubmit } = useForm<ForgotPasswordSchema>({
@@ -67,15 +58,11 @@ const ForgotPassword = () => {
                       returnKeyType="next"
                       submitBehavior="submit"
                     />
-                    {errors?.email && <Text className="text-sm text-destructive">{errors?.email}</Text>}
+                    <Text className="text-sm text-destructive">{errors.email}</Text>
                   </View>
                   <GoldGradient>
                     <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
-                      {isPending ? (
-                        <ActivityIndicator color={colorScheme === 'dark' ? '#000000' : '#ffffff'} />
-                      ) : (
-                        <Text>Request Code</Text>
-                      )}
+                      {isPending ? <ActivityIndicator /> : <Text className="text-black">Request Code</Text>}
                     </Button>
                   </GoldGradient>
                 </View>
