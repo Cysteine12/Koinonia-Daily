@@ -61,7 +61,7 @@ const Register = () => {
               </CardHeader>
               <CardContent className="gap-6">
                 <View className="gap-1.5">
-                  <View className="gap-1.0">
+                  <View className="gap-1">
                     <Label htmlFor="firstName">First name</Label>
                     <Input
                       id="firstName"
@@ -74,7 +74,7 @@ const Register = () => {
                     />
                     <Text className="text-red-500 text-sm">{errors.firstName}</Text>
                   </View>
-                  <View className="gap-1.0">
+                  <View className="gap-1">
                     <Label htmlFor="lastName">Last name</Label>
                     <Input
                       id="lastName"
@@ -88,7 +88,7 @@ const Register = () => {
                     />
                     <Text className="text-red-500 text-sm">{errors.lastName}</Text>
                   </View>
-                  <View className="gap-1.0">
+                  <View className="gap-1">
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
@@ -105,7 +105,7 @@ const Register = () => {
                     />
                     <Text className="text-red-500 text-sm">{errors.email}</Text>
                   </View>
-                  <View className="gap-1.0">
+                  <View className="gap-1">
                     <View className="flex-row items-center">
                       <Label htmlFor="password">Password</Label>
                     </View>
@@ -121,7 +121,7 @@ const Register = () => {
                     />
                     <Text className="text-red-500 text-sm">{errors.password}</Text>
                   </View>
-                  <View className="gap-1.0">
+                  <View className="gap-1">
                     <View className="flex-row items-center">
                       <Label htmlFor="confirmPassword">Confirm Password</Label>
                     </View>

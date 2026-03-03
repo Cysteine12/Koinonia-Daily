@@ -13,7 +13,7 @@ import { useAppTheme } from '@/hooks/use-app-theme';
 import * as Sentry from '@sentry/react-native';
 import { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { useFonts } from 'expo-fonts';
+import { useFonts } from 'expo-font';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,7 +21,7 @@ const queryClient = new QueryClient();
 
 function AppLayout() {
   const [fontsLoaded] = useFonts({
-    'Inter-Regular': require('../assets/fonts/Inter-Regular.ttf'),
+    'Inter-Regular': require('@/assets/fonts/SpaceMono-Regular.ttf'),
 
   })
   const [isLayoutReady, setLayoutReady] = useState(false);
@@ -54,10 +54,7 @@ function AppLayout() {
 
   return (
     <View
-      // style={{
-      //   flex: 1,
-      //   backgroundColor,
-      // }}
+      className="flex-1"
       onLayout={() => setLayoutReady(true)}
       accessibilityLabel="app-root-view"
     >

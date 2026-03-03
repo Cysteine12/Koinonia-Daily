@@ -85,7 +85,7 @@ const ResetPassword = () => {
               </CardHeader>
               <CardContent className="gap-6">
                 <View className="gap-1.5">
-                  <View className="gap-1.0">
+                  <View className="gap-1">
                     <Label htmlFor="password">New Password</Label>
                     <Input
                       id="password"
