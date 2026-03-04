@@ -11,20 +11,13 @@ import { useLogin, useRequestOtp, useVerifyEmail } from '@/features/auth/hook';
 import { verifyEmailSchema, type VerifyEmailSchema } from '@/features/auth/schema';
 import { useAuthStore } from '@/features/auth/store';
 import useForm from '@/hooks/use-app-form';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
 
 const VerifyEmail = () => {
-  const colorScheme = useColorScheme();
+  const { color } = useAppTheme();
   const router = useRouter();
   const { mutate: login, isPending: isLoginPending } = useLogin();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -159,11 +152,7 @@ const VerifyEmail = () => {
 
       <BottomSheet isOpen={isModalOpen} onClose={handleCompleteModal}>
         <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
-          <IconSymbol
-            name="checkmark.circle"
-            size={40}
-            color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
-          />
+          <IconSymbol name="checkmark.circle" size={40} color={color.background} />
         </GoldGradient>
 
         <ThemedText className="text-center text-2xl">Email verified successfully!</ThemedText>
@@ -174,10 +163,10 @@ const VerifyEmail = () => {
           disabled={isLoginPending}
         >
           {isLoginPending ? (
-            <ActivityIndicator className="text-gold-text font-semibold" />
+            <ActivityIndicator color={Colors.goldIcon} />
           ) : (
-            <Text className="flex-row items-center gap-2 text-gold-text font-semibold">
-              <Text>Continue</Text>
+            <Text>
+              <Text className="text-gold-text font-semibold">Continue</Text>
               <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
             </Text>
           )}

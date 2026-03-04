@@ -58,7 +58,7 @@ const ForgotPassword = () => {
                       returnKeyType="next"
                       submitBehavior="submit"
                     />
-                    <Text className="text-sm text-destructive">{errors.email}</Text>
+                    <Text className="text-sm text-destructive">{errors.email ?? ' '}</Text>
                   </View>
                   <GoldGradient>
                     <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>

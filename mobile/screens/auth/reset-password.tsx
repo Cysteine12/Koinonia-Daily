@@ -11,14 +11,15 @@ import { Colors } from '@/constants/theme';
 import { useLogin, useResetPassword } from '@/features/auth/hook';
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, useColorScheme, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 
 const ResetPassword = () => {
   const { mutate: login, isPending: isLoginPending } = useLogin();
-  const colorScheme = useColorScheme();
+  const { color } = useAppTheme();
   const [isModalOpen, setModalOpen] = useState(false);
   const { email } = useLocalSearchParams<{ email?: string }>();
   const { mutate: resetPassword, isPending, data } = useResetPassword();
@@ -129,11 +130,7 @@ const ResetPassword = () => {
 
       <BottomSheet isOpen={isModalOpen} onClose={handleCompleteModal}>
         <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
-          <IconSymbol
-            name="checkmark.circle"
-            size={40}
-            color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
-          />
+          <IconSymbol name="checkmark.circle" size={40} color={color.background} />
         </GoldGradient>
 
         <ThemedText className="text-center text-2xl">Password reset successfully!</ThemedText>
@@ -144,10 +141,10 @@ const ResetPassword = () => {
           disabled={isLoginPending}
         >
           {isLoginPending ? (
-            <ActivityIndicator className="text-gold-text font-semibold" />
+            <ActivityIndicator color={Colors.goldIcon} />
           ) : (
-            <Text className="flex-row items-center gap-2 text-gold-text font-semibold">
-              <Text>Continue</Text>
+            <Text>
+              <Text className="text-gold-text font-semibold">Continue</Text>
               <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
             </Text>
           )}
