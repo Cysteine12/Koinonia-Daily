@@ -11,14 +11,15 @@ import { Colors } from '@/constants/theme';
 import { useLogin, useResetPassword } from '@/features/auth/hook';
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, useColorScheme, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 
 const ResetPassword = () => {
-  const { mutate: login } = useLogin();
-  const colorScheme = useColorScheme();
+  const { mutate: login, isPending: isLoginPending } = useLogin();
+  const { color } = useAppTheme();
   const [isModalOpen, setModalOpen] = useState(false);
   const { email } = useLocalSearchParams<{ email?: string }>();
   const { mutate: resetPassword, isPending, data } = useResetPassword();
@@ -41,6 +42,7 @@ const ResetPassword = () => {
   }, [data]);
 
   const handleCompleteModal = () => {
+    if (isLoginPending) return;
     if (!form.email || !form.password) {
       router.replace('/login');
       return;
@@ -84,8 +86,8 @@ const ResetPassword = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="gap-6">
-                <View className="gap-6">
-                  <View className="gap-1.5">
+                <View className="gap-1.5">
+                  <View className="gap-1">
                     <Label htmlFor="password">New Password</Label>
                     <Input
                       id="password"
@@ -96,7 +98,7 @@ const ResetPassword = () => {
                       onChangeText={(text) => handleChange('password', text)}
                       onSubmitEditing={() => otpRef.current?.focus()}
                     />
-                    {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
+                    <Text className="text-sm text-destructive">{errors.password ?? ' '}</Text>
                   </View>
 
                   <View className="gap-1.5">
@@ -113,17 +115,11 @@ const ResetPassword = () => {
                       maxLength={6}
                       ref={otpRef}
                     />
-                    {errors?.otp && <Text className="text-sm text-destructive">{errors?.otp}</Text>}
+                    <Text className="text-sm text-destructive">{errors.otp ?? ' '}</Text>
                   </View>
                   <GoldGradient>
                     <Button className="bg-transparent w-full font-semibold" onPress={handleSubmit} disabled={isPending}>
-                      {isPending ? (
-                        <ActivityIndicator
-                          color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
-                        />
-                      ) : (
-                        <Text>Reset Password</Text>
-                      )}
+                      {isPending ? <ActivityIndicator /> : <Text className="text-black">Reset Password</Text>}
                     </Button>
                   </GoldGradient>
                 </View>
@@ -133,21 +129,26 @@ const ResetPassword = () => {
         </View>
       </ScrollView>
 
-      <BottomSheet isOpen={isModalOpen} onClose={handleCompleteModal}>
+      <BottomSheet isOpen={isModalOpen} onClose={() => !isLoginPending && handleCompleteModal()}>
         <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
-          <IconSymbol
-            name="checkmark.circle"
-            size={40}
-            color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
-          />
+          <IconSymbol name="checkmark.circle" size={40} color={color.background} />
         </GoldGradient>
+
         <ThemedText className="text-center text-2xl">Password reset successfully!</ThemedText>
+
         <Button
-          className="mt-8 self-center bg-transparent w-full border border-gold items-center"
+          className="mt-8 self-center bg-transparent w-full border border-gold"
           onPress={handleCompleteModal}
+          disabled={isLoginPending}
         >
-          <Text className="font-semibold text-gold-text">Continue</Text>
-          <IconSymbol name="arrow.forward" size={16} className="text-gold-text" color={Colors.goldIcon} />
+          {isLoginPending ? (
+            <ActivityIndicator color={Colors.goldIcon} />
+          ) : (
+            <View className="flex-row items-center justify-center gap-1">
+              <Text className="text-gold-text font-semibold">Continue</Text>
+              <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
+            </View>
+          )}
         </Button>
       </BottomSheet>
     </KeyboardAvoidingView>

@@ -12,19 +12,9 @@ import useForm from '@/hooks/use-app-form';
 import { router } from 'expo-router';
 import { useRef } from 'react';
 import type { TextInput } from 'react-native';
-import {
-  ActivityIndicator,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { ActivityIndicator, Image, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 
 const Login = () => {
-  const colorScheme = useColorScheme();
   const { mutate: login, isPending } = useLogin();
   const { form, errors, handleChange, handleSubmit } = useForm<LoginSchema>({
     data: {
@@ -63,8 +53,8 @@ const Login = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="gap-6">
-                <View className="gap-6">
-                  <View className="gap-1.5">
+                <View className="gap-1.5">
+                  <View className="gap-1">
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
@@ -79,9 +69,9 @@ const Login = () => {
                       onChangeText={(text) => handleChange('email', text)}
                       onSubmitEditing={() => passwordRef.current?.focus()}
                     />
-                    {errors?.email && <Text className="text-sm text-destructive">{errors?.email}</Text>}
+                    <Text className="text-sm text-destructive">{errors?.email}</Text>
                   </View>
-                  <View className="gap-1.5">
+                  <View className="gap-1">
                     <View className="flex-row items-center">
                       <Label htmlFor="password">Password</Label>
                       <Button
@@ -103,24 +93,24 @@ const Login = () => {
                       ref={passwordRef}
                       onSubmitEditing={handleSubmit}
                     />
-                    {errors?.password && <Text className="text-sm text-destructive">{errors?.password}</Text>}
+                    <Text className="text-sm text-destructive">{errors?.password}</Text>
                   </View>
                   <GoldGradient>
                     <Button className="bg-transparent w-full font-semibold" onPress={handleSubmit} disabled={isPending}>
-                      {isPending ? (
-                        <ActivityIndicator color={colorScheme === 'dark' ? '#000000' : '#ffffff'} />
-                      ) : (
-                        <Text>Continue</Text>
-                      )}
+                      {isPending ? <ActivityIndicator /> : <Text className="text-black">Continue</Text>}
                     </Button>
                   </GoldGradient>
                 </View>
-                <View className="flex-row items-center justify-center gap-1">
-                  <Text className="text-sm">Don&apos;t have an account? </Text>
-                  <Pressable onPress={() => router.push('/register')} accessibilityRole="link">
-                    <Text className="text-sm text-gold-text leading-4">Sign up</Text>
-                  </Pressable>
-                </View>
+                <Button
+                  variant="outline"
+                  onPress={() => router.push('/register')}
+                  className="border-gold bg-transparent w-full font-semibold flex-row items-center justify-center gap-1"
+                >
+                  <Text className="text-sm leading-4">
+                    <Text>Don&apos;t have an account? </Text>
+                    <Text className="text-gold-text">Sign up</Text>
+                  </Text>
+                </Button>
                 <View className="flex-row items-center">
                   <Separator className="flex-1" />
                   <Text className="text-muted-foreground px-4 text-sm">or</Text>

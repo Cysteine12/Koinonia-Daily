@@ -19,6 +19,7 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   'checkmark.circle': 'check',
   'arrow.forward': 'arrow-forward',
+  'chevron.left': 'chevron-left',
 } satisfies IconMapping;
 
 type IconSymbolName = keyof typeof MAPPING;
@@ -32,12 +33,12 @@ export function IconSymbol({
   name,
   size = 24,
   color,
-  style,
+  style = {},
   className = '',
 }: {
   name: IconSymbolName;
   size?: number;
-  color: string | OpaqueColorValue;
+  color?: string | OpaqueColorValue;
   style?: StyleProp<TextStyle>;
   weight?: SymbolWeight;
   className?: string;

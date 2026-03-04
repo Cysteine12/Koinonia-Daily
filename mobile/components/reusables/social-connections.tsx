@@ -22,7 +22,6 @@ export function SocialConnections({ handleSocialSignIn }: { handleSocialSignIn: 
           <Button
             key={strategy.type}
             variant="outline"
-            size="sm"
             className="sm:flex-1"
             accessibilityLabel={strategy.label}
             onPress={() => handleSocialSignIn(strategy.type)}

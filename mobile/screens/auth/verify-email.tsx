@@ -11,22 +11,15 @@ import { useLogin, useRequestOtp, useVerifyEmail } from '@/features/auth/hook';
 import { verifyEmailSchema, type VerifyEmailSchema } from '@/features/auth/schema';
 import { useAuthStore } from '@/features/auth/store';
 import useForm from '@/hooks/use-app-form';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
 
 const VerifyEmail = () => {
-  const colorScheme = useColorScheme();
+  const { color } = useAppTheme();
   const router = useRouter();
-  const { mutate: login } = useLogin();
+  const { mutate: login, isPending: isLoginPending } = useLogin();
   const [isModalOpen, setModalOpen] = useState(false);
   const { credentials } = useAuthStore();
   const { mutate: verifyEmail, isPending, data: verifyEmailData } = useVerifyEmail();
@@ -68,6 +61,7 @@ const VerifyEmail = () => {
   }, [verifyEmailData]);
 
   const handleCompleteModal = () => {
+    if (isLoginPending) return;
     if (!credentials?.email || !credentials?.password) {
       router.replace('/login');
       return;
@@ -147,7 +141,7 @@ const VerifyEmail = () => {
                       onPress={handleSubmit}
                       disabled={isPending || isRequestingOtp}
                     >
-                      {isPending ? <ActivityIndicator color={'#ffffff'} /> : <Text>Verify Email</Text>}
+                      {isPending ? <ActivityIndicator /> : <Text className="text-black">Verify Email</Text>}
                     </Button>
                   </GoldGradient>
                 </View>
@@ -157,21 +151,26 @@ const VerifyEmail = () => {
         </View>
       </ScrollView>
 
-      <BottomSheet isOpen={isModalOpen} onClose={handleCompleteModal}>
+      <BottomSheet isOpen={isModalOpen} onClose={() => !isLoginPending && handleCompleteModal()}>
         <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
-          <IconSymbol
-            name="checkmark.circle"
-            size={40}
-            color={colorScheme === 'dark' ? Colors.dark.background : Colors.light.background}
-          />
+          <IconSymbol name="checkmark.circle" size={40} color={color.background} />
         </GoldGradient>
+
         <ThemedText className="text-center text-2xl">Email verified successfully!</ThemedText>
+
         <Button
-          className="mt-8 self-center bg-transparent w-full border border-gold items-center"
+          className="mt-8 self-center bg-transparent w-full border border-gold"
           onPress={handleCompleteModal}
+          disabled={isLoginPending}
         >
-          <Text className="font-semibold text-gold-text">Continue</Text>
-          <IconSymbol name="arrow.forward" size={16} className="text-gold-text" color={Colors.goldIcon} />
+          {isLoginPending ? (
+            <ActivityIndicator color={Colors.goldIcon} />
+          ) : (
+            <View className="flex-row items-center justify-center gap-1">
+              <Text className="text-gold-text font-semibold">Continue</Text>
+              <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
+            </View>
+          )}
         </Button>
       </BottomSheet>
     </KeyboardAvoidingView>
