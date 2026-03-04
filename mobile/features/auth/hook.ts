@@ -144,4 +144,3 @@ const useLogout = () => {
 };
 
 export { useForgotPassword, useLogin, useLogout, useRegister, useRequestOtp, useResetPassword, useVerifyEmail };
-
