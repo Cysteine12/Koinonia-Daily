@@ -42,6 +42,7 @@ const ResetPassword = () => {
   }, [data]);
 
   const handleCompleteModal = () => {
+    if (isLoginPending) return;
     if (!form.email || !form.password) {
       router.replace('/login');
       return;
@@ -97,7 +98,7 @@ const ResetPassword = () => {
                       onChangeText={(text) => handleChange('password', text)}
                       onSubmitEditing={() => otpRef.current?.focus()}
                     />
-                    <Text className="text-sm text-destructive">{errors.password}</Text>
+                    <Text className="text-sm text-destructive">{errors.password ?? ' '}</Text>
                   </View>
 
                   <View className="gap-1.5">
@@ -114,7 +115,7 @@ const ResetPassword = () => {
                       maxLength={6}
                       ref={otpRef}
                     />
-                    <Text className="text-sm text-destructive">{errors.otp}</Text>
+                    <Text className="text-sm text-destructive">{errors.otp ?? ' '}</Text>
                   </View>
                   <GoldGradient>
                     <Button className="bg-transparent w-full font-semibold" onPress={handleSubmit} disabled={isPending}>
@@ -128,7 +129,7 @@ const ResetPassword = () => {
         </View>
       </ScrollView>
 
-      <BottomSheet isOpen={isModalOpen} onClose={handleCompleteModal}>
+      <BottomSheet isOpen={isModalOpen} onClose={() => !isLoginPending && handleCompleteModal()}>
         <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
           <IconSymbol name="checkmark.circle" size={40} color={color.background} />
         </GoldGradient>
@@ -143,10 +144,10 @@ const ResetPassword = () => {
           {isLoginPending ? (
             <ActivityIndicator color={Colors.goldIcon} />
           ) : (
-            <Text>
+            <View className="flex-row items-center justify-center gap-1">
               <Text className="text-gold-text font-semibold">Continue</Text>
               <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
-            </Text>
+            </View>
           )}
         </Button>
       </BottomSheet>

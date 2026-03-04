@@ -22,11 +22,11 @@ const queryClient = new QueryClient();
 function AppLayout() {
   const { isAppReady, setLayoutReady } = useSplashScreenReady();
 
-  const opacity = useRef(new Animated.Value(0)).current;
+  const opacity = useRef(new Animated.Value(0));
 
   useEffect(() => {
     if (isAppReady) {
-      Animated.timing(opacity, {
+      Animated.timing(opacity.current, {
         toValue: 1,
         duration: 350,
         useNativeDriver: true,
@@ -37,7 +37,7 @@ function AppLayout() {
   return (
     <View className="flex-1" onLayout={() => setLayoutReady(true)} accessibilityLabel="app-root-view">
       {isAppReady && (
-        <Animated.View style={{ flex: 1, opacity }}>
+        <Animated.View style={{ flex: 1, opacity: opacity.current }}>
           <Navigation />
           <StatusBar style="auto" />
           <PortalHost />

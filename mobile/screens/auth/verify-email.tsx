@@ -61,6 +61,7 @@ const VerifyEmail = () => {
   }, [verifyEmailData]);
 
   const handleCompleteModal = () => {
+    if (isLoginPending) return;
     if (!credentials?.email || !credentials?.password) {
       router.replace('/login');
       return;
@@ -150,7 +151,7 @@ const VerifyEmail = () => {
         </View>
       </ScrollView>
 
-      <BottomSheet isOpen={isModalOpen} onClose={handleCompleteModal}>
+      <BottomSheet isOpen={isModalOpen} onClose={() => !isLoginPending && handleCompleteModal()}>
         <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
           <IconSymbol name="checkmark.circle" size={40} color={color.background} />
         </GoldGradient>
@@ -165,10 +166,10 @@ const VerifyEmail = () => {
           {isLoginPending ? (
             <ActivityIndicator color={Colors.goldIcon} />
           ) : (
-            <Text>
+            <View className="flex-row items-center justify-center gap-1">
               <Text className="text-gold-text font-semibold">Continue</Text>
               <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
-            </Text>
+            </View>
           )}
         </Button>
       </BottomSheet>
