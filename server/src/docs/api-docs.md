@@ -76,3 +76,5 @@ Verify user email with OTP.
 ```
 
 **Error Codes**
+- `UNAUTHORIZED` — OTP is invalid, revoked, or expired
+- `RESOURCE_NOT_FOUND` — no account found for the provided email
