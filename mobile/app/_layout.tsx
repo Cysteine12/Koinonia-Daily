@@ -12,6 +12,7 @@ import { useAppTheme } from '@/hooks/use-app-theme';
 import { useSplashScreenReady } from '@/hooks/use-splash-screen-ready';
 import { useEffect, useRef } from 'react';
 import { Animated, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 void SplashScreen.preventAutoHideAsync().catch((err) => {
   Sentry.captureException(err);
@@ -63,9 +64,11 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
-          <AppLayout />
-        </ThemeProvider>
+        <SafeAreaProvider>
+          <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
+            <AppLayout />
+          </ThemeProvider>
+        </SafeAreaProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

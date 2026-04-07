@@ -1,9 +1,9 @@
-import { GOLD_GRADIENT } from '@/constants/theme';
+import { GOLD_GRADIENT } from '@/constants';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { cn } from '@/lib/utils';
 import { LinearGradient } from 'expo-linear-gradient';
 import { cssInterop } from 'nativewind';
 import type React from 'react';
-import { useColorScheme } from 'react-native';
 
 interface GoldGradientProps {
   children: React.ReactNode;
@@ -17,8 +17,7 @@ cssInterop(LinearGradient, {
 });
 
 const GoldGradient = ({ children, className, start = { x: 0.2, y: 0 }, end = { x: 1, y: 1 } }: GoldGradientProps) => {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
+  const { isDark } = useAppTheme();
 
   const colors = isDark ? GOLD_GRADIENT.dark : GOLD_GRADIENT.light;
 

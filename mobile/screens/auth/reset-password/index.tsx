@@ -1,3 +1,4 @@
+import { Icon, Screen } from '@/components/core';
 import { Button } from '@/components/reusables/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/reusables/ui/card';
 import { Input } from '@/components/reusables/ui/input';
@@ -6,8 +7,7 @@ import { Text } from '@/components/reusables/ui/text';
 import { ThemedText } from '@/components/themed-text';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import GoldGradient from '@/components/ui/gold-gradient';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import { Colors } from '@/constants';
 import { useLogin, useResetPassword } from '@/features/auth/hook';
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
@@ -15,12 +15,12 @@ import { useAppTheme } from '@/hooks/use-app-theme';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
 const ResetPassword = () => {
   const { mutate: login, isPending: isLoginPending } = useLogin();
   const { color } = useAppTheme();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const { email } = useLocalSearchParams<{ email?: string }>();
   const { mutate: resetPassword, isPending, data } = useResetPassword();
   const { form, errors, handleChange, handleSubmit } = useForm<ResetPasswordSchema>({
@@ -37,7 +37,7 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (data?.success) {
-      setModalOpen(true);
+      setModalVisible(true);
     }
   }, [data]);
 
@@ -66,15 +66,13 @@ const ResetPassword = () => {
   }
 
   return (
-    <KeyboardAvoidingView
-      className="flex-1"
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
-    >
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
+    <>
+      <Screen
+        keyboard
+        scrollable
         keyboardDismissMode="interactive"
+        keyboardShouldPersistTaps="handled"
+        contentContainerClassName="sm:flex-1 items-center justify-center p-4 pb-8 sm:py-4 sm:p-6 mt-safe"
       >
         <View className="w-full max-w-sm">
           <View className="gap-6">
@@ -127,11 +125,11 @@ const ResetPassword = () => {
             </Card>
           </View>
         </View>
-      </ScrollView>
+      </Screen>
 
-      <BottomSheet isOpen={isModalOpen} onClose={() => !isLoginPending && handleCompleteModal()}>
+      <BottomSheet visible={isModalVisible} onClose={() => !isLoginPending && handleCompleteModal()}>
         <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
-          <IconSymbol name="checkmark.circle" size={40} color={color.background} />
+          <Icon name="check" size={40} color={color.background} />
         </GoldGradient>
 
         <ThemedText className="text-center text-2xl">Password reset successfully!</ThemedText>
@@ -146,12 +144,12 @@ const ResetPassword = () => {
           ) : (
             <View className="flex-row items-center justify-center gap-1">
               <Text className="text-gold-text font-semibold">Continue</Text>
-              <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
+              <Icon name="arrow.forward" size={16} color={Colors.goldIcon} />
             </View>
           )}
         </Button>
       </BottomSheet>
-    </KeyboardAvoidingView>
+    </>
   );
 };
 

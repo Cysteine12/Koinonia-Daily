@@ -1,4 +1,4 @@
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Icon } from '@/components/core';
 import { useRouter } from 'expo-router';
 import { Pressable } from 'react-native';
 import { useAppTheme } from './use-app-theme';
@@ -20,7 +20,7 @@ export const useScreenOptions = () => {
         })}
         onPress={() => router.back()}
       >
-        <IconSymbol name="chevron.left" size={36} color={color.text} />
+        <Icon name="chevron.left" size={36} color={color.text} />
       </Pressable>
     ),
   };

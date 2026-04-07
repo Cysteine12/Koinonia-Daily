@@ -5,11 +5,15 @@
   "build": {
     "development": {
       "distribution": "internal",
+      "channel": "development",
       "developmentClient": true
     },
     "preview": {
       "distribution": "internal",
-      "channel": "preview"
+      "channel": "preview",
+      "android": {
+        "buildType": "apk"
+      }
     },
     "production": {
       "distribution": "store",

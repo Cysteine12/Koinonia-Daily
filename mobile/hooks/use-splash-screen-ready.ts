@@ -1,13 +1,11 @@
-import { AppConfig } from '@/constants/app-config';
+import { AppConfig } from '@/constants';
 import * as Sentry from '@sentry/react-native';
-import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { useEffect, useState } from 'react';
+import useAppFonts from './use-app-fonts';
 
 export function useSplashScreenReady() {
-  const [fontsLoaded, fontError] = useFonts({
-    'SpaceMono-Regular': require('@/assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [fontsLoaded, fontError] = useAppFonts();
   const [isLayoutReady, setLayoutReady] = useState(false);
   const [hasPassedMinDelay, setHasPassedMinDelay] = useState(false);
   const [isAppReady, setAppReady] = useState(false);

@@ -15,16 +15,30 @@ const tintColorDark = '#fff';
 
 export const Colors = {
   light: {
-    text: '#11181C',
+    text: '#0F0D0A',
+    textMuted: '#9A8F84',
+    goldText: 'hsl(45 71% 36%)',
+    goldTextMuted: '#F5EBCA',
     background: '#fff',
+    containerBackground: 'hsl(0 0% 95%)',
+    cardBackground: 'hsl(0 0% 100%)',
+    cardBorder: '#E8E0D4',
+    border: '#E5E7EB',
     tint: tintColorLight,
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
   },
   dark: {
-    text: '#ECEDEE',
+    text: '#F2EBE0',
+    textMuted: '#7A7068',
+    goldText: 'hsl(48 70% 60%)',
+    goldTextMuted: 'rgba(196, 154, 60, 0.15)',
     background: '#151718',
+    containerBackground: 'hsl(0 0% 5%)',
+    cardBackground: 'hsl(0 0% 3.9%)',
+    cardBorder: '#2A2720',
+    border: '#2D2D2D',
     tint: tintColorDark,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
@@ -35,6 +49,8 @@ export const Colors = {
   secondary: '#E6E2F3',
   tertiary: '#E03971',
   goldIcon: 'hsl(48 80% 50%)',
+  tabBackground: '#0A0906',
+  cardOverlay: 'rgba(0, 0, 0, 0.5)',
 };
 
 export const Fonts = Platform.select({

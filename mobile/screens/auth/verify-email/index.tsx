@@ -1,3 +1,4 @@
+import { Icon, Screen } from '@/components/core';
 import { Button } from '@/components/reusables/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/reusables/ui/card';
 import { Input } from '@/components/reusables/ui/input';
@@ -5,8 +6,7 @@ import { Text } from '@/components/reusables/ui/text';
 import { ThemedText } from '@/components/themed-text';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import GoldGradient from '@/components/ui/gold-gradient';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import { Colors } from '@/constants';
 import { useLogin, useRequestOtp, useVerifyEmail } from '@/features/auth/hook';
 import { verifyEmailSchema, type VerifyEmailSchema } from '@/features/auth/schema';
 import { useAuthStore } from '@/features/auth/store';
@@ -14,13 +14,13 @@ import useForm from '@/hooks/use-app-form';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
 const VerifyEmail = () => {
   const { color } = useAppTheme();
   const router = useRouter();
   const { mutate: login, isPending: isLoginPending } = useLogin();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const { credentials } = useAuthStore();
   const { mutate: verifyEmail, isPending, data: verifyEmailData } = useVerifyEmail();
   const { mutate: requestOtp, isPending: isRequestingOtp, data } = useRequestOtp();
@@ -56,7 +56,7 @@ const VerifyEmail = () => {
 
   useEffect(() => {
     if (verifyEmailData?.success) {
-      setModalOpen(true);
+      setModalVisible(true);
     }
   }, [verifyEmailData]);
 
@@ -85,15 +85,13 @@ const VerifyEmail = () => {
   }
 
   return (
-    <KeyboardAvoidingView
-      className="flex-1"
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
-    >
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
+    <>
+      <Screen
+        keyboard
+        scrollable
         keyboardDismissMode="interactive"
+        keyboardShouldPersistTaps="handled"
+        contentContainerClassName="sm:flex-1 items-center justify-center p-4 pb-8 sm:py-4 sm:p-6 mt-safe"
       >
         <View className="w-full max-w-sm">
           <View className="gap-6">
@@ -149,11 +147,11 @@ const VerifyEmail = () => {
             </Card>
           </View>
         </View>
-      </ScrollView>
+      </Screen>
 
-      <BottomSheet isOpen={isModalOpen} onClose={() => !isLoginPending && handleCompleteModal()}>
+      <BottomSheet visible={isModalVisible} onClose={() => !isLoginPending && handleCompleteModal()}>
         <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
-          <IconSymbol name="checkmark.circle" size={40} color={color.background} />
+          <Icon name="check" size={40} color={color.background} />
         </GoldGradient>
 
         <ThemedText className="text-center text-2xl">Email verified successfully!</ThemedText>
@@ -168,12 +166,12 @@ const VerifyEmail = () => {
           ) : (
             <View className="flex-row items-center justify-center gap-1">
               <Text className="text-gold-text font-semibold">Continue</Text>
-              <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
+              <Icon name="arrow.forward" size={16} color={Colors.goldIcon} />
             </View>
           )}
         </Button>
       </BottomSheet>
-    </KeyboardAvoidingView>
+    </>
   );
 };
 
