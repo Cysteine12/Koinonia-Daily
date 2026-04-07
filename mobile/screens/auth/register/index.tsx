@@ -7,14 +7,17 @@ import { Label } from '@/components/reusables/ui/label';
 import { Separator } from '@/components/reusables/ui/separator';
 import { Text } from '@/components/reusables/ui/text';
 import GoldGradient from '@/components/ui/gold-gradient';
+import { Colors } from '@/constants';
 import { useRegister } from '@/features/auth/hook';
 import { registerSchema, type RegisterSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { router } from 'expo-router';
 import React, { useRef } from 'react';
 import { ActivityIndicator, TextInput, View } from 'react-native';
 
 const Register = () => {
+  const { color } = useAppTheme();
   const { mutate: register, isPending } = useRegister();
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const { form, errors, handleChange, handleSubmit } = useForm<RegisterSchema>({
@@ -47,13 +50,16 @@ const Register = () => {
       keyboardDismissMode="interactive"
       keyboardShouldPersistTaps="handled"
       contentContainerClassName="sm:flex-1 items-center justify-center px-4 pb-8 sm:py-4 sm:p-6 mt-safe"
+      secondaryBackground
       edges={[]}
     >
       <View className="w-full max-w-sm">
         <View className="gap-6">
           <Card className="bg-transparent border-0">
             <CardHeader>
-              <CardTitle className="text-gold-text text-center text-xl sm:text-left">Create your account</CardTitle>
+              <CardTitle className="text-center text-xl sm:text-left" style={{ color: color.goldText }}>
+                Create your account
+              </CardTitle>
               <CardDescription className="text-center sm:text-left">
                 Welcome! Please fill in the details to get started.
               </CardDescription>
@@ -71,7 +77,9 @@ const Register = () => {
                     returnKeyType="next"
                     onSubmitEditing={() => lastNameRef.current?.focus()}
                   />
-                  <Text className="text-red-500 text-sm">{errors.firstName}</Text>
+                  <Text className="text-sm" style={{ color: Colors.warning }}>
+                    {errors.firstName}
+                  </Text>
                 </View>
                 <View className="gap-1">
                   <Label htmlFor="lastName">Last name</Label>
@@ -85,7 +93,9 @@ const Register = () => {
                     ref={lastNameRef}
                     onSubmitEditing={() => emailRef.current?.focus()}
                   />
-                  <Text className="text-red-500 text-sm">{errors.lastName}</Text>
+                  <Text className="text-sm" style={{ color: Colors.warning }}>
+                    {errors.lastName}
+                  </Text>
                 </View>
                 <View className="gap-1">
                   <Label htmlFor="email">Email</Label>
@@ -102,7 +112,9 @@ const Register = () => {
                     ref={emailRef}
                     onSubmitEditing={() => passwordRef.current?.focus()}
                   />
-                  <Text className="text-red-500 text-sm">{errors.email}</Text>
+                  <Text className="text-sm" style={{ color: Colors.warning }}>
+                    {errors.email}
+                  </Text>
                 </View>
                 <View className="gap-1">
                   <View className="flex-row items-center">
@@ -118,7 +130,9 @@ const Register = () => {
                     ref={passwordRef}
                     onSubmitEditing={() => confirmPasswordRef.current?.focus()}
                   />
-                  <Text className="text-red-500 text-sm">{errors.password}</Text>
+                  <Text className="text-sm" style={{ color: Colors.warning }}>
+                    {errors.password}
+                  </Text>
                 </View>
                 <View className="gap-1">
                   <View className="flex-row items-center">
@@ -134,7 +148,7 @@ const Register = () => {
                     onChangeText={(text) => setConfirmPassword(text)}
                     ref={confirmPasswordRef}
                   />
-                  <Text className="text-red-500 text-sm">
+                  <Text className="text-sm" style={{ color: Colors.warning }}>
                     {(confirmPassword.length > 0 &&
                       form.password.length > 0 &&
                       confirmPassword !== form.password &&
@@ -155,10 +169,11 @@ const Register = () => {
               <Button
                 variant="outline"
                 onPress={() => router.push('/login')}
-                className="border-gold bg-transparent w-full font-semibold flex-row items-center justify-center gap-1"
+                className="bg-transparent w-full font-semibold flex-row items-center justify-center gap-1"
+                style={{ borderColor: color.goldBorder, backgroundColor: 'transparent' }}
               >
                 <Text className="text-sm leading-4">
-                  <Text className="text-gold-text">Already have an account? Sign in</Text>
+                  <Text style={{ color: color.goldText }}>Already have an account? Sign in</Text>
                 </Text>
               </Button>
               <View className="flex-row items-center">

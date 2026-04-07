@@ -38,8 +38,8 @@ const ForgotPassword = () => {
               <CardHeader>
                 <CardTitle className="text-center text-gold-text text-xl sm:text-left">Forgot Password</CardTitle>
                 <CardDescription className="text-center sm:text-left">
-                  Yeah! It happens. We&apos;ve got your back. Simply supply your registered email below and you&apos;ll
-                  be set to go.
+                  Yeah! It happens. We&apos;ve got your back. Simply supply your registered email below and you&apos;ll be set to
+                  go.
                 </CardDescription>
               </CardHeader>
               <CardContent className="gap-6">

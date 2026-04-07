@@ -12,7 +12,12 @@ export default function SeeMoreButton({ link }: { link: Href }) {
 
   return (
     <View className="mx-8 my-auto">
-      <TouchableOpacity onPress={() => router.push(link)}>
+      <TouchableOpacity
+        onPress={() => router.push(link)}
+        accessibilityRole="button"
+        accessibilityLabel="See more"
+        accessibilityHint="Opens more content"
+      >
         <View
           className="border rounded-full p-4"
           style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}

@@ -1,7 +1,7 @@
 import { AppConfig } from '@/constants';
-import * as Sentry from '@sentry/react-native';
+import logger from '@/lib/logger';
 import { SplashScreen } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useAppFonts from './use-app-fonts';
 
 export function useSplashScreenReady() {
@@ -9,6 +9,7 @@ export function useSplashScreenReady() {
   const [isLayoutReady, setLayoutReady] = useState(false);
   const [hasPassedMinDelay, setHasPassedMinDelay] = useState(false);
   const [isAppReady, setAppReady] = useState(false);
+  const hasReportedFontError = useRef(false);
 
   // Ensure splash shows for minimum time
   useEffect(() => {
@@ -18,8 +19,9 @@ export function useSplashScreenReady() {
 
   // Hide splash when all conditions are met
   useEffect(() => {
-    if (fontError) {
-      Sentry.captureException(fontError);
+    if (fontError && !hasReportedFontError.current) {
+      hasReportedFontError.current = true;
+      logger.captureException(fontError);
     }
     const shouldHide = (fontsLoaded || !!fontError) && isLayoutReady && hasPassedMinDelay && !isAppReady;
 
@@ -29,7 +31,7 @@ export function useSplashScreenReady() {
           await SplashScreen.hideAsync();
         } catch (error) {
           console.error('Splash screen error:', error);
-          Sentry.captureException(error);
+          logger.captureException(error);
         } finally {
           setAppReady(true);
         }

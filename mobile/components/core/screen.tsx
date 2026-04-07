@@ -1,6 +1,6 @@
-import { useAppTheme } from '@/hooks/use-app-theme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import React, { type ReactNode } from 'react';
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { SafeAreaView, type SafeAreaViewProps } from 'react-native-safe-area-context';
 
@@ -8,12 +8,13 @@ interface ScreenProps {
   children: ReactNode;
   scrollable?: boolean;
   keyboard?: boolean;
-  style?: '';
+  style?: StyleProp<ViewStyle>;
   contentContainerStyle?: ViewStyle;
   contentContainerClassName?: string;
   keyboardDismissMode?: 'none' | 'interactive' | 'on-drag';
   keyboardShouldPersistTaps?: boolean | 'handled' | 'always' | 'never';
   edges?: SafeAreaViewProps['edges'];
+  secondaryBackground?: boolean;
 }
 
 export function Screen({
@@ -26,14 +27,15 @@ export function Screen({
   keyboardDismissMode,
   keyboardShouldPersistTaps,
   edges = ['top', 'bottom'],
+  secondaryBackground,
 }: ScreenProps) {
-  const { color } = useAppTheme();
+  const backgroundColor = useThemeColor({}, secondaryBackground ? 'secondaryBackground' : 'containerBackground');
   const Container = scrollable ? ScrollView : View;
 
   const content = (
-    <SafeAreaView style={[{ flex: 1 }, style]} edges={edges}>
+    <SafeAreaView style={[{ flex: 1, backgroundColor }, style]} edges={edges}>
       <Container
-        style={[{ backgroundColor: color.containerBackground }, !scrollable && { flex: 1 }]}
+        style={[!scrollable && { flex: 1 }]}
         contentContainerStyle={scrollable ? [{ flexGrow: 1 }, contentContainerStyle] : undefined}
         contentContainerClassName={scrollable ? contentContainerClassName : undefined}
         showsVerticalScrollIndicator={false}

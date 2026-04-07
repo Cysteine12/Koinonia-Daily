@@ -12,6 +12,13 @@ import SeriesCard from './components/series-card';
 import StatsCard from './components/stats-card';
 
 export default function HomeScreen() {
+  const lastTeaching = {
+    title: 'Commanding the Supernatural: The Principles of Dominion',
+    thumbnailUrl: require('@/assets/images/i4.jpg'),
+    type: 'Sunday Service',
+    lastRead: 'Last read 2 days ago • 8 min read',
+  };
+
   const recentTeachings = [
     {
       id: 1,
@@ -128,7 +135,12 @@ export default function HomeScreen() {
         <View className="py-4 px-4">
           <SectionTitle title="Continue Reading" />
 
-          <ContinueCard />
+          <ContinueCard
+            title={lastTeaching.title}
+            thumbnailUrl={lastTeaching.thumbnailUrl}
+            type={lastTeaching.type}
+            lastRead={lastTeaching.lastRead}
+          />
         </View>
 
         {/* Latest Teachings Section */}

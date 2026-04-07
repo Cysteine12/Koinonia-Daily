@@ -1,6 +1,6 @@
 import { Button } from '@/components/reusables/ui/button';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { cn } from '@/lib/utils';
-import { useColorScheme } from 'nativewind';
 import { Image, Platform, View } from 'react-native';
 
 const SOCIAL_CONNECTION_STRATEGIES = [
@@ -13,7 +13,7 @@ const SOCIAL_CONNECTION_STRATEGIES = [
 ];
 
 export function SocialConnections({ handleSocialSignIn }: { handleSocialSignIn: (type: string) => void }) {
-  const { colorScheme } = useColorScheme();
+  const { theme, color } = useAppTheme();
 
   return (
     <View className="gap-2 sm:flex-row sm:gap-3">
@@ -25,11 +25,12 @@ export function SocialConnections({ handleSocialSignIn }: { handleSocialSignIn: 
             className="sm:flex-1"
             accessibilityLabel={strategy.label}
             onPress={() => handleSocialSignIn(strategy.type)}
+            style={{ backgroundColor: color.background, borderColor: color.border }}
           >
             <Image
               className={cn('size-4', strategy.useTint && Platform.select({ web: 'dark:invert' }))}
               tintColor={Platform.select({
-                native: strategy.useTint ? (colorScheme === 'dark' ? 'white' : 'black') : undefined,
+                native: strategy.useTint ? (theme === 'dark' ? 'white' : 'black') : undefined,
               })}
               source={strategy.source}
             />

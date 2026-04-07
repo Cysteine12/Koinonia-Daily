@@ -1,4 +1,4 @@
-import { Screen } from '@/components/core';
+import { Screen, View } from '@/components/core';
 import { SocialConnections } from '@/components/reusables/social-connections';
 import { Button } from '@/components/reusables/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/reusables/ui/card';
@@ -7,15 +7,18 @@ import { Label } from '@/components/reusables/ui/label';
 import { Separator } from '@/components/reusables/ui/separator';
 import { Text } from '@/components/reusables/ui/text';
 import GoldGradient from '@/components/ui/gold-gradient';
+import { Colors } from '@/constants';
 import { useLogin } from '@/features/auth/hook';
 import { type LoginSchema, loginSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { router } from 'expo-router';
 import { useRef } from 'react';
 import type { TextInput } from 'react-native';
-import { ActivityIndicator, Image, View } from 'react-native';
+import { ActivityIndicator, Image } from 'react-native';
 
 const Login = () => {
+  const { color } = useAppTheme();
   const { mutate: login, isPending } = useLogin();
   const { form, errors, handleChange, handleSubmit } = useForm<LoginSchema>({
     data: {
@@ -39,6 +42,7 @@ const Login = () => {
       keyboardDismissMode="interactive"
       keyboardShouldPersistTaps="handled"
       contentContainerClassName="sm:flex-1 items-center justify-center px-4 pb-8 sm:py-4 sm:p-6 mt-safe"
+      secondaryBackground
       edges={[]}
     >
       <View className="w-full max-w-sm">
@@ -46,7 +50,9 @@ const Login = () => {
         <View className="gap-6">
           <Card className="bg-transparent border-0">
             <CardHeader>
-              <CardTitle className="text-center text-gold-text text-xl sm:text-left">Sign in to your app</CardTitle>
+              <CardTitle className="text-center text-xl sm:text-left" style={{ color: color.goldText }}>
+                Sign in to your app
+              </CardTitle>
               <CardDescription className="text-center sm:text-left">Welcome back! Please sign in to continue</CardDescription>
             </CardHeader>
             <CardContent className="gap-6">
@@ -66,7 +72,9 @@ const Login = () => {
                     onChangeText={(text) => handleChange('email', text)}
                     onSubmitEditing={() => passwordRef.current?.focus()}
                   />
-                  <Text className="text-sm text-destructive">{errors?.email}</Text>
+                  <Text className="text-sm" style={{ color: Colors.warning }}>
+                    {errors?.email}
+                  </Text>
                 </View>
                 <View className="gap-1">
                   <View className="flex-row items-center">
@@ -77,7 +85,9 @@ const Login = () => {
                       className="ml-auto h-4 px-1 py-0 sm:h-4 no-underline"
                       onPress={() => router.push({ pathname: '/forgot-password', params: { email: form.email } })}
                     >
-                      <Text className="text-gold-text font-normal leading-4">Forgot your password?</Text>
+                      <Text className="font-normal leading-4" style={{ color: color.goldText }}>
+                        Forgot your password?
+                      </Text>
                     </Button>
                   </View>
                   <Input
@@ -90,21 +100,30 @@ const Login = () => {
                     ref={passwordRef}
                     onSubmitEditing={handleSubmit}
                   />
-                  <Text className="text-sm text-destructive">{errors?.password}</Text>
+                  <Text className="text-sm" style={{ color: Colors.warning }}>
+                    {errors?.password}
+                  </Text>
                 </View>
                 <GoldGradient>
-                  <Button className="bg-transparent w-full font-semibold" onPress={handleSubmit} disabled={isPending}>
-                    {isPending ? <ActivityIndicator /> : <Text className="text-black">Continue</Text>}
+                  <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
+                    {isPending ? (
+                      <ActivityIndicator />
+                    ) : (
+                      <Text className="font-bold" style={{ color: '#000' }}>
+                        Continue
+                      </Text>
+                    )}
                   </Button>
                 </GoldGradient>
               </View>
               <Button
                 variant="outline"
                 onPress={() => router.push('/register')}
-                className="border-gold bg-transparent w-full font-semibold flex-row items-center justify-center gap-1"
+                className="bg-transparent w-full font-semibold flex-row items-center justify-center gap-1"
+                style={{ borderColor: color.goldBorder, backgroundColor: 'transparent' }}
               >
                 <Text className="text-sm leading-4">
-                  <Text className="text-gold-text">Don&apos;t have an account? Sign up</Text>
+                  <Text style={{ color: color.goldText }}>Don&apos;t have an account? Sign up</Text>
                 </Text>
               </Button>
               <View className="flex-row items-center">

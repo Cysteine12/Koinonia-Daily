@@ -1,5 +1,6 @@
 import { Text, View } from '@/components/core';
 import { Colors, FontFamily, FontSize } from '@/constants';
+import { useTheme } from '@/features/theme-context';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -36,7 +37,9 @@ function getGreeting(): string {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function HeroSection() {
-  const { theme } = useAppTheme();
+  const { theme, isDark } = useAppTheme();
+  const { setThemeMode } = useTheme();
+
   const userName = 'Emmanuel';
   const verse = 'For I know the thoughts that I think towards you, says the Lord, thoughts of peace and not of evil.';
   const verseReference = 'Jeremiah 29:11';
@@ -102,9 +105,14 @@ export default function HeroSection() {
             <Text style={styles.datePillText}>{displayDate.toUpperCase()}</Text>
           </View>
 
-          <TouchableOpacity className="mt-[-7px]">
-            <BlurView intensity={50} tint={'light'} className="p-1.5" style={{ borderRadius: '50%' }}>
-              <Ionicons name={theme === 'dark' ? 'sunny' : 'moon'} size={FontSize.lg} color={'#fff'} className="" />
+          <TouchableOpacity
+            onPress={() => setThemeMode(isDark ? 'light' : 'dark')}
+            className="mt-[-7px]"
+            accessibilityRole="button"
+            accessibilityLabel="Togggle theme"
+          >
+            <BlurView intensity={50} tint={theme} className="p-1.5 rounded-full">
+              <Ionicons name={isDark ? 'sunny' : 'moon'} size={FontSize.lg} color={'#fff'} />
             </BlurView>
           </TouchableOpacity>
         </View>

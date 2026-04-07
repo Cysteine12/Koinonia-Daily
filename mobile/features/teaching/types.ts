@@ -14,7 +14,7 @@ export type Teaching = {
   audioUrl: string;
   videoUrl: string;
   thumbnailUrl: string;
-  teachingType: typeof TeachingType;
+  teachingType: (typeof TeachingType)[keyof typeof TeachingType];
   tags: string;
   seriesPart: number;
   taughtAt: string;

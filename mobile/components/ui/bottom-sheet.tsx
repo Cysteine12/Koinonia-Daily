@@ -40,9 +40,11 @@ const BottomSheet = ({ visible, title, onClose, children, maxHeight = 0.6 }: Bot
         toValue: 0,
         duration: 250,
         useNativeDriver: true,
-      }).start(() => setShouldRender(false));
+      }).start(({ finished }) => {
+        if (finished) setShouldRender(false);
+      });
     }
-  }, [visible]);
+  }, [visible, anim]);
 
   if (!shouldRender) return null;
 
@@ -69,6 +71,7 @@ const BottomSheet = ({ visible, title, onClose, children, maxHeight = 0.6 }: Bot
           style={[
             styles.content,
             {
+              maxHeight: SCREEN_HEIGHT * maxHeight,
               backgroundColor: color.containerBackground,
               transform: [
                 {

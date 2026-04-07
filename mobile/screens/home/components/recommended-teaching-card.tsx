@@ -1,6 +1,6 @@
 import { Text, View } from '@/components/core';
 import ScalePressable from '@/components/reusables/ui/scale-pressable';
-import { FontFamily, FontSize } from '@/constants';
+import { Colors, FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
 import { Image, type ImageSourcePropType } from 'react-native';
@@ -26,7 +26,7 @@ export default function RecommendedTeachingCard({ id, imageUrl, title, type }: R
         <View className="flex-1 p-2 h-24">
           <View className="flex-row">
             <View className="w-1.5 h-1.5 rounded-full bg-primary mr-1 mt-1" />
-            <Text size={FontSize.xs - 1} className="font-bold" style={{ color: '#6a5ca3' }}>
+            <Text size={FontSize.xs - 1} className="font-bold" style={{ color: Colors.purple }}>
               SIMILAR TEACHINGS
             </Text>
           </View>
