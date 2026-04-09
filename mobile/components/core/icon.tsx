@@ -22,11 +22,16 @@ type IconMappingEntry = {
 type IconMapping = Record<string, IconMappingEntry>;
 
 const MAPPING = {
-  home: { name: 'home-outline', family: 'Ionicons' },
-  search: { name: 'search', family: 'Ionicons' },
+  home: { name: 'home', family: 'Ionicons' },
+  'home.outline': { name: 'home-outline', family: 'Ionicons' },
+  search: { name: 'search-sharp', family: 'Ionicons' },
+  'search.outline': { name: 'search-outline', family: 'Ionicons' },
   library: { name: 'book', family: 'FontAwesome' },
+  'library.outline': { name: 'book', family: 'FontAwesome' },
   activity: { name: 'trending-up', family: 'MaterialIcons' },
-  profile: { name: 'person-outline', family: 'Ionicons' },
+  'activity.outline': { name: 'trending-up', family: 'MaterialIcons' },
+  profile: { name: 'person', family: 'Ionicons' },
+  'profile.outline': { name: 'person-outline', family: 'Ionicons' },
   'chevron.left': { name: 'chevron-back', family: 'Ionicons' },
   'chevron.right': { name: 'chevron-forward', family: 'Ionicons' },
   'arrow.forward': { name: 'arrow-forward', family: 'MaterialIcons' },
@@ -41,7 +46,7 @@ const MAPPING = {
 export type IconSymbolName = keyof typeof MAPPING;
 
 /**
- * An icon component that uses native SF Symbols on iOS, and Material Icons on Android and web.
+ * An icon component that uses native SF Symbols on iOS, and Material Icons on Android.
  * This ensures a consistent look across platforms, and optimal resource usage.
  * Icon `name`s are based on SF Symbols and require manual mapping to Material Icons.
  */

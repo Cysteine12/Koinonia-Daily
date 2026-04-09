@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 
 function Label({
   className,
+  style,
   onPress,
   onLongPress,
   onPressIn,
@@ -25,7 +26,7 @@ function Label({
     >
       <LabelPrimitive.Text
         className={cn('text-foreground text-base font-medium', Platform.select({ web: 'leading-none' }), className)}
-        style={[{ color: color.text }, props.style]}
+        style={[{ color: color.text }, style]}
         {...props}
       />
     </LabelPrimitive.Root>

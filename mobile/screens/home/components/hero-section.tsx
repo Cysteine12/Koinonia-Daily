@@ -1,11 +1,11 @@
 import { Text, View } from '@/components/core';
 import { Colors, FontFamily, FontSize } from '@/constants';
-import { useTheme } from '@/features/theme-context';
 import { useAppTheme } from '@/hooks/use-app-theme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 
 // ─── Tokens ──────────────────────────────────────────────────────────────────
@@ -37,8 +37,8 @@ function getGreeting(): string {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function HeroSection() {
-  const { theme, isDark } = useAppTheme();
-  const { setThemeMode } = useTheme();
+  const { theme, isDark, setThemeMode } = useAppTheme();
+  const themeToggleBorderColor = useThemeColor({ light: 'rgba(255,255,255,0.8)', dark: 'rgba(255,255,255,0.2)' }, 'border');
 
   const userName = 'Emmanuel';
   const verse = 'For I know the thoughts that I think towards you, says the Lord, thoughts of peace and not of evil.';
@@ -47,7 +47,7 @@ export default function HeroSection() {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   // Format display date
-  const displayDate = React.useMemo(() => {
+  const displayDate = useMemo(() => {
     const d = new Date();
     return d.toLocaleDateString('en-US', {
       weekday: 'long',
@@ -59,7 +59,7 @@ export default function HeroSection() {
 
   return (
     <View style={styles.container} onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
-      <StatusBar />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
 
       {/* ── Layer 1: Solid dark base ── */}
       <View style={StyleSheet.absoluteFill} />
@@ -99,7 +99,7 @@ export default function HeroSection() {
 
       {/* ── Content ── */}
       <View style={styles.content}>
-        <View className="flex-row justify-between mt-5">
+        <View className="flex-row items-center justify-between my-2.5 ">
           {/* Date pill */}
           <View style={styles.datePill}>
             <Text style={styles.datePillText}>{displayDate.toUpperCase()}</Text>
@@ -107,13 +107,14 @@ export default function HeroSection() {
 
           <TouchableOpacity
             onPress={() => setThemeMode(isDark ? 'light' : 'dark')}
-            className="mt-[-7px]"
             accessibilityRole="button"
-            accessibilityLabel="Togggle theme"
+            accessibilityLabel="Toggle theme"
           >
-            <BlurView intensity={50} tint={theme} className="p-1.5 rounded-full">
-              <Ionicons name={isDark ? 'sunny' : 'moon'} size={FontSize.lg} color={'#fff'} />
-            </BlurView>
+            <View className="rounded-full overflow-hidden border" style={{ borderColor: themeToggleBorderColor }}>
+              <BlurView intensity={50} tint={theme} className="p-1.5">
+                <Ionicons name={isDark ? 'sunny' : 'moon'} size={FontSize.lg} color={'#fff'} />
+              </BlurView>
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -180,8 +181,7 @@ const styles = StyleSheet.create({
 
   // Date pill
   datePill: {
-    alignSelf: 'flex-start',
-    marginBottom: 18,
+    alignSelf: 'center',
   },
   datePillText: {
     color: COLORS.tagText,

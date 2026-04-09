@@ -24,6 +24,7 @@ type BottomSheetProps = {
 const BottomSheet = ({ visible, title, onClose, children, maxHeight = 0.6 }: BottomSheetProps) => {
   const { color } = useAppTheme();
   const { height: SCREEN_HEIGHT } = useWindowDimensions();
+  const sheetHeightRatio = maxHeight > 0 && maxHeight <= 1 ? maxHeight : 0.6;
   const [shouldRender, setShouldRender] = useState(visible);
   const anim = useRef(new Animated.Value(0)).current;
 
@@ -63,7 +64,7 @@ const BottomSheet = ({ visible, title, onClose, children, maxHeight = 0.6 }: Bot
             },
           ]}
         >
-          <Pressable style={{ flex: 1 }} onPress={onClose} />
+          <Pressable style={{ flex: 1 }} onPress={onClose} aria-hidden={true} />
         </Animated.View>
 
         {/* Content Sheet: Orchestrated Slide */}
@@ -71,13 +72,13 @@ const BottomSheet = ({ visible, title, onClose, children, maxHeight = 0.6 }: Bot
           style={[
             styles.content,
             {
-              maxHeight: SCREEN_HEIGHT * maxHeight,
+              maxHeight: SCREEN_HEIGHT * sheetHeightRatio,
               backgroundColor: color.containerBackground,
               transform: [
                 {
                   translateY: anim.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [SCREEN_HEIGHT * maxHeight, 0],
+                    outputRange: [SCREEN_HEIGHT * sheetHeightRatio, 0],
                   }),
                 },
               ],
@@ -98,13 +99,21 @@ const BottomSheet = ({ visible, title, onClose, children, maxHeight = 0.6 }: Bot
           {/* Header */}
           <View style={styles.header}>
             <Text style={{ color: color.text, fontSize: 20 }}>{title}</Text>
-            <TouchableOpacity onPress={onClose} style={[styles.closeButton, { backgroundColor: color.background }]}>
+            <TouchableOpacity
+              onPress={onClose}
+              accessibilityRole="button"
+              accessibilityLabel="Close Modal"
+              style={[styles.closeButton, { backgroundColor: color.background }]}
+            >
               <Ionicons name="close" size={20} color={color.text} />
             </TouchableOpacity>
           </View>
 
           {/* Options */}
-          <ScrollView showsVerticalScrollIndicator={false} style={styles.contentContainer}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={[styles.contentContainer, { maxHeight: SCREEN_HEIGHT * sheetHeightRatio - 10 }]}
+          >
             {children}
           </ScrollView>
         </Animated.View>
@@ -144,25 +153,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     gap: 2,
-  },
-  optionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 16,
-  },
-  radioOuter: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 16,
-  },
-  radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
   },
 });
 

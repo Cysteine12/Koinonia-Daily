@@ -8,10 +8,15 @@ import type { IconSymbolName } from './icon';
  */
 const MAPPING: Record<IconSymbolName, SymbolViewProps['name']> = {
   home: 'house.fill',
-  search: 'scanner',
-  library: 'book.closed',
+  'home.outline': 'house',
+  search: 'scanner.fill',
+  'search.outline': 'scanner',
+  library: 'book.closed.fill',
+  'library.outline': 'book.closed',
   activity: 'chart.line.uptrend.xyaxis',
-  profile: 'person.circle',
+  'activity.outline': 'chart.line.uptrend.xyaxis',
+  profile: 'person.fill',
+  'profile.outline': 'person',
   'chevron.left': 'chevron.left',
   'chevron.right': 'chevron.right',
   'arrow.forward': 'arrow.forward',
@@ -36,16 +41,14 @@ export function Icon({
   style?: StyleProp<ViewStyle>;
   weight?: SymbolWeight;
 }) {
-  if (!MAPPING[name]) {
-    MAPPING[name] = 'questionmark';
-  }
+  const symbolName = MAPPING[name] ?? 'questionmark';
 
   return (
     <SymbolView
       weight={weight}
       tintColor={color}
       resizeMode="scaleAspectFit"
-      name={MAPPING[name]}
+      name={symbolName}
       style={[
         {
           width: size,

@@ -37,35 +37,35 @@ export default function TabLayout() {
         name="home"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <Icon size={28} name="home" color={color} />,
+          tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'home' : 'home.outline'} color={color} />,
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
           title: 'Search',
-          tabBarIcon: ({ color }) => <Icon size={28} name="search" color={color} />,
+          tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'search' : 'search.outline'} color={color} />,
         }}
       />
       <Tabs.Screen
         name="library"
         options={{
           title: 'Library',
-          tabBarIcon: ({ color }) => <Icon size={28} name="library" color={color} />,
+          tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'library' : 'library.outline'} color={color} />,
         }}
       />
       <Tabs.Screen
         name="activity"
         options={{
           title: 'Activity',
-          tabBarIcon: ({ color }) => <Icon size={28} name="activity" color={color} />,
+          tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'activity' : 'activity.outline'} color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <Icon size={28} name="profile" color={color} />,
+          tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'profile' : 'profile.outline'} color={color} />,
         }}
       />
     </Tabs>

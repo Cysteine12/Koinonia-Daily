@@ -1,16 +1,19 @@
-import { Button } from '@/components/reusables/ui/button';
+import { Screen } from '@/components/core';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/reusables/ui/card';
 import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
-import GoldGradient from '@/components/ui/gold-gradient';
+import BackButton from '@/components/ui/back-button';
 import { useForgotPassword } from '@/features/auth/hook';
 import { forgotPasswordSchema, type ForgotPasswordSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import GoldSubmitButton from '../components/gold-submit-button';
 
 const ForgotPassword = () => {
+  const { color } = useAppTheme();
   const { email } = useLocalSearchParams<{ email?: string }>();
   const { mutate: forgotPassword, isPending } = useForgotPassword();
   const { form, errors, handleChange, handleSubmit } = useForm<ForgotPasswordSchema>({
@@ -22,56 +25,52 @@ const ForgotPassword = () => {
   });
 
   return (
-    <KeyboardAvoidingView
-      className="flex-1"
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+    <Screen
+      keyboard
+      scrollable
+      keyboardDismissMode="interactive"
+      keyboardShouldPersistTaps="handled"
+      contentContainerClassName="sm:flex-1 px-4 pb-8 sm:py-4 sm:p-6"
     >
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
-        keyboardDismissMode="interactive"
-      >
-        <View className="w-full max-w-sm">
-          <View className="gap-6">
-            <Card className="bg-transparent border-0">
-              <CardHeader>
-                <CardTitle className="text-center text-gold-text text-xl sm:text-left">Forgot Password</CardTitle>
-                <CardDescription className="text-center sm:text-left">
-                  Yeah! It happens. We&apos;ve got your back. Simply supply your registered email below and you&apos;ll be set to
-                  go.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="gap-6">
-                <View className="gap-6">
-                  <View className="gap-1.5">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      placeholder="m@example.com"
-                      keyboardType="email-address"
-                      autoComplete="email"
-                      autoCapitalize="none"
-                      editable={!isPending}
-                      value={form.email}
-                      onChangeText={(text) => handleChange('email', text)}
-                      returnKeyType="next"
-                      submitBehavior="submit"
-                    />
-                    <Text className="text-sm text-destructive">{errors.email ?? ' '}</Text>
-                  </View>
-                  <GoldGradient>
-                    <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
-                      {isPending ? <ActivityIndicator /> : <Text className="text-black">Request Code</Text>}
-                    </Button>
-                  </GoldGradient>
+      <View className="w-full max-w-sm">
+        <BackButton />
+        <View className="gap-6">
+          <Card className="bg-transparent border-0">
+            <CardHeader>
+              <CardTitle className="text-center text-xl sm:text-left" style={{ color: color.goldText }}>
+                Forgot Password
+              </CardTitle>
+              <CardDescription className="text-center sm:text-left">
+                Yeah! It happens. We&apos;ve got your back. Simply supply your registered email below and you&apos;ll be set to
+                go.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="gap-6">
+              <View className="gap-6">
+                <View className="gap-1.5">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    placeholder="m@example.com"
+                    keyboardType="email-address"
+                    autoComplete="email"
+                    autoCapitalize="none"
+                    editable={!isPending}
+                    value={form.email}
+                    onChangeText={(text) => handleChange('email', text.trim())}
+                    returnKeyType="next"
+                    submitBehavior="submit"
+                  />
+                  <Text className="text-sm text-destructive">{errors.email ?? ' '}</Text>
                 </View>
-              </CardContent>
-            </Card>
-          </View>
+
+                <GoldSubmitButton onPress={handleSubmit} isPending={isPending} title="Request Code" />
+              </View>
+            </CardContent>
+          </Card>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </View>
+    </Screen>
   );
 };
 

@@ -2,7 +2,7 @@ import { useAppTheme } from '@/hooks/use-app-theme';
 import { cn } from '@/lib/utils';
 import { Platform, TextInput, type TextInputProps } from 'react-native';
 
-function Input({ className, ...props }: TextInputProps & React.RefAttributes<TextInput>) {
+function Input({ className, style, ...props }: TextInputProps & React.RefAttributes<TextInput>) {
   const { color } = useAppTheme();
 
   return (
@@ -15,7 +15,7 @@ function Input({ className, ...props }: TextInputProps & React.RefAttributes<Tex
         }),
         className
       )}
-      style={{ color: color.text, borderColor: color.input, backgroundColor: color.background }}
+      style={[{ color: color.text, borderColor: color.input, backgroundColor: color.background }, style]}
       {...props}
     />
   );

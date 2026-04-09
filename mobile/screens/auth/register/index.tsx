@@ -6,7 +6,6 @@ import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
 import { Separator } from '@/components/reusables/ui/separator';
 import { Text } from '@/components/reusables/ui/text';
-import GoldGradient from '@/components/ui/gold-gradient';
 import { Colors } from '@/constants';
 import { useRegister } from '@/features/auth/hook';
 import { registerSchema, type RegisterSchema } from '@/features/auth/schema';
@@ -14,7 +13,8 @@ import useForm from '@/hooks/use-app-form';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { router } from 'expo-router';
 import React, { useRef } from 'react';
-import { ActivityIndicator, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
+import GoldSubmitButton from '../components/gold-submit-button';
 
 const Register = () => {
   const { color } = useAppTheme();
@@ -73,7 +73,7 @@ const Register = () => {
                     autoComplete="given-name"
                     editable={!isPending}
                     value={form.firstName}
-                    onChangeText={(text) => handleChange('firstName', text)}
+                    onChangeText={(text) => handleChange('firstName', text.trim())}
                     returnKeyType="next"
                     onSubmitEditing={() => lastNameRef.current?.focus()}
                   />
@@ -88,7 +88,7 @@ const Register = () => {
                     autoComplete="family-name"
                     editable={!isPending}
                     value={form.lastName}
-                    onChangeText={(text) => handleChange('lastName', text)}
+                    onChangeText={(text) => handleChange('lastName', text.trim())}
                     returnKeyType="next"
                     ref={lastNameRef}
                     onSubmitEditing={() => emailRef.current?.focus()}
@@ -107,7 +107,7 @@ const Register = () => {
                     autoCapitalize="none"
                     editable={!isPending}
                     value={form.email}
-                    onChangeText={(text) => handleChange('email', text)}
+                    onChangeText={(text) => handleChange('email', text.trim())}
                     returnKeyType="next"
                     ref={emailRef}
                     onSubmitEditing={() => passwordRef.current?.focus()}
@@ -126,7 +126,7 @@ const Register = () => {
                     returnKeyType="send"
                     editable={!isPending}
                     value={form.password}
-                    onChangeText={(text) => handleChange('password', text)}
+                    onChangeText={(text) => handleChange('password', text.trim())}
                     ref={passwordRef}
                     onSubmitEditing={() => confirmPasswordRef.current?.focus()}
                   />
@@ -156,20 +156,19 @@ const Register = () => {
                       ''}
                   </Text>
                 </View>
-                <GoldGradient>
-                  <Button
-                    className="bg-transparent w-full font-semibold"
-                    onPress={handleSubmit}
-                    disabled={isPending || confirmPassword !== form.password}
-                  >
-                    {isPending ? <ActivityIndicator /> : <Text className="text-black">Continue</Text>}
-                  </Button>
-                </GoldGradient>
+
+                <GoldSubmitButton
+                  onPress={handleSubmit}
+                  isPending={isPending}
+                  title="Continue"
+                  disabled={isPending || confirmPassword !== form.password}
+                />
               </View>
+
               <Button
                 variant="outline"
                 onPress={() => router.push('/login')}
-                className="bg-transparent w-full font-semibold flex-row items-center justify-center gap-1"
+                className="w-full font-semibold flex-row items-center justify-center gap-1"
                 style={{ borderColor: color.goldBorder, backgroundColor: 'transparent' }}
               >
                 <Text className="text-sm leading-4">

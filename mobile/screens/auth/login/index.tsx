@@ -6,7 +6,6 @@ import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
 import { Separator } from '@/components/reusables/ui/separator';
 import { Text } from '@/components/reusables/ui/text';
-import GoldGradient from '@/components/ui/gold-gradient';
 import { Colors } from '@/constants';
 import { useLogin } from '@/features/auth/hook';
 import { type LoginSchema, loginSchema } from '@/features/auth/schema';
@@ -15,7 +14,8 @@ import { useAppTheme } from '@/hooks/use-app-theme';
 import { router } from 'expo-router';
 import { useRef } from 'react';
 import type { TextInput } from 'react-native';
-import { ActivityIndicator, Image } from 'react-native';
+import { Image } from 'react-native';
+import GoldSubmitButton from '../components/gold-submit-button';
 
 const Login = () => {
   const { color } = useAppTheme();
@@ -69,7 +69,7 @@ const Login = () => {
                     submitBehavior="submit"
                     editable={!isPending}
                     value={form.email}
-                    onChangeText={(text) => handleChange('email', text)}
+                    onChangeText={(text) => handleChange('email', text.trim())}
                     onSubmitEditing={() => passwordRef.current?.focus()}
                   />
                   <Text className="text-sm" style={{ color: Colors.warning }}>
@@ -104,22 +104,14 @@ const Login = () => {
                     {errors?.password}
                   </Text>
                 </View>
-                <GoldGradient>
-                  <Button className="bg-transparent w-full" onPress={handleSubmit} disabled={isPending}>
-                    {isPending ? (
-                      <ActivityIndicator />
-                    ) : (
-                      <Text className="font-bold" style={{ color: '#000' }}>
-                        Continue
-                      </Text>
-                    )}
-                  </Button>
-                </GoldGradient>
+
+                <GoldSubmitButton onPress={handleSubmit} isPending={isPending} title="Continue" />
               </View>
+
               <Button
                 variant="outline"
                 onPress={() => router.push('/register')}
-                className="bg-transparent w-full font-semibold flex-row items-center justify-center gap-1"
+                className="w-full font-semibold flex-row items-center justify-center gap-1"
                 style={{ borderColor: color.goldBorder, backgroundColor: 'transparent' }}
               >
                 <Text className="text-sm leading-4">

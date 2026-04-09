@@ -4,6 +4,7 @@ import * as SeparatorPrimitive from '@rn-primitives/separator';
 
 function Separator({
   className,
+  style,
   orientation = 'horizontal',
   decorative = true,
   ...props
@@ -15,7 +16,7 @@ function Separator({
       decorative={decorative}
       orientation={orientation}
       className={cn('bg-border shrink-0', orientation === 'horizontal' ? 'h-[1px] w-full' : 'h-full w-[1px]', className)}
-      style={{ backgroundColor: color.border }}
+      style={[{ backgroundColor: color.border }, style]}
       {...props}
     />
   );
