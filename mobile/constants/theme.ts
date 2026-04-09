@@ -31,7 +31,7 @@ export const Colors = {
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
-  },
+  } as const,
   dark: {
     text: '#F2EBE0',
     textMuted: '#7A7068',
@@ -49,7 +49,7 @@ export const Colors = {
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
-  },
+  } as const,
   primary: '#6A5CA3',
   lightPrimary: '#EDEAF5',
   secondary: '#E6E2F3',
@@ -59,7 +59,7 @@ export const Colors = {
   tabBackground: '#0A0906',
   cardOverlay: 'rgba(0, 0, 0, 0.5)',
   purple: '#6A5CA3',
-};
+} as const;
 
 export const Fonts = Platform.select({
   ios: {

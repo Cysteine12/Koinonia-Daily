@@ -55,7 +55,6 @@ export function Icon({
   size = 24,
   color,
   style = {},
-  weight = 'regular',
   className = '',
 }: {
   name: IconSymbolName;
@@ -70,20 +69,16 @@ export function Icon({
   if (!color) color = iconColor.icon;
 
   if (!MAPPING[name]) {
-    return <MaterialIcons name="help-outline" size={size} color={color} style={style} weight={weight} />;
+    return <MaterialIcons name="help-outline" size={size} color={color} style={style} />;
   }
 
   switch (MAPPING[name]['family']) {
     case 'Ionicons':
-      return <Ionicons color={color} size={size} name={MAPPING[name].name} style={style} className={className} weight={weight} />;
+      return <Ionicons color={color} size={size} name={MAPPING[name].name} style={style} className={className} />;
     case 'FontAwesome':
-      return (
-        <FontAwesome color={color} size={size} name={MAPPING[name].name} style={style} className={className} weight={weight} />
-      );
+      return <FontAwesome color={color} size={size} name={MAPPING[name].name} style={style} className={className} />;
     case 'MaterialIcons':
     default:
-      return (
-        <MaterialIcons color={color} size={size} name={MAPPING[name].name} style={style} className={className} weight={weight} />
-      );
+      return <MaterialIcons color={color} size={size} name={MAPPING[name].name} style={style} className={className} />;
   }
 }

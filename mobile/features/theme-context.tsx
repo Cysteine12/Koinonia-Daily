@@ -1,13 +1,14 @@
 import { Colors } from '@/constants';
 import { useColorScheme as useRNColorScheme } from '@/hooks/use-color-scheme';
+import useOverlayOpacity from '@/hooks/use-overlay-opacity';
 import logger from '@/lib/logger';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
-type ThemeMode = 'auto' | 'light' | 'dark';
+export type ThemeMode = 'auto' | 'light' | 'dark';
 
 interface ThemeContextType {
   isReady: boolean;
@@ -20,10 +21,13 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 const THEME_STORAGE_KEY = 'koinonia_daily_theme_mode';
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const systemColorScheme = useRNColorScheme();
   const [themeMode, setThemeModeState] = useState<ThemeMode>('auto');
-  const overlayOpacity = useSharedValue(0);
+
+  const resolvedTheme = themeMode === 'auto' ? (systemColorScheme ?? 'dark') : themeMode;
+  const { overlayStyle } = useOverlayOpacity(resolvedTheme);
+
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -31,7 +35,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const loadTheme = async () => {
       try {
         const savedTheme = await AsyncStorage.getItem(THEME_STORAGE_KEY);
-        if (savedTheme) {
+        if (savedTheme && ['auto', 'light', 'dark'].includes(savedTheme)) {
           setThemeModeState(savedTheme as ThemeMode);
         }
       } catch (e) {
@@ -54,18 +58,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  const resolvedTheme = themeMode === 'auto' ? (systemColorScheme ?? 'dark') : themeMode;
-
   const navigationTheme = resolvedTheme === 'dark' ? DarkTheme : DefaultTheme;
-
-  useEffect(() => {
-    overlayOpacity.value = 1;
-    overlayOpacity.value = withTiming(0, { duration: 1000 });
-  }, [resolvedTheme, overlayOpacity]);
-
-  const overlayStyle = useAnimatedStyle(() => ({
-    opacity: overlayOpacity.value,
-  }));
 
   if (!isReady) return null;
 

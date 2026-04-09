@@ -1,4 +1,5 @@
 import { Text, View } from '@/components/core';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect } from 'react';
 import { StyleSheet, type ViewStyle } from 'react-native';
@@ -27,6 +28,8 @@ export default function Snackbar({
   autoHide = true,
   duration = 3000,
 }: SnackbarProps) {
+  const { isDark } = useAppTheme();
+
   useEffect(() => {
     if (visible && autoHide) {
       const timer = setTimeout(() => {
@@ -42,38 +45,38 @@ export default function Snackbar({
     switch (variant) {
       case 'success':
         return {
-          backgroundColor: '#F0FDF4',
-          iconColor: '#16B364',
+          backgroundColor: isDark ? '#011607' : '#F0FDF4',
+          iconColor: isDark ? '#2ef893' : '#16B364',
           icon: 'checkmark-circle' as const,
-          titleColor: '#166534',
-          textColor: '#15803D',
+          titleColor: isDark ? '#16B364' : '#166534',
+          textColor: isDark ? '#23e082' : '#15803D',
           defaultTitle: 'Success',
         };
       case 'error':
         return {
-          backgroundColor: '#FDF2F2',
-          iconColor: '#D92D20',
+          backgroundColor: isDark ? '#0e0000' : '#FDF2F2',
+          iconColor: isDark ? '#d82424' : '#D92D20',
           icon: 'close-circle' as const,
-          titleColor: '#991B1B',
-          textColor: '#B91C1C',
+          titleColor: isDark ? '#bd2323' : '#991B1B',
+          textColor: isDark ? '#d82424' : '#B91C1C',
           defaultTitle: 'Error',
         };
       case 'warning':
         return {
-          backgroundColor: '#FFFAEB',
+          backgroundColor: isDark ? '#110d00' : '#FFFAEB',
           iconColor: '#F79009',
           icon: 'alert-circle' as const,
-          titleColor: '#92400E',
-          textColor: '#B45309',
+          titleColor: isDark ? '#b65316' : '#92400E',
+          textColor: isDark ? '#F79009' : '#B45309',
           defaultTitle: 'Warning',
         };
       default:
         return {
-          backgroundColor: '#F2F4F7',
-          iconColor: '#667085',
+          backgroundColor: isDark ? '#262626' : '#F2F4F7',
+          iconColor: isDark ? '#F2EBE0' : '#667085',
           icon: 'information-circle' as const,
-          titleColor: '#101828',
-          textColor: '#344054',
+          titleColor: isDark ? '#F2EBE0' : '#101828',
+          textColor: isDark ? '#FFFFFF' : '#344054',
           defaultTitle: 'Info',
         };
     }
