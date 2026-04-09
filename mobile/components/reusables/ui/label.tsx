@@ -1,9 +1,11 @@
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { cn } from '@/lib/utils';
 import * as LabelPrimitive from '@rn-primitives/label';
 import { Platform } from 'react-native';
 
 function Label({
   className,
+  style,
   onPress,
   onLongPress,
   onPressIn,
@@ -11,6 +13,8 @@ function Label({
   disabled,
   ...props
 }: LabelPrimitive.TextProps & React.RefAttributes<LabelPrimitive.TextRef>) {
+  const { color } = useAppTheme();
+
   return (
     <LabelPrimitive.Root
       className={cn('flex select-none flex-row items-center gap-2', disabled && 'opacity-50')}
@@ -22,6 +26,7 @@ function Label({
     >
       <LabelPrimitive.Text
         className={cn('text-foreground text-base font-medium', Platform.select({ web: 'leading-none' }), className)}
+        style={[{ color: color.text }, style]}
         {...props}
       />
     </LabelPrimitive.Root>

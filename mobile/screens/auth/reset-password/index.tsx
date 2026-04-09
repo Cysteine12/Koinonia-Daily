@@ -1,13 +1,9 @@
-import { Button } from '@/components/reusables/ui/button';
+import { Screen } from '@/components/core';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/reusables/ui/card';
 import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
 import { Text } from '@/components/reusables/ui/text';
-import { ThemedText } from '@/components/themed-text';
-import BottomSheet from '@/components/ui/bottom-sheet';
-import GoldGradient from '@/components/ui/gold-gradient';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import BackButton from '@/components/ui/back-button';
 import { useLogin, useResetPassword } from '@/features/auth/hook';
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
@@ -15,12 +11,14 @@ import { useAppTheme } from '@/hooks/use-app-theme';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { View } from 'react-native';
+import ConfirmationBottomSheet from '../components/confirmation-bottom-sheet';
+import GoldSubmitButton from '../components/gold-submit-button';
 
 const ResetPassword = () => {
   const { mutate: login, isPending: isLoginPending } = useLogin();
   const { color } = useAppTheme();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const { email } = useLocalSearchParams<{ email?: string }>();
   const { mutate: resetPassword, isPending, data } = useResetPassword();
   const { form, errors, handleChange, handleSubmit } = useForm<ResetPasswordSchema>({
@@ -37,7 +35,7 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (data?.success) {
-      setModalOpen(true);
+      setModalVisible(true);
     }
   }, [data]);
 
@@ -66,21 +64,22 @@ const ResetPassword = () => {
   }
 
   return (
-    <KeyboardAvoidingView
-      className="flex-1"
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
-    >
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
+    <>
+      <Screen
+        keyboard
+        scrollable
         keyboardDismissMode="interactive"
+        keyboardShouldPersistTaps="handled"
+        contentContainerClassName="sm:flex-1 px-4 pb-8 sm:py-4 sm:p-6"
       >
         <View className="w-full max-w-sm">
+          <BackButton />
           <View className="gap-6">
             <Card className="bg-transparent border-0">
               <CardHeader>
-                <CardTitle className="text-center text-gold-text text-xl sm:text-left">Reset Your Password</CardTitle>
+                <CardTitle className="text-center text-xl sm:text-left" style={{ color: color.goldText }}>
+                  Reset Your Password
+                </CardTitle>
                 <CardDescription className="text-center sm:text-left">
                   Enter the One-Time Password sent to your email ({email}) and set your new account password
                 </CardDescription>
@@ -117,41 +116,22 @@ const ResetPassword = () => {
                     />
                     <Text className="text-sm text-destructive">{errors.otp ?? ' '}</Text>
                   </View>
-                  <GoldGradient>
-                    <Button className="bg-transparent w-full font-semibold" onPress={handleSubmit} disabled={isPending}>
-                      {isPending ? <ActivityIndicator /> : <Text className="text-black">Reset Password</Text>}
-                    </Button>
-                  </GoldGradient>
+
+                  <GoldSubmitButton onPress={handleSubmit} isPending={isPending} title="Reset Password" />
                 </View>
               </CardContent>
             </Card>
           </View>
         </View>
-      </ScrollView>
+      </Screen>
 
-      <BottomSheet isOpen={isModalOpen} onClose={() => !isLoginPending && handleCompleteModal()}>
-        <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
-          <IconSymbol name="checkmark.circle" size={40} color={color.background} />
-        </GoldGradient>
-
-        <ThemedText className="text-center text-2xl">Password reset successfully!</ThemedText>
-
-        <Button
-          className="mt-8 self-center bg-transparent w-full border border-gold"
-          onPress={handleCompleteModal}
-          disabled={isLoginPending}
-        >
-          {isLoginPending ? (
-            <ActivityIndicator color={Colors.goldIcon} />
-          ) : (
-            <View className="flex-row items-center justify-center gap-1">
-              <Text className="text-gold-text font-semibold">Continue</Text>
-              <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
-            </View>
-          )}
-        </Button>
-      </BottomSheet>
-    </KeyboardAvoidingView>
+      <ConfirmationBottomSheet
+        visible={isModalVisible}
+        onClose={handleCompleteModal}
+        title="Password reset successfully!"
+        isPending={isLoginPending}
+      />
+    </>
   );
 };
 

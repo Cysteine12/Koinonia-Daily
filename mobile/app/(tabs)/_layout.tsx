@@ -1,14 +1,12 @@
 import { router, Tabs } from 'expo-router';
 import React, { useEffect } from 'react';
 
+import { Icon } from '@/components/core';
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import { Colors, FontSize } from '@/constants';
 import { useAuth } from '@/features/auth/auth-context';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
@@ -22,23 +20,52 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors.goldIcon,
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: {
+          backgroundColor: Colors.tabBackground,
+          minHeight: 75,
+        },
+        tabBarIconStyle: { marginTop: 5 },
+        tabBarLabelStyle: {
+          fontSize: FontSize.sm,
+        },
       }}
     >
       <Tabs.Screen
         name="home"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'home' : 'home.outline'} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="search"
+        options={{
+          title: 'Search',
+          tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'search' : 'search.outline'} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="library"
+        options={{
+          title: 'Library',
+          tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'library' : 'library.outline'} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="activity"
+        options={{
+          title: 'Activity',
+          tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'activity' : 'activity.outline'} color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'profile' : 'profile.outline'} color={color} />,
         }}
       />
     </Tabs>

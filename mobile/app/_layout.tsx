@@ -1,6 +1,4 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
-import * as Sentry from '@sentry/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -8,19 +6,23 @@ import 'react-native-reanimated';
 import '../global.css';
 
 import { AuthProvider } from '@/features/auth/auth-context';
+import { ThemeProvider } from '@/features/theme-context';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useSplashScreenReady } from '@/hooks/use-splash-screen-ready';
+import logger from '@/lib/logger';
 import { useEffect, useRef } from 'react';
 import { Animated, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 void SplashScreen.preventAutoHideAsync().catch((err) => {
-  Sentry.captureException(err);
+  logger.captureException(err);
 });
 
 const queryClient = new QueryClient();
 
 function AppLayout() {
   const { isAppReady, setLayoutReady } = useSplashScreenReady();
+  const { isDark } = useAppTheme();
 
   const opacity = useRef(new Animated.Value(0));
 
@@ -39,7 +41,7 @@ function AppLayout() {
       {isAppReady && (
         <Animated.View style={{ flex: 1, opacity: opacity.current }}>
           <Navigation />
-          <StatusBar style="auto" />
+          <StatusBar style={isDark ? 'light' : 'dark'} />
           <PortalHost />
         </Animated.View>
       )}
@@ -58,14 +60,14 @@ function Navigation() {
 }
 
 export default function RootLayout() {
-  const { theme } = useAppTheme();
-
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
-          <AppLayout />
-        </ThemeProvider>
+        <SafeAreaProvider>
+          <ThemeProvider>
+            <AppLayout />
+          </ThemeProvider>
+        </SafeAreaProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

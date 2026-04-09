@@ -1,8 +1,9 @@
+import { useAppTheme } from '@/hooks/use-app-theme';
 import { cn } from '@/lib/utils';
 import * as Slot from '@rn-primitives/slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
-import { Platform, Text as RNText, type Role } from 'react-native';
+import { Text as RNText, type Role } from 'react-native';
 
 const textVariants = cva(cn('text-foreground text-base'), {
   variants: {
@@ -35,8 +36,6 @@ const ROLE: Partial<Record<TextVariant, Role>> = {
   h2: 'heading',
   h3: 'heading',
   h4: 'heading',
-  blockquote: Platform.select({ web: 'blockquote' as Role }),
-  code: Platform.select({ web: 'code' as Role }),
 };
 
 const ARIA_LEVEL: Partial<Record<TextVariant, string>> = {
@@ -52,19 +51,24 @@ function Text({
   className,
   asChild = false,
   variant = 'default',
+  style,
   ...props
 }: React.ComponentProps<typeof RNText> &
   TextVariantProps &
   React.RefAttributes<RNText> & {
     asChild?: boolean;
   }) {
+  const { color } = useAppTheme();
+
   const textClass = React.useContext(TextClassContext);
   const Component = asChild ? Slot.Text : RNText;
+
   return (
     <Component
-      className={cn(textVariants({ variant }), textClass, className)}
       role={variant ? ROLE[variant] : undefined}
       aria-level={variant ? ARIA_LEVEL[variant] : undefined}
+      style={[{ color: color.text }, style]}
+      className={cn(textVariants({ variant }), textClass, className)}
       {...props}
     />
   );

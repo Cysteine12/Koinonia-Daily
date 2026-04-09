@@ -14,10 +14,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: cn(
-          'bg-primary active:bg-primary/90 shadow-sm shadow-black/5',
-          Platform.select({ web: 'hover:bg-primary/90' })
-        ),
+        default: cn('bg-primary active:bg-primary/90 shadow-sm shadow-black/5', Platform.select({ web: 'hover:bg-primary/90' })),
         destructive: cn(
           'bg-destructive active:bg-destructive/90 dark:bg-destructive/60 shadow-sm shadow-black/5',
           Platform.select({
@@ -61,10 +58,7 @@ const buttonTextVariants = cva(
       variant: {
         default: 'text-primary-foreground',
         destructive: 'text-white',
-        outline: cn(
-          'group-active:text-accent-foreground',
-          Platform.select({ web: 'group-hover:text-accent-foreground' })
-        ),
+        outline: cn('group-active:text-accent-foreground', Platform.select({ web: 'group-hover:text-accent-foreground' })),
         secondary: 'text-secondary-foreground',
         ghost: 'group-active:text-accent-foreground',
         link: cn(
@@ -104,3 +98,4 @@ function Button({ className, variant, size, ...props }: ButtonProps) {
 
 export { Button, buttonTextVariants, buttonVariants };
 export type { ButtonProps };
+

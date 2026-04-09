@@ -1,4 +1,4 @@
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Icon } from '@/components/core';
 import { useRouter } from 'expo-router';
 import { Pressable } from 'react-native';
 import { useAppTheme } from './use-app-theme';
@@ -13,14 +13,16 @@ export const useScreenOptions = () => {
     headerTitleAlign: 'center' as 'center',
     headerLeft: () => (
       <Pressable
+        onPress={() => router.back()}
+        accessibilityRole="button"
+        accessibilityLabel="Go back"
         style={({ pressed }) => ({
           opacity: pressed ? 0.7 : 1,
           paddingVertical: 8,
           paddingRight: 16,
         })}
-        onPress={() => router.back()}
       >
-        <IconSymbol name="chevron.left" size={36} color={color.text} />
+        <Icon name="chevron.left" size={36} color={color.text} />
       </Pressable>
     ),
   };

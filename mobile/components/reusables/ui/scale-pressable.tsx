@@ -11,7 +11,7 @@ const ScalePressable = ({
 
   const animateIn = () => {
     Animated.spring(scale, {
-      toValue: 0.9,
+      toValue: 0.95,
       useNativeDriver: true,
       speed: 20,
       bounciness: 0,

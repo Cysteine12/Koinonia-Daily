@@ -1,0 +1,36 @@
+import { Text, View } from '@/components/core';
+import ScalePressable from '@/components/reusables/ui/scale-pressable';
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { useRouter } from 'expo-router';
+import { Image, type ImageSourcePropType } from 'react-native';
+
+interface LatestTeachingCardProps {
+  id: number;
+  imageUrl: ImageSourcePropType;
+  title: string;
+  date: string;
+}
+
+export default function LatestTeachingCard({ id, imageUrl, title, date }: LatestTeachingCardProps) {
+  const router = useRouter();
+  const { color } = useAppTheme();
+
+  return (
+    <ScalePressable onPress={() => router.push('/(tabs)/home')}>
+      <View
+        className="mr-2 w-44 border rounded-xl"
+        style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}
+      >
+        <Image source={imageUrl} className="object-contain w-full h-28 rounded-t-xl" />
+        <View className="p-2 h-24">
+          <Text variant="title" numberOfLines={3} className="font-semibold">
+            {title}
+          </Text>
+          <Text variant="label" className="mt-auto">
+            {date}
+          </Text>
+        </View>
+      </View>
+    </ScalePressable>
+  );
+}

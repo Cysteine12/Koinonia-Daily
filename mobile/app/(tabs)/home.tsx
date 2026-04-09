@@ -1,5 +1,5 @@
-import { ThemedView } from '@/components/themed-view';
+import HomeScreen from '@/screens/home';
 
-export default function HomeScreen() {
-  return <ThemedView style={{ flex: 1 }}></ThemedView>;
+export default function HomeRoute() {
+  return <HomeScreen />;
 }

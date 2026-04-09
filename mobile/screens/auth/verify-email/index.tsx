@@ -1,12 +1,8 @@
-import { Button } from '@/components/reusables/ui/button';
+import { Screen } from '@/components/core';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/reusables/ui/card';
 import { Input } from '@/components/reusables/ui/input';
 import { Text } from '@/components/reusables/ui/text';
-import { ThemedText } from '@/components/themed-text';
-import BottomSheet from '@/components/ui/bottom-sheet';
-import GoldGradient from '@/components/ui/gold-gradient';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import BackButton from '@/components/ui/back-button';
 import { useLogin, useRequestOtp, useVerifyEmail } from '@/features/auth/hook';
 import { verifyEmailSchema, type VerifyEmailSchema } from '@/features/auth/schema';
 import { useAuthStore } from '@/features/auth/store';
@@ -14,13 +10,15 @@ import useForm from '@/hooks/use-app-form';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
+import ConfirmationBottomSheet from '../components/confirmation-bottom-sheet';
+import GoldSubmitButton from '../components/gold-submit-button';
 
 const VerifyEmail = () => {
   const { color } = useAppTheme();
   const router = useRouter();
   const { mutate: login, isPending: isLoginPending } = useLogin();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const { credentials } = useAuthStore();
   const { mutate: verifyEmail, isPending, data: verifyEmailData } = useVerifyEmail();
   const { mutate: requestOtp, isPending: isRequestingOtp, data } = useRequestOtp();
@@ -56,7 +54,7 @@ const VerifyEmail = () => {
 
   useEffect(() => {
     if (verifyEmailData?.success) {
-      setModalOpen(true);
+      setModalVisible(true);
     }
   }, [verifyEmailData]);
 
@@ -85,21 +83,22 @@ const VerifyEmail = () => {
   }
 
   return (
-    <KeyboardAvoidingView
-      className="flex-1"
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
-    >
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
+    <>
+      <Screen
+        keyboard
+        scrollable
         keyboardDismissMode="interactive"
+        keyboardShouldPersistTaps="handled"
+        contentContainerClassName="sm:flex-1 px-4 pb-8 sm:py-4 sm:p-6"
       >
         <View className="w-full max-w-sm">
+          <BackButton />
           <View className="gap-6">
             <Card className="bg-transparent border-0">
               <CardHeader>
-                <CardTitle className="text-center text-gold-text text-xl sm:text-left">Verify your email</CardTitle>
+                <CardTitle className="text-center text-gold-text text-xl sm:text-left" style={{ color: color.goldText }}>
+                  Verify your email
+                </CardTitle>
                 <CardDescription className="text-center sm:text-left">
                   Please enter the 6-digit code sent to your email to verify your account.
                 </CardDescription>
@@ -135,45 +134,27 @@ const VerifyEmail = () => {
                       </Text>
                     </Pressable>
                   </View>
-                  <GoldGradient className="flex-1 self-center">
-                    <Button
-                      className="bg-transparent max-w-32 font-semibold"
-                      onPress={handleSubmit}
-                      disabled={isPending || isRequestingOtp}
-                    >
-                      {isPending ? <ActivityIndicator /> : <Text className="text-black">Verify Email</Text>}
-                    </Button>
-                  </GoldGradient>
+
+                  <GoldSubmitButton
+                    onPress={handleSubmit}
+                    isPending={isPending}
+                    title="Verify Email"
+                    disabled={isPending || isRequestingOtp}
+                  />
                 </View>
               </CardContent>
             </Card>
           </View>
         </View>
-      </ScrollView>
+      </Screen>
 
-      <BottomSheet isOpen={isModalOpen} onClose={() => !isLoginPending && handleCompleteModal()}>
-        <GoldGradient className="w-16 h-16 rounded-full items-center justify-center self-center mb-8">
-          <IconSymbol name="checkmark.circle" size={40} color={color.background} />
-        </GoldGradient>
-
-        <ThemedText className="text-center text-2xl">Email verified successfully!</ThemedText>
-
-        <Button
-          className="mt-8 self-center bg-transparent w-full border border-gold"
-          onPress={handleCompleteModal}
-          disabled={isLoginPending}
-        >
-          {isLoginPending ? (
-            <ActivityIndicator color={Colors.goldIcon} />
-          ) : (
-            <View className="flex-row items-center justify-center gap-1">
-              <Text className="text-gold-text font-semibold">Continue</Text>
-              <IconSymbol name="arrow.forward" size={16} color={Colors.goldIcon} />
-            </View>
-          )}
-        </Button>
-      </BottomSheet>
-    </KeyboardAvoidingView>
+      <ConfirmationBottomSheet
+        visible={isModalVisible}
+        onClose={handleCompleteModal}
+        title="Email verified successfully!"
+        isPending={isLoginPending}
+      />
+    </>
   );
 };
 
