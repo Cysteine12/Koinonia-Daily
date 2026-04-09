@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
 import { Separator } from '@/components/reusables/ui/separator';
+import Snackbar, { type SnackbarVariant } from '@/components/reusables/ui/snack-bar';
 import { Text } from '@/components/reusables/ui/text';
 import { Colors } from '@/constants';
 import { useRegister } from '@/features/auth/hook';
@@ -12,12 +13,13 @@ import { registerSchema, type RegisterSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { router } from 'expo-router';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import GoldSubmitButton from '../components/gold-submit-button';
 
 const Register = () => {
   const { color } = useAppTheme();
+  const [snackBar, setSnackBar] = useState<{ message: string; variant: SnackbarVariant } | null>(null);
   const { mutate: register, isPending } = useRegister();
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const { form, errors, handleChange, handleSubmit } = useForm<RegisterSchema>({
@@ -40,8 +42,11 @@ const Register = () => {
   const confirmPasswordRef = useRef<TextInput>(null);
 
   function handleSocialSignIn(type: string) {
-    // TODO
+    setSnackBar({ message: 'Coming soon!', variant: 'info' });
   }
+
+  const passwordMismatchError =
+    confirmPassword.length > 0 && form.password.length > 0 && confirmPassword !== form.password ? 'Passwords do not match' : null;
 
   return (
     <Screen
@@ -126,7 +131,7 @@ const Register = () => {
                     returnKeyType="send"
                     editable={!isPending}
                     value={form.password}
-                    onChangeText={(text) => handleChange('password', text.trim())}
+                    onChangeText={(text) => handleChange('password', text)}
                     ref={passwordRef}
                     onSubmitEditing={() => confirmPasswordRef.current?.focus()}
                   />
@@ -149,11 +154,7 @@ const Register = () => {
                     ref={confirmPasswordRef}
                   />
                   <Text className="text-sm" style={{ color: Colors.warning }}>
-                    {(confirmPassword.length > 0 &&
-                      form.password.length > 0 &&
-                      confirmPassword !== form.password &&
-                      'Passwords do not match') ||
-                      ''}
+                    {passwordMismatchError || ''}
                   </Text>
                 </View>
 
@@ -185,6 +186,14 @@ const Register = () => {
           </Card>
         </View>
       </View>
+
+      <Snackbar
+        message={snackBar?.message || ''}
+        variant={snackBar?.variant || 'info'}
+        visible={!!snackBar}
+        onHide={() => setSnackBar(null)}
+        style={{ top: 0 }}
+      />
     </Screen>
   );
 };

@@ -1,8 +1,11 @@
+import { Colors } from '@/constants';
 import { useColorScheme as useRNColorScheme } from '@/hooks/use-color-scheme';
 import logger from '@/lib/logger';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 type ThemeMode = 'auto' | 'light' | 'dark';
 
@@ -20,6 +23,7 @@ const THEME_STORAGE_KEY = 'koinonia_daily_theme_mode';
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const systemColorScheme = useRNColorScheme();
   const [themeMode, setThemeModeState] = useState<ThemeMode>('auto');
+  const overlayOpacity = useSharedValue(0);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -54,11 +58,34 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const navigationTheme = resolvedTheme === 'dark' ? DarkTheme : DefaultTheme;
 
+  useEffect(() => {
+    overlayOpacity.value = 1;
+    overlayOpacity.value = withTiming(0, { duration: 1000 });
+  }, [resolvedTheme, overlayOpacity]);
+
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: overlayOpacity.value,
+  }));
+
   if (!isReady) return null;
 
   return (
     <ThemeContext.Provider value={{ isReady, themeMode, setThemeMode, resolvedTheme }}>
-      <NavigationThemeProvider value={navigationTheme}>{children}</NavigationThemeProvider>
+      <NavigationThemeProvider value={navigationTheme}>
+        <Animated.View style={{ flex: 1 }}>
+          {children}
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              {
+                ...StyleSheet.absoluteFillObject,
+                backgroundColor: resolvedTheme === 'dark' ? Colors.dark.containerBackground : Colors.light.containerBackground,
+              },
+              overlayStyle,
+            ]}
+          />
+        </Animated.View>
+      </NavigationThemeProvider>
     </ThemeContext.Provider>
   );
 };

@@ -1,6 +1,5 @@
 import { Button } from '@/components/reusables/ui/button';
 import { useAppTheme } from '@/hooks/use-app-theme';
-import { cn } from '@/lib/utils';
 import { Image, Platform, View } from 'react-native';
 
 const SOCIAL_CONNECTION_STRATEGIES = [
@@ -28,7 +27,7 @@ export function SocialConnections({ handleSocialSignIn }: { handleSocialSignIn: 
             style={{ backgroundColor: color.background, borderColor: color.border }}
           >
             <Image
-              className={cn('size-4', strategy.useTint && Platform.select({ web: 'dark:invert' }))}
+              className="size-4"
               tintColor={Platform.select({
                 native: strategy.useTint ? (theme === 'dark' ? 'white' : 'black') : undefined,
               })}

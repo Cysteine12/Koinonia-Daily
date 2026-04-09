@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
 import { Separator } from '@/components/reusables/ui/separator';
+import Snackbar, { type SnackbarVariant } from '@/components/reusables/ui/snack-bar';
 import { Text } from '@/components/reusables/ui/text';
 import { Colors } from '@/constants';
 import { useLogin } from '@/features/auth/hook';
@@ -12,13 +13,14 @@ import { type LoginSchema, loginSchema } from '@/features/auth/schema';
 import useForm from '@/hooks/use-app-form';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { router } from 'expo-router';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 import { Image } from 'react-native';
 import GoldSubmitButton from '../components/gold-submit-button';
 
 const Login = () => {
   const { color } = useAppTheme();
+  const [snackBar, setSnackBar] = useState<{ message: string; variant: SnackbarVariant } | null>(null);
   const { mutate: login, isPending } = useLogin();
   const { form, errors, handleChange, handleSubmit } = useForm<LoginSchema>({
     data: {
@@ -32,7 +34,7 @@ const Login = () => {
   const passwordRef = useRef<TextInput>(null);
 
   const handleSocialSignIn = (type: string) => {
-    // TODO
+    setSnackBar({ message: 'Coming soon!', variant: 'info' });
   };
 
   return (
@@ -128,6 +130,14 @@ const Login = () => {
           </Card>
         </View>
       </View>
+
+      <Snackbar
+        message={snackBar?.message || ''}
+        variant={snackBar?.variant || 'info'}
+        visible={!!snackBar}
+        onHide={() => setSnackBar(null)}
+        style={{ top: 0 }}
+      />
     </Screen>
   );
 };
