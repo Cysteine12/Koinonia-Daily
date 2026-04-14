@@ -1,0 +1,8 @@
+description = "Rebases the current branch onto the current origin/develop"
+prompt = """
+First ensure there are no unstaged changes before proceeding, if there are, quit and inform me.
+1. Run `git switch develop`
+2. Run `git pull`
+3. Run `git switch` to that previous branch
+4. Run `git rebase develop`
+"""
