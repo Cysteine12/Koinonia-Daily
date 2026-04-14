@@ -209,7 +209,7 @@ jobs:
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
       
     - name: Scan Docker Image with Trivy (Sarif)
-      uses: aquasecurity/trivy-action@v0.33.1
+      uses: aquasecurity/trivy-action@v0.20.0
       with:
         image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
         severity: 'CRITICAL,HIGH'
@@ -225,7 +225,7 @@ jobs:
         category: "Trivy Docker Image Scan"
 
     - name: Scan Docker Image with Trivy (Table)
-      uses: aquasecurity/trivy-action@v0.33.1
+      uses: aquasecurity/trivy-action@v0.20.0
       with:
         image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/koinonia-daily-server:${{ github.sha }}
         severity: 'CRITICAL,HIGH'
