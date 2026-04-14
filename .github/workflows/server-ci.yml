@@ -127,6 +127,7 @@ jobs:
         scanners: vuln,secret,config
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TRIVY_DEBUG: true
 
     - name: Upload Trivy FS results
       uses: github/codeql-action/upload-sarif@v4
