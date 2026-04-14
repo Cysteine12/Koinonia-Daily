@@ -23,11 +23,12 @@ Standard paginated response structure.
 ```json
 {
   "content": ["T"],
-  "pageNumber": 0,
-  "pageSize": 50,
+  "page": 0,
+  "size": 50,
   "totalElements": 100,
   "totalPages": 2,
-  "last": false
+  "isFirst": true,
+  "isLast": false
 }
 ```
 
