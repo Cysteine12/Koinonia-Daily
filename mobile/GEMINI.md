@@ -63,3 +63,4 @@ npm run prettier:fix
 - **Authentication:** Use the `useAuth` hook from `features/auth/auth-context.tsx` to access authentication state and methods.
 - **Types:** Use TypeScript strictly. Define schemas with `zod` for API responses and form validation.
 - **Project Structure:** Place new features inside the `features/` directory, following the existing pattern of `api`, `hook`, `store`, and `types`.
+

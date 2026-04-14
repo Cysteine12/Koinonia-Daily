@@ -65,3 +65,4 @@ cd transcriber
 
 ## ✝️ Project Vision
 Koinonia Daily aims to provide a seamless and high-quality experience for users to access and interact with spiritual resources, sermons, and teachings.
+
