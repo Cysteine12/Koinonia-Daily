@@ -5,6 +5,11 @@ prompt = """
 ## Git Status
 !{git status}
 
+# Safety Gate (Mandatory)
+Before analyzing the diffs below, you MUST scan the content for PII or secret patterns (API keys, tokens, private keys, passwords, emails, IDs).
+1. **Redaction:** If any matches are found, redact or mask them in your analysis.
+2. **Alert:** If secrets are detected, PAUSE THE FLOW and prompt the user via `ask_user` to sanitize or rotate them before showing the diff or proceeding.
+
 ## Staged Diff
 ```diff
 !{git diff --staged}
@@ -33,8 +38,9 @@ Present the proposed commit plan to the user using the `ask_user` tool. The plan
 
 # Execution (After Approval)
 Once the user approves the plan:
-1.  For each approved commit:
-    - Use `git add` for the specific files in that group.
-    - Use `git commit -m "<message>"` to commit them.
-2.  Provide a final summary of what was committed and what was skipped.
+1.  Clear the index first (`git reset` or `git restore --staged :/`).
+2.  For each approved commit:
+    - Stage only that group: `git add -- <files...>`
+    - Commit only that group: `git commit -m "<message>" -- <files...>`
+3.  Provide a final summary of what was committed and what was skipped.
 """

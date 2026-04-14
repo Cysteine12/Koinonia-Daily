@@ -1,6 +1,6 @@
 description = "Synchronizes the current branch with 'develop' using autostash."
 
-prompt = \"\"\"
+prompt = """
 # Context: Current Git State
 - **Current Branch:** !{git branch --show-current}
 - **Working Tree Status:**
@@ -21,4 +21,4 @@ prompt = \"\"\"
 - **Autostash Benefit:** Git will automatically stash your changes before the rebase and pop them back once the rebase is finished.
 - **Stop on Errors:** If a rebase conflict occurs or any command fails, STOP immediately and ask me for instructions.
 - **Confirmation:** Provide a brief summary of the steps taken once completed.
-\"\"\"
+"""
