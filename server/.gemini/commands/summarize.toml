@@ -7,7 +7,7 @@ Please summarize this session, focusing on:
 4. **Current Status:** What is the current state of the workspace?
 5. **Next Steps:** What tasks remain or should be prioritized in the next session?
 
-After generating the summary, use the `write_file` tool to save it to '.agent/context/session_summary_{{args}}.md'. 
+After generating the summary, sanitize `{{args}}` if present to a safe slug (letters, numbers, '_', '-' only; no slashes/dots, then use the `write_file` tool to save it to '.agent/context/session_summary_{{args}}.md'. 
 The filename should be descriptive (e.g., '2026-04-14_api-docs-update').
 
 Finally, after saving the file, call the `/compress` command to optimize the session history.

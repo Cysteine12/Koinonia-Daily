@@ -1,6 +1,6 @@
 description = "Analyzes, groups, and commits changes with interactive approval."
 
-prompt = \"\"\"
+prompt = """
 # Context: Current Git State
 ## Git Status
 !{git status}
@@ -35,6 +35,6 @@ Present the proposed commit plan to the user using the `ask_user` tool. The plan
 Once the user approves the plan:
 1.  For each approved commit:
     - Use `git add` for the specific files in that group.
-    - Use `git commit -m \"<message>\"` to commit them.
+    - Use `git commit -m "<message>"` to commit them.
 2.  Provide a final summary of what was committed and what was skipped.
-\"\"\"
+"""
