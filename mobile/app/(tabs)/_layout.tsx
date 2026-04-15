@@ -5,6 +5,7 @@ import { Icon } from '@/components/core';
 import { HapticTab } from '@/components/haptic-tab';
 import { Colors, FontSize } from '@/constants';
 import { useAuth } from '@/features/auth/auth-context';
+import type { SearchStateType } from '@/screens/search/hooks/use-search-state';
 
 export default function TabLayout() {
   const { isAuthenticated } = useAuth();
@@ -46,6 +47,21 @@ export default function TabLayout() {
           title: 'Search',
           tabBarIcon: ({ focused, color }) => <Icon size={28} name={focused ? 'search' : 'search.outline'} color={color} />,
         }}
+        listeners={({ route, navigation }) => ({
+          tabPress: (e) => {
+            if (navigation.isFocused()) {
+              e.preventDefault();
+
+              navigation.navigate('search', {
+                searchState: ((route.params as any)?.searchState as SearchStateType) === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
+              } satisfies { searchState: SearchStateType });
+            } else {
+              e.preventDefault();
+
+              navigation.navigate('search');
+            }
+          },
+        })}
       />
       <Tabs.Screen
         name="library"
