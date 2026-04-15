@@ -35,12 +35,15 @@ const MAPPING = {
   'chevron.left': { name: 'chevron-back', family: 'Ionicons' },
   'chevron.right': { name: 'chevron-forward', family: 'Ionicons' },
   'arrow.forward': { name: 'arrow-forward', family: 'MaterialIcons' },
+  'arrow.backward': { name: 'arrow-back', family: 'MaterialIcons' },
+  cancel: { name: 'cancel', family: 'MaterialIcons' },
   check: { name: 'check', family: 'MaterialIcons' },
   add: { name: 'add-circle', family: 'Ionicons' },
   rocket: { name: 'rocket', family: 'MaterialIcons' },
   'timer.outline': { name: 'timer-outline', family: 'Ionicons' },
   'book.outline': { name: 'book-outline', family: 'Ionicons' },
   'check.circle.outline': { name: 'check-circle-outline', family: 'MaterialIcons' },
+  flame: { name: 'flame', family: 'Ionicons' },
 } satisfies IconMapping;
 
 export type IconSymbolName = keyof typeof MAPPING;

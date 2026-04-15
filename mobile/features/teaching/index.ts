@@ -1,1 +1,2 @@
-export { TeachingType, type Teaching } from './types';
+export { TEACHING_TYPE, type Teaching, type TeachingType } from './types';
+

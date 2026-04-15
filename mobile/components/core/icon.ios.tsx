@@ -20,12 +20,15 @@ const MAPPING: Record<IconSymbolName, SymbolViewProps['name']> = {
   'chevron.left': 'chevron.left',
   'chevron.right': 'chevron.right',
   'arrow.forward': 'arrow.forward',
+  'arrow.backward': 'arrow.backward',
+  cancel: 'xmark',
   check: 'checkmark.circle',
   add: 'plus',
   rocket: 'fireworks',
   'timer.outline': 'timer',
   'book.outline': 'book',
   'check.circle.outline': 'checkmark.circle',
+  flame: 'flame',
 };
 
 export function Icon({

@@ -1,4 +1,4 @@
-import { Colors } from '@/constants';
+import { Colors, FontSize } from '@/constants';
 import { useTheme } from '@/features/theme-context';
 
 export function useAppTheme() {
@@ -10,5 +10,6 @@ export function useAppTheme() {
     setThemeMode,
     color: Colors[resolvedTheme],
     isDark: resolvedTheme === 'dark',
+    typography: FontSize
   };
 }
