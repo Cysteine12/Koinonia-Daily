@@ -1,0 +1,46 @@
+description = "Analyzes, groups, and commits changes with interactive approval."
+
+prompt = """
+# Context: Current Git State
+## Git Status
+!{git status}
+
+# Safety Gate (Mandatory)
+Before analyzing the diffs below, you MUST scan the content for PII or secret patterns (API keys, tokens, private keys, passwords, emails, IDs).
+1. **Redaction:** If any matches are found, redact or mask them in your analysis.
+2. **Alert:** If secrets are detected, PAUSE THE FLOW and prompt the user via `ask_user` to sanitize or rotate them before showing the diff or proceeding.
+
+## Staged Diff
+```diff
+!{git diff --staged}
+```
+
+## Unstaged Diff
+```diff
+!{git diff}
+```
+
+# Task: Analyze and Plan Commits
+1.  **Analyze All Changes:** Review both staged and unstaged diffs.
+2.  **Logical Grouping:** Separate changes into coherent groups. For example:
+    - Feature implementation should be separate from documentation updates.
+    - Bug fixes should be separate from unrelated refactoring.
+3.  **Identify Non-Commit Candidates:** List any files that should NOT be committed (e.g., local configuration, temporary logs, or incomplete work) and provide a reason for each.
+4.  **Generate Commit Messages:** For each logical group, generate a concise and descriptive Conventional Commit message (e.g., `feat: ...`, `fix: ...`, `docs: ...`).
+
+# Mandatory Step: Interactive Approval
+Present the proposed commit plan to the user using the `ask_user` tool. The plan must include:
+- A list of files for each proposed commit.
+- The proposed commit message for that group.
+- A list of files to be skipped and why.
+
+**Do NOT execute any `git commit` commands until the user has explicitly approved the plan via `ask_user`.**
+
+# Execution (After Approval)
+Once the user approves the plan:
+1.  Clear the index first (`git reset` or `git restore --staged :/`).
+2.  For each approved commit:
+    - Stage only that group: `git add -- <files...>`
+    - Commit only that group: `git commit -m "<message>" -- <files...>`
+3.  Provide a final summary of what was committed and what was skipped.
+"""
