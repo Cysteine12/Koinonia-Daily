@@ -7,12 +7,12 @@ import { Image, type ImageSourcePropType } from 'react-native';
 
 interface RecommendedTeachingCardProps {
   id: number;
-  imageUrl: ImageSourcePropType;
+  thumbnailUrl: ImageSourcePropType;
   title: string;
   type: string;
 }
 
-export default function RecommendedTeachingCard({ id, imageUrl, title, type }: RecommendedTeachingCardProps) {
+export default function RecommendedTeachingCard({ id, thumbnailUrl, title, type }: RecommendedTeachingCardProps) {
   const router = useRouter();
   const { color } = useAppTheme();
 
@@ -22,7 +22,7 @@ export default function RecommendedTeachingCard({ id, imageUrl, title, type }: R
         className="flex-row mr-2 w-64 border rounded-xl"
         style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}
       >
-        <Image source={imageUrl} className="object-cover w-24 h-24 rounded-l-xl" />
+        <Image source={thumbnailUrl} className="object-cover w-24 h-24 rounded-l-xl" />
         <View className="flex-1 p-2 h-24">
           <View className="flex-row">
             <View className="w-1.5 h-1.5 rounded-full bg-primary mr-1 mt-1" />
