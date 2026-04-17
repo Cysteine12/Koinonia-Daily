@@ -1,19 +1,36 @@
-import { Icon, Screen, Text, View } from '@/components/core';
+import { Screen, Text, View } from '@/components/core';
+import OpacityPressable from '@/components/ui/opacity-pressable';
+import Tag from '@/components/ui/tag';
 import { FontSize } from '@/constants';
 import type { TeachingType } from '@/features/teaching';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useState } from 'react';
-import { FlatList, Switch, TextInput, TouchableOpacity } from 'react-native';
+import { FlatList, Switch } from 'react-native';
+import RecentSearchList from './components/recent-search-list';
+import SearchBox from './components/search-box';
+import SearchResultList from './components/search-result-list';
+import { recentSearchesData, searchResultsData } from './data';
 
 interface SearchActiveScreenProps {
   toggleSearchState: () => void;
 }
 
+export type SearchResult = {
+  id: string;
+  title: string;
+  text: string;
+  thumbnailUrl: any;
+  type: string;
+  searchTag: string;
+};
+
 export default function SearchActiveScreen({ toggleSearchState }: SearchActiveScreenProps) {
-  const { color, isDark } = useAppTheme();
+  const { color } = useAppTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [fullSearch, setFullSearch] = useState(false);
   const [selectedSearchTag, setSelectedSearchTag] = useState<TeachingType | 'ALL'>('ALL');
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+
   const searchTags: { text: string; type: TeachingType | 'ALL' }[] = [
     {
       text: 'All',
@@ -37,61 +54,53 @@ export default function SearchActiveScreen({ toggleSearchState }: SearchActiveSc
     },
   ];
 
+  const recentSearches = recentSearchesData;
+
+  const handleSearch = () => {
+    setSearchResults(searchResultsData);
+  };
+
   return (
-    <Screen scrollable keyboard edges={['top']} stickyHeaderIndices={[0]}>
-      <View className="flex flex-row items-center" style={{ backgroundColor: color.border }}>
-        <TouchableOpacity onPress={toggleSearchState} className="p-2">
-          <Icon name="arrow.backward" size={FontSize.xl} color={color.text} />
-        </TouchableOpacity>
-        <TextInput
-          autoFocus={true}
-          placeholder="Search teachings, topics, scriptures and more"
-          placeholderTextColor={color.textMuted}
-          keyboardAppearance={isDark ? 'dark' : 'light'}
-          inputMode="search"
-          maxLength={100}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          className="text-lg rounded-lg w-fit h-16 px-2 items-center focus:outline-none leading-5 shadow-sm shadow-black/5"
-          style={{ color: color.text }}
-        />
-        {searchQuery.length > 0 && (
-          <TouchableOpacity onPress={() => setSearchQuery('')} className="p-2 ml-auto">
-            <Icon name="cancel" size={FontSize.xl} color={color.text} />
-          </TouchableOpacity>
-        )}
-      </View>
+    <Screen
+      scrollable
+      keyboard
+      keyboardDismissMode="on-drag"
+      keyboardShouldPersistTaps="always"
+      edges={[]}
+      stickyHeaderIndices={[0]}
+    >
+      <SearchBox
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        handleSearch={handleSearch}
+        onBack={toggleSearchState}
+        setSearchResults={setSearchResults}
+      />
 
       <View>
         <FlatList
           contentContainerClassName="my-2 px-4"
           horizontal={true}
           showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="always"
           data={searchTags}
           renderItem={({ item }) => (
-            <TouchableOpacity
-              className="flex-1 border rounded-xl py-1 px-3 mr-2"
-              style={{
-                borderColor: selectedSearchTag === item.type ? color.goldBorder : color.border,
-                backgroundColor: selectedSearchTag === item.type ? color.goldTextMuted : color.cardBorder,
-              }}
-              onPress={() => setSelectedSearchTag(item.type)}
-            >
-              <Text
-                variant="label"
-                weight="semibold"
-                size={FontSize.xs}
-                style={{ color: selectedSearchTag === item.type ? color.goldText : color.text }}
-              >
-                {item.text}
-              </Text>
-            </TouchableOpacity>
+            <OpacityPressable activeScale={1} onPress={() => setSelectedSearchTag(item.type)}>
+              <Tag
+                text={item.text}
+                color={selectedSearchTag === item.type ? color.goldBorder : color.border}
+                backgroundColor={selectedSearchTag === item.type ? color.goldTextMuted : color.cardBorder}
+                textColor={selectedSearchTag === item.type ? color.goldText : color.text}
+                fontSize={FontSize.xs}
+                className="mr-2 py-1 px-3 rounded-xl"
+              />
+            </OpacityPressable>
           )}
         />
       </View>
 
       <View
-        className="flex-row items-center justify-between mb-2 mx-4 p-3 rounded-lg border"
+        className="flex-row items-center justify-between mb-2 mx-4 px-3 rounded-lg border"
         style={{ backgroundColor: color.cardBorder, borderColor: color.border }}
       >
         <View>
@@ -102,13 +111,17 @@ export default function SearchActiveScreen({ toggleSearchState }: SearchActiveSc
             Looks through full teaching content
           </Text>
         </View>
-        <View className="">
+        <View>
           <Switch value={fullSearch} onValueChange={setFullSearch} trackColor={{ true: color.goldBorder }} thumbColor={'#fff'} />
         </View>
       </View>
 
-      <View className="px-2 my-4">
-        <Text>SearchActiveScreen is now WIP</Text>
+      <View className="my-3 mx-4">
+        {searchResults.length > 0 ? (
+          <SearchResultList searchQuery={searchQuery} searchResults={searchResults} />
+        ) : (
+          <RecentSearchList recentSearches={recentSearches} />
+        )}
       </View>
     </Screen>
   );

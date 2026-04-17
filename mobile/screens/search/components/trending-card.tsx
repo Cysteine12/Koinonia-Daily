@@ -1,14 +1,13 @@
-import { Text, View } from '@/components/core';
-import ScalePressable from '@/components/reusables/ui/scale-pressable';
+import { Image, type ImageProps, Text, View } from '@/components/core';
+import ScalePressable from '@/components/ui/scale-pressable';
 import { FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
-import { Image } from 'react-native';
 
 interface TrendingCardProps {
   index: number;
   id: string;
-  thumbnailUrl: any;
+  thumbnailUrl: ImageProps;
   title: string;
   type: string;
   taughtAt: string;
@@ -36,7 +35,7 @@ export default function TrendingCard({ index, id, thumbnailUrl, title, type, tau
           </Text>
         </View>
         <View>
-          <Image source={thumbnailUrl} className="size-20 rounded-xl" />
+          <Image source={thumbnailUrl} className="size-20 rounded-lg" />
         </View>
         <View className="flex-1 flex-col h-20 p-2">
           <Text className="uppercase" size={FontSize.xs} style={{ color: color.goldText }}>

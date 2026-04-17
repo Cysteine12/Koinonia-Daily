@@ -1,10 +1,9 @@
-import { Text, View } from '@/components/core';
+import { Image, type ImageProps, Text, View } from '@/components/core';
+import OpacityPressable from '@/components/ui/opacity-pressable';
 import { FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import type { ImageProps } from 'react-native';
-import { Image, TouchableOpacity } from 'react-native';
 
 interface DiscoveryCardProps {
   id: string;
@@ -19,10 +18,10 @@ export default function DiscoveryCard({ id, title, thumbnailUrl, type, createdAt
   const { color } = useAppTheme();
 
   return (
-    <TouchableOpacity className=" my-1.5" onPress={() => router.push('/(tabs)/search')}>
-      <View className="flex flex-row rounded-xl w-full">
-        <View className="">
-          <Image source={thumbnailUrl} className="size-16 rounded-xl" />
+    <OpacityPressable className="my-1.5" onPress={() => router.push('/(tabs)/search')}>
+      <View className="flex flex-row rounded-md w-full">
+        <View>
+          <Image source={thumbnailUrl} className="size-16 rounded-md" />
         </View>
         <View className="flex-1 flex-col py-0.5 pl-4">
           <Text className="uppercase" size={FontSize.xs} style={{ color: color.goldText }}>
@@ -45,6 +44,6 @@ export default function DiscoveryCard({ id, title, thumbnailUrl, type, createdAt
           <Ionicons name="chevron-forward" size={FontSize.lg} color={color.text} />
         </View>
       </View>
-    </TouchableOpacity>
+    </OpacityPressable>
   );
 }
