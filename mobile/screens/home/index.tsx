@@ -13,8 +13,8 @@ import StatsCard from './components/stats-card';
 
 export default function HomeScreen() {
   const lastTeaching = {
-    title: 'Commanding the Supernatural: The Principles of Dominion',
-    thumbnailUrl: require('@/assets/images/i4.jpg'),
+    title: 'Worship and Warfare Service: March Edition, 2026',
+    thumbnailUrl: require('@/assets/images/p4.jpg'),
     type: 'Sunday Service',
     lastRead: 'Last read 2 days ago • 8 min read',
   };
@@ -22,20 +22,20 @@ export default function HomeScreen() {
   const recentTeachings = [
     {
       id: 1,
-      title: 'Commanding The Supernatural Part 1: The Mystery of Dominion',
-      imageUrl: require('@/assets/images/p1.jpg'),
+      title: 'The Journey to Maturity & Power: The Mystery of Dominion',
+      thumbnailUrl: require('@/assets/images/p1.jpg'),
       date: 'Mar 6, 2025',
     },
     {
       id: 2,
-      title: 'Commanding The Supernatural Part 1: The Mystery of Dominion',
-      imageUrl: require('@/assets/images/p2.jpg'),
+      title: 'The Fight of Faith: Making Dominion a Functional Reality',
+      thumbnailUrl: require('@/assets/images/p2.jpg'),
       date: 'Mar 6, 2025',
     },
     {
       id: 3,
       title: 'Commanding The Supernatural Part 1: The Mystery of Dominion',
-      imageUrl: require('@/assets/images/p3.jpg'),
+      thumbnailUrl: require('@/assets/images/p3.jpg'),
       date: 'Mar 6, 2025',
     },
   ];
@@ -44,25 +44,25 @@ export default function HomeScreen() {
     {
       id: 1,
       title: 'How Kings Reign: The Power of Spoken Words',
-      imageUrl: require('@/assets/images/p1.jpg'),
+      thumbnailUrl: require('@/assets/images/p1.jpg'),
       type: 'Conference',
     },
     {
       id: 2,
       title: 'How Kings Reign: The Power of Spoken Words',
-      imageUrl: require('@/assets/images/p2.jpg'),
+      thumbnailUrl: require('@/assets/images/p2.jpg'),
       type: 'Sunday Service',
     },
     {
       id: 3,
       title: 'How Kings Reign: The Power of Spoken Words',
-      imageUrl: require('@/assets/images/p3.jpg'),
+      thumbnailUrl: require('@/assets/images/p3.jpg'),
       type: 'External Ministration',
     },
     {
       id: 4,
       title: 'How Kings Reign: The Power of Spoken Words',
-      imageUrl: require('@/assets/images/p4.jpg'),
+      thumbnailUrl: require('@/assets/images/p4.jpg'),
       type: 'Conference',
     },
   ];
@@ -71,25 +71,25 @@ export default function HomeScreen() {
     {
       id: 1,
       title: 'Warfare & Deliverance',
-      imageUrl: require('@/assets/images/p1.jpg'),
+      thumbnailUrl: require('@/assets/images/p1.jpg'),
       total: 12,
     },
     {
       id: 2,
       title: 'New Creation Realities',
-      imageUrl: require('@/assets/images/p2.jpg'),
+      thumbnailUrl: require('@/assets/images/p2.jpg'),
       total: 8,
     },
     {
       id: 3,
       title: 'Establishing Dominion',
-      imageUrl: require('@/assets/images/p3.jpg'),
+      thumbnailUrl: require('@/assets/images/p3.jpg'),
       total: 15,
     },
     {
       id: 4,
       title: 'Manifesting The Supernatural',
-      imageUrl: require('@/assets/images/p4.jpg'),
+      thumbnailUrl: require('@/assets/images/p4.jpg'),
       total: 20,
     },
   ];
@@ -98,21 +98,21 @@ export default function HomeScreen() {
     {
       id: 1,
       title: 'Commanding The Supernatural',
-      imageUrl: require('@/assets/images/p1.jpg'),
+      thumbnailUrl: require('@/assets/images/p1.jpg'),
       description: 'Exploring the dynamics of faith in establishing kingdom ordinances',
       total: 2,
     },
     {
       id: 2,
       title: 'Complete Deliverance',
-      imageUrl: require('@/assets/images/p2.jpg'),
+      thumbnailUrl: require('@/assets/images/p2.jpg'),
       description: 'A deep dive on the assets for establish the reality of over victory experientially',
       total: 3,
     },
     {
       id: 3,
       title: 'Striving for Mastery',
-      imageUrl: require('@/assets/images/p3.jpg'),
+      thumbnailUrl: require('@/assets/images/p3.jpg'),
       description: 'Becoming the God-man that we have been created to be in our daily living',
       total: 2,
     },
@@ -153,7 +153,7 @@ export default function HomeScreen() {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-              <LatestTeachingCard id={item.id} imageUrl={item.imageUrl} title={item.title} date={item.date} />
+              <LatestTeachingCard id={item.id} thumbnailUrl={item.thumbnailUrl} title={item.title} date={item.date} />
             )}
             ListFooterComponent={() => <SeeMoreButton link={'/(tabs)/home'} />}
           />
@@ -169,7 +169,7 @@ export default function HomeScreen() {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-              <RecommendedTeachingCard id={item.id} imageUrl={item.imageUrl} title={item.title} type={item.type} />
+              <RecommendedTeachingCard id={item.id} thumbnailUrl={item.thumbnailUrl} title={item.title} type={item.type} />
             )}
             ListFooterComponent={() => <SeeMoreButton link={'/(tabs)/home'} />}
           />
@@ -185,7 +185,7 @@ export default function HomeScreen() {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-              <CollectionCard id={item.id} imageUrl={item.imageUrl} title={item.title} total={item.total} />
+              <CollectionCard id={item.id} thumbnailUrl={item.thumbnailUrl} title={item.title} total={item.total} />
             )}
             ListFooterComponent={() => <SeeMoreButton link={'/(tabs)/home'} />}
           />
@@ -203,7 +203,7 @@ export default function HomeScreen() {
             renderItem={({ item }) => (
               <SeriesCard
                 id={item.id}
-                imageUrl={item.imageUrl}
+                thumbnailUrl={item.thumbnailUrl}
                 title={item.title}
                 description={item.description}
                 total={item.total}

@@ -35,20 +35,25 @@ const MAPPING = {
   'chevron.left': { name: 'chevron-back', family: 'Ionicons' },
   'chevron.right': { name: 'chevron-forward', family: 'Ionicons' },
   'arrow.forward': { name: 'arrow-forward', family: 'MaterialIcons' },
+  'arrow.backward': { name: 'arrow-back', family: 'MaterialIcons' },
+  close: { name: 'close', family: 'Ionicons' },
+  'close.circle': { name: 'cancel', family: 'MaterialIcons' },
   check: { name: 'check', family: 'MaterialIcons' },
   add: { name: 'add-circle', family: 'Ionicons' },
   rocket: { name: 'rocket', family: 'MaterialIcons' },
   'timer.outline': { name: 'timer-outline', family: 'Ionicons' },
+  'clock.outline': { name: 'time-outline', family: 'Ionicons' },
   'book.outline': { name: 'book-outline', family: 'Ionicons' },
   'check.circle.outline': { name: 'check-circle-outline', family: 'MaterialIcons' },
+  flame: { name: 'flame', family: 'Ionicons' },
 } satisfies IconMapping;
 
 export type IconSymbolName = keyof typeof MAPPING;
 
 /**
- * An icon component that uses native SF Symbols on iOS, and Material Icons on Android.
+ * An icon component that uses Vector Icons on Android and native SF Symbols on iOS.
  * This ensures a consistent look across platforms, and optimal resource usage.
- * Icon `name`s are based on SF Symbols and require manual mapping to Material Icons.
+ * Icon `name`s are based on Vector Icons and require manual mapping to SF Symbols.
  */
 export function Icon({
   name,

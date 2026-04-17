@@ -1,8 +1,8 @@
 import { Text, View } from '@/components/core';
+import OpacityPressable from '@/components/ui/opacity-pressable';
 import { FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter, type Href } from 'expo-router';
-import { TouchableOpacity } from 'react-native';
 
 interface SectionTitleProps {
   title: string;
@@ -15,15 +15,17 @@ export default function SectionTitle({ title, link, linkTitle = 'See more' }: Se
   const { color } = useAppTheme();
 
   return (
-    <View className="mb-3 flex-row items-center">
+    <View className="mb-3 flex-row items-center justify-between">
       <Text size={FontSize.xl} className="font-semibold" style={{ fontFamily: FontFamily.Lora_500Medium }}>
         {title}
       </Text>
 
       {link && (
-        <TouchableOpacity onPress={() => router.push(link)} className="ml-auto">
-          <Text style={{ color: color.goldText }}>{linkTitle}</Text>
-        </TouchableOpacity>
+        <View>
+          <OpacityPressable onPress={() => router.push(link)} className="ml-auto">
+            <Text style={{ color: color.goldText }}>{linkTitle}</Text>
+          </OpacityPressable>
+        </View>
       )}
     </View>
   );

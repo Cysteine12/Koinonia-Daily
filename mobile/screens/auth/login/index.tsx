@@ -5,8 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/reusables/ui/input';
 import { Label } from '@/components/reusables/ui/label';
 import { Separator } from '@/components/reusables/ui/separator';
-import Snackbar, { type SnackbarVariant } from '@/components/reusables/ui/snack-bar';
 import { Text } from '@/components/reusables/ui/text';
+import Snackbar, { type SnackbarVariant } from '@/components/ui/snack-bar';
 import { Colors } from '@/constants';
 import { useLogin } from '@/features/auth/hook';
 import { type LoginSchema, loginSchema } from '@/features/auth/schema';

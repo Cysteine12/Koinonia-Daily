@@ -1,19 +1,18 @@
-import { Icon, Text, View } from '@/components/core';
-import ScalePressable from '@/components/reusables/ui/scale-pressable';
+import { Icon, Image, type ImageSourcePropType, Text, View } from '@/components/core';
+import ScalePressable from '@/components/ui/scale-pressable';
 import { FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
-import { Image, type ImageSourcePropType } from 'react-native';
 
 interface SeriesCardProps {
   id: number;
-  imageUrl: ImageSourcePropType;
+  thumbnailUrl: ImageSourcePropType;
   title: string;
   description: string;
   total: number;
 }
 
-export default function SeriesCard({ id, imageUrl, title, description, total }: SeriesCardProps) {
+export default function SeriesCard({ id, thumbnailUrl, title, description, total }: SeriesCardProps) {
   const router = useRouter();
   const { color } = useAppTheme();
 
@@ -23,7 +22,7 @@ export default function SeriesCard({ id, imageUrl, title, description, total }: 
         className="mr-2 w-48 border rounded-xl"
         style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}
       >
-        <Image source={imageUrl} className="object-contain w-full h-28 rounded-t-xl" />
+        <Image source={thumbnailUrl} className="object-contain w-full h-28 rounded-t-xl" />
         <View className="py-3 px-2 h-[104px]">
           <Text variant="title" numberOfLines={2} family={FontFamily.Lora_500Medium}>
             {title}

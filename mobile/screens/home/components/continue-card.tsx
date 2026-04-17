@@ -1,16 +1,14 @@
-import { Text, View } from '@/components/core';
-import ScalePressable from '@/components/reusables/ui/scale-pressable';
+import { Image, type ImageSourcePropType, Text, View } from '@/components/core';
+import ScalePressable from '@/components/ui/scale-pressable';
 import { Colors, FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import type { ImageProps } from 'react-native';
-import { Image } from 'react-native';
 
 interface ContinueCardProps {
   title: string;
-  thumbnailUrl: ImageProps;
+  thumbnailUrl: ImageSourcePropType;
   type: string;
   lastRead: string;
 }

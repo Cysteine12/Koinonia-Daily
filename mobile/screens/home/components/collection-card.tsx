@@ -1,18 +1,17 @@
-import { Text, View } from '@/components/core';
-import ScalePressable from '@/components/reusables/ui/scale-pressable';
+import { Image, type ImageSourcePropType, Text, View } from '@/components/core';
+import ScalePressable from '@/components/ui/scale-pressable';
 import { Colors, FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
-import { Image, type ImageSourcePropType } from 'react-native';
 
 interface CollectionCardProps {
   id: number;
-  imageUrl: ImageSourcePropType;
+  thumbnailUrl: ImageSourcePropType;
   title: string;
   total: number;
 }
 
-export default function CollectionCard({ id, imageUrl, title, total }: CollectionCardProps) {
+export default function CollectionCard({ id, thumbnailUrl, title, total }: CollectionCardProps) {
   const router = useRouter();
   const { color } = useAppTheme();
 
@@ -22,7 +21,7 @@ export default function CollectionCard({ id, imageUrl, title, total }: Collectio
         className="relative mr-2 w-32 h-40 border rounded-xl"
         style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}
       >
-        <Image source={imageUrl} className="object-cover w-32 h-40 rounded-xl" />
+        <Image source={thumbnailUrl} className="object-cover w-32 h-40 rounded-xl" />
         <View className="absolute bottom-0 p-2 rounded-b-xl w-full" style={{ backgroundColor: Colors.cardOverlay }}>
           <Text
             variant="title"

@@ -1,4 +1,4 @@
-import { FontSize } from '@/constants';
+import { FontFamily, FontSize } from '@/constants';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { cn } from '@/lib/utils';
 import { Text as RNText, StyleSheet, type TextProps as RNTextProps } from 'react-native';
@@ -49,6 +49,6 @@ export function Text({
 
 const weightStyles = StyleSheet.create({
   regular: { fontFamily: 'regular' },
-  semibold: { fontFamily: 'semibold' },
-  bold: { fontFamily: 'bold' },
+  semibold: { fontFamily: FontFamily.Outfit_600SemiBold },
+  bold: { fontFamily: FontFamily.Outfit_700Bold },
 });
