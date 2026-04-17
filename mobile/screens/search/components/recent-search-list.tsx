@@ -1,4 +1,4 @@
-import { View } from '@/components/core';
+import { View, type ImageSourcePropType } from '@/components/core';
 import React from 'react';
 import RecentSearchCard from './recent-search-card';
 import SectionTitle from './section-title';
@@ -7,7 +7,7 @@ interface RecentSearchListProps {
   recentSearches: {
     id: string;
     title: string;
-    thumbnailUrl: any;
+    thumbnailUrl: ImageSourcePropType;
     type: string;
     createdAt: string;
   }[];

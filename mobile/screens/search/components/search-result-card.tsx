@@ -1,4 +1,4 @@
-import { Image, type ImageProps, Text, View } from '@/components/core';
+import { Image, type ImageSourcePropType, Text, View } from '@/components/core';
 import OpacityPressable from '@/components/ui/opacity-pressable';
 import Tag from '@/components/ui/tag';
 import { FontFamily, FontSize } from '@/constants';
@@ -9,7 +9,7 @@ interface SearchResultCardProps {
   id: string;
   title: string;
   text: string;
-  thumbnailUrl: ImageProps;
+  thumbnailUrl: ImageSourcePropType;
   type: string;
   searchTag: string;
 }

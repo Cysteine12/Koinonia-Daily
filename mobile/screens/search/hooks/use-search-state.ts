@@ -1,5 +1,4 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
 
 export const SearchState = {
   ACTIVE: 'ACTIVE',
@@ -10,12 +9,8 @@ export type SearchStateType = keyof typeof SearchState;
 
 export default function useSearchState() {
   const router = useRouter();
-  const { searchState = 'INACTIVE' } = useLocalSearchParams<{ searchState: SearchStateType }>();
-  const [isSearchActive, setSearchActive] = useState(false);
-
-  useEffect(() => {
-    setSearchActive(searchState === SearchState.ACTIVE);
-  }, [searchState]);
+  const { searchState = SearchState.INACTIVE } = useLocalSearchParams<{ searchState: SearchStateType }>();
+  const isSearchActive = searchState === SearchState.ACTIVE;
 
   const toggleSearchState = () => {
     router.setParams({ searchState: searchState === SearchState.ACTIVE ? SearchState.INACTIVE : SearchState.ACTIVE });

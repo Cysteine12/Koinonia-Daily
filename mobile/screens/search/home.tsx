@@ -8,11 +8,12 @@ import TrendingCard from './components/trending-card';
 
 import SearchButton from './components/search-button';
 import { discoveryTeachingsData, trendingTeachingsData } from './data';
-interface SearchHomeScreenProp {
+
+interface SearchHomeScreenProps {
   toggleSearchState: () => void;
 }
 
-export default function SearchHomeScreen({ toggleSearchState }: SearchHomeScreenProp) {
+export default function SearchHomeScreen({ toggleSearchState }: SearchHomeScreenProps) {
   const { color } = useAppTheme();
 
   const trendingTeachings = trendingTeachingsData;

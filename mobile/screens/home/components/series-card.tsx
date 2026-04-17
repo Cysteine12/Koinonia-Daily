@@ -1,4 +1,4 @@
-import { Icon, Image, type ImageProps, Text, View } from '@/components/core';
+import { Icon, Image, type ImageSourcePropType, Text, View } from '@/components/core';
 import ScalePressable from '@/components/ui/scale-pressable';
 import { FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 
 interface SeriesCardProps {
   id: number;
-  thumbnailUrl: ImageProps;
+  thumbnailUrl: ImageSourcePropType;
   title: string;
   description: string;
   total: number;

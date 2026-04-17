@@ -1,4 +1,4 @@
-import { Icon, Image, type ImageProps, Text, View } from '@/components/core';
+import { Icon, Image, type ImageSourcePropType, Text, View } from '@/components/core';
 import OpacityPressable from '@/components/ui/opacity-pressable';
 import { FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 interface RecentSearchCardProps {
   id: string;
   title: string;
-  thumbnailUrl: ImageProps;
+  thumbnailUrl: ImageSourcePropType;
   type: string;
   createdAt: string;
   onCancel: () => void;
@@ -46,7 +46,7 @@ export default function RecentSearchCard({ id, title, thumbnailUrl, type, create
             </Text>
           </View>
         </View>
-        <View>
+        <View className="my-auto">
           <OpacityPressable onPress={onCancel} className="my-auto m-0">
             <Icon name="close" size={FontSize.xl} color={color.text} />
           </OpacityPressable>

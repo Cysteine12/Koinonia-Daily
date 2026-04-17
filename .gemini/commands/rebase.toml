@@ -10,6 +10,7 @@ prompt = """
 
 # Task: Synchronized Rebase (with Autostash)
 1.  **Update Base Branch:**
+    - If the working tree is dirty, statsh first: `git stash push -u -m "pre-rebase autostash"` (and pop at the end on success).
     - Switch to the base branch: `git checkout develop`
     - Pull latest changes: `git pull origin develop`
 2.  **Execute Rebase with Autostash:**

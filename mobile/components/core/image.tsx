@@ -1,9 +1,13 @@
-import { Image as RNImage, type ImageProps as RNImageProps } from 'react-native';
+import {
+  Image as RNImage,
+  type ImageProps as RNImageProps,
+  type ImageSourcePropType as RNImageSourcePropType,
+} from 'react-native';
 
-export type ImageProps = RNImageProps & {
-  className?: string;
-};
+export type ImageProps = RNImageProps;
 
-export function Image({ className, ...props }: ImageProps) {
-  return <RNImage className={className} {...props} />;
+export type ImageSourcePropType = RNImageSourcePropType;
+
+export function Image(props: ImageProps) {
+  return <RNImage {...props} />;
 }

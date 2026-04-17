@@ -51,7 +51,7 @@ const MAPPING = {
 export type IconSymbolName = keyof typeof MAPPING;
 
 /**
- * An icon component that uses Vector Icons on Android and native SF Symbols on iOS, and.
+ * An icon component that uses Vector Icons on Android and native SF Symbols on iOS.
  * This ensures a consistent look across platforms, and optimal resource usage.
  * Icon `name`s are based on Vector Icons and require manual mapping to SF Symbols.
  */

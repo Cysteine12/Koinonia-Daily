@@ -1,14 +1,13 @@
-import { Image, type ImageProps, Text, View } from '@/components/core';
+import { Icon, Image, type ImageSourcePropType, Text, View } from '@/components/core';
 import OpacityPressable from '@/components/ui/opacity-pressable';
 import { FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 interface DiscoveryCardProps {
   id: string;
   title: string;
-  thumbnailUrl: ImageProps;
+  thumbnailUrl: ImageSourcePropType;
   type: string;
   createdAt: string;
 }
@@ -41,7 +40,7 @@ export default function DiscoveryCard({ id, title, thumbnailUrl, type, createdAt
           </Text>
         </View>
         <View className="my-auto m-0">
-          <Ionicons name="chevron-forward" size={FontSize.lg} color={color.text} />
+          <Icon name="chevron.right" size={FontSize.lg} color={color.text} />
         </View>
       </View>
     </OpacityPressable>

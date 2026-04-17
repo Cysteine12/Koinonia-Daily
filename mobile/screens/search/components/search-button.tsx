@@ -12,6 +12,8 @@ export default function SearchButton({ toggleSearchState }: { toggleSearchState:
       activeOpacity={0.5}
       activeScale={1}
       duration={0}
+      accessibilityRole="button"
+      accessibilityLabel="Open Search"
       className="flex-row items-center border-2 rounded-xl p-4"
       style={{ backgroundColor: color.cardBackground, borderColor: color.border }}
     >

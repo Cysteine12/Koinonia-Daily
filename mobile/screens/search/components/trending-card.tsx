@@ -1,4 +1,4 @@
-import { Image, type ImageProps, Text, View } from '@/components/core';
+import { Image, type ImageSourcePropType, Text, View } from '@/components/core';
 import ScalePressable from '@/components/ui/scale-pressable';
 import { FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 interface TrendingCardProps {
   index: number;
   id: string;
-  thumbnailUrl: ImageProps;
+  thumbnailUrl: ImageSourcePropType;
   title: string;
   type: string;
   taughtAt: string;

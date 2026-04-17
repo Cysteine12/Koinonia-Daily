@@ -53,7 +53,8 @@ export default function TabLayout() {
               e.preventDefault();
 
               navigation.navigate('search', {
-                searchState: ((route.params as any)?.searchState as SearchStateType) === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
+                searchState:
+                  (route.params as { searchState?: SearchStateType })?.searchState === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
               } satisfies { searchState: SearchStateType });
             } else {
               e.preventDefault();

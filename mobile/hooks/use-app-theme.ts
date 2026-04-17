@@ -10,6 +10,6 @@ export function useAppTheme() {
     setThemeMode,
     color: Colors[resolvedTheme],
     isDark: resolvedTheme === 'dark',
-    typography: FontSize
+    typography: FontSize,
   };
 }

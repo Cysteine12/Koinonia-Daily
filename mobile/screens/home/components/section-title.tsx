@@ -15,15 +15,17 @@ export default function SectionTitle({ title, link, linkTitle = 'See more' }: Se
   const { color } = useAppTheme();
 
   return (
-    <View className="mb-3 flex-row items-center">
+    <View className="mb-3 flex-row items-center justify-between">
       <Text size={FontSize.xl} className="font-semibold" style={{ fontFamily: FontFamily.Lora_500Medium }}>
         {title}
       </Text>
 
       {link && (
-        <OpacityPressable onPress={() => router.push(link)} className="ml-auto">
-          <Text style={{ color: color.goldText }}>{linkTitle}</Text>
-        </OpacityPressable>
+        <View>
+          <OpacityPressable onPress={() => router.push(link)} className="ml-auto">
+            <Text style={{ color: color.goldText }}>{linkTitle}</Text>
+          </OpacityPressable>
+        </View>
       )}
     </View>
   );

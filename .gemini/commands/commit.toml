@@ -38,7 +38,8 @@ Present the proposed commit plan to the user using the `ask_user` tool. The plan
 
 # Execution (After Approval)
 Once the user approves the plan:
-1.  Clear the index first (`git reset` or `git restore --staged :/`).
+1.  Clear the index first (`git reset` or `git restore --staged :/`). 
+	(git reset (no args) resets the index to HEAD but leaves working tree intact)
 2.  For each approved commit:
     - Stage only that group: `git add -- <files...>`
     - Commit only that group: `git commit -m "<message>" -- <files...>`

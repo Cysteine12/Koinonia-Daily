@@ -1,11 +1,11 @@
-import { Image, type ImageProps, Text, View } from '@/components/core';
+import { Image, type ImageSourcePropType, Text, View } from '@/components/core';
 import ScalePressable from '@/components/ui/scale-pressable';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
 
 interface LatestTeachingCardProps {
   id: number;
-  thumbnailUrl: ImageProps;
+  thumbnailUrl: ImageSourcePropType;
   title: string;
   date: string;
 }

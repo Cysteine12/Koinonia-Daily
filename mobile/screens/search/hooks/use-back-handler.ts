@@ -2,12 +2,12 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { BackHandler } from 'react-native';
 
-interface UseBackToggleOptions {
+interface UseBackHandlerOptions {
   isActive: boolean;
   handler: () => void;
 }
 
-export default function useBackHandler({ isActive, handler }: UseBackToggleOptions) {
+export default function useBackHandler({ isActive, handler }: UseBackHandlerOptions) {
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {

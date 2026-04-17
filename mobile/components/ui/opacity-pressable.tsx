@@ -73,7 +73,6 @@ export default function OpacityPressable({
         animateOut();
         onPressOut?.(e);
       }}
-      style={{ flex: 1 }}
       {...rest}
     >
       <Animated.View className={className} style={[style, { transform: [{ scale }], opacity }]}>

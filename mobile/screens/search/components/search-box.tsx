@@ -22,7 +22,7 @@ export default function SearchBox({ onBack, searchQuery, setSearchQuery, handleS
     if (searchQuery === '') {
       setSearchResults([]);
     }
-  }, [searchQuery]);
+  }, [searchQuery, setSearchResults]);
 
   return (
     <View className="flex flex-row items-center h-16 w-full" style={{ backgroundColor: color.border }}>

@@ -32,7 +32,7 @@ export default function Tag({
       className={cn('flex-row items-center rounded-lg py-0.5 px-2', className)}
       style={{ borderColor: borderColor ?? color, backgroundColor: backgroundColor ?? hexToRgba(color, 0.15), borderWidth }}
     >
-      {icon && <Icon name="flame" size={fontSize} color={iconColor ?? color} className="mr-0.5" />}
+      {icon && <Icon name={icon} size={fontSize} color={iconColor ?? color} className="mr-0.5" />}
       <Text variant="label" weight="semibold" size={fontSize} style={{ color: textColor ?? color }}>
         {text}
       </Text>

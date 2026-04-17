@@ -2,18 +2,12 @@ import { Text, View } from '@/components/core';
 import { FontFamily } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import React from 'react';
+import type { SearchResult } from '../active';
 import SearchResultCard from './search-result-card';
 
 interface SearchResultListProps {
   searchQuery: string;
-  searchResults: {
-    id: string;
-    title: string;
-    text: string;
-    thumbnailUrl: any;
-    type: string;
-    searchTag: string;
-  }[];
+  searchResults: SearchResult[];
 }
 
 export default function SearchResultList({ searchQuery, searchResults }: SearchResultListProps) {
