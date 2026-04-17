@@ -1,13 +1,12 @@
-import { Icon, Text, View } from '@/components/core';
-import ScalePressable from '@/components/reusables/ui/scale-pressable';
+import { Icon, Image, type ImageProps, Text, View } from '@/components/core';
+import ScalePressable from '@/components/ui/scale-pressable';
 import { FontFamily, FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
-import { Image, type ImageSourcePropType } from 'react-native';
 
 interface SeriesCardProps {
   id: number;
-  thumbnailUrl: ImageSourcePropType;
+  thumbnailUrl: ImageProps;
   title: string;
   description: string;
   total: number;

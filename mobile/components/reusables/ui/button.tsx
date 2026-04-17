@@ -2,7 +2,7 @@ import { TextClassContext } from '@/components/reusables/ui/text';
 import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Platform, Pressable } from 'react-native';
-import ScalePressable from './scale-pressable';
+import ScalePressable from '../../ui/scale-pressable';
 
 const buttonVariants = cva(
   cn(

@@ -1,12 +1,11 @@
-import { Text, View } from '@/components/core';
-import ScalePressable from '@/components/reusables/ui/scale-pressable';
+import { Image, type ImageProps, Text, View } from '@/components/core';
+import ScalePressable from '@/components/ui/scale-pressable';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
-import { Image, type ImageSourcePropType } from 'react-native';
 
 interface LatestTeachingCardProps {
   id: number;
-  thumbnailUrl: ImageSourcePropType;
+  thumbnailUrl: ImageProps;
   title: string;
   date: string;
 }
