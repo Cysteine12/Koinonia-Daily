@@ -29,7 +29,7 @@ public class SecurityConfig {
   private final JwtFilter jwtFilter;
   
   @Bean
-  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  SecurityFilterChain securityFilterChain(HttpSecurity http) {
     return http
             .csrf(customizer -> customizer.disable())
             .authorizeHttpRequests(request -> request
@@ -44,7 +44,7 @@ public class SecurityConfig {
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
     return config.getAuthenticationManager();
   }
 
