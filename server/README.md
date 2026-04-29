@@ -1,230 +1,90 @@
-Koinonia Daily – Server (Backend)
+# Koinonia Daily Server
 
-This folder contains the Spring Boot backend for the Koinonia Daily application. The server exposes REST APIs consumed by the React Native mobile application and handles authentication, business logic, persistence, and integrations.
+The **Koinonia Daily Server** is a robust, high-performance backend built with **Spring Boot 4.0.5** and **Java 25**. It serves as the central intelligence for the Koinonia Daily ecosystem, providing secure RESTful APIs for the mobile application and managing spiritual resources including teachings, transcripts, and multimedia assets.
 
+## 🚀 Tech Stack
 
----
+-   **Language:** Java 25 (OpenJDK)
+-   **Framework:** Spring Boot 4.0.5
+-   **Security:** Spring Security with JWT (jjwt)
+-   **Database:** PostgreSQL (Production/Dev), H2 (Testing)
+-   **Migrations:** Flyway
+-   **Storage & Messaging:** AWS S3 (File Storage), AWS SES (Email Services)
+-   **Observability:** Sentry (Error tracking), Spring Boot Actuator
+-   **Resilience:** Bucket4j (Rate Limiting), Caffeine (Caching)
+-   **Build & Quality:** Maven, Lombok, Checkstyle (Google Style), SpotBugs, JaCoCo
 
-🧱 Tech Stack
+## 📂 Architecture
 
-Java 25
+The project follows a **Modular Layered Architecture**. Each feature is encapsulated within its own module under `org.eni.koinoniadaily.modules`, promoting high cohesion and low coupling.
 
-Spring Boot
+### Project Structure
+-   `config/`: Application-wide configurations (Security, JWT, S3, Rate Limiting).
+-   `modules/`: Feature-specific modules (Auth, Teaching, Series, Collection, etc.).
+    -   Each module contains its own: `Controller`, `Service`, `Repository`, `Entity`, and `DTOs`.
+-   `infrastructure/`: External integrations (AWS, Email).
+-   `exceptions/`: Global exception handling and custom error types.
+-   `utils/`: Shared utilities and standard API response wrappers.
 
-Spring Web (REST APIs)
+## 🛠️ Getting Started
 
-Spring Data JPA / Hibernate
+### Prerequisites
+-   **Java 25**
+-   **Maven 3.9+**
+-   **PostgreSQL** (Running instance)
 
-Spring Security (JWT-based authentication)
+### Installation & Run
+1.  **Clone and navigate:**
+    ```bash
+    cd server
+    ```
+2.  **Environment Setup:** Create `src/main/resources/application-local.properties` (ignored by git):
+    ```properties
+    spring.datasource.url=jdbc:postgresql://localhost:5432/koinoniadaily
+    spring.datasource.username=your_user
+    spring.datasource.password=your_password
+    jwt.secret=your_super_secret_key_at_least_32_characters
+    ```
+3.  **Run the application:**
+    ```bash
+    ./mvnw spring-boot:run
+    ```
+    The API will be available at `http://localhost:8080/api/v1`.
 
-AWS S3 & SES
+## 📚 API Documentation
 
-PostgreSQL (production & local dev)
+Detailed documentation of all available endpoints, request/response formats, and error codes can be found in:
 
-H2 (optional, for tests)
+👉 **[API Documentation](docs/api-docs.md)**
 
-Lombok
+## 🛡️ Security & Conventions
 
-Maven
+-   **Authentication:** Stateless JWT-based authentication.
+-   **Authorization:** Role-Based Access Control (RBAC) with `USER` and `ADMIN` roles.
+-   **Standardized Responses:** All APIs return a consistent `ApiResponse<T>` or `ErrorResponse` envelope.
+-   **Rate Limiting:** Protects sensitive endpoints (Login, Register) via Bucket4j filters.
+-   **Validation:** Strict input validation using Jakarta Bean Validation (`@Valid`).
 
+## 🧪 Quality & Testing
 
+We maintain high code quality through automated checks:
 
----
+```bash
+# Run unit and integration tests
+./mvnw test
 
-📂 Project Structure
+# Check code style (Google Style)
+./mvnw checkstyle:check
 
-server/
-├── src/
-│   ├── main/
-│   │   ├── java/com/koinoniadaily/
-│   │   │   ├── config/        # Security, JWT, CORS, app configs
-│   │   │   ├── modules/       # Feature modules with controllers, services, etc.
-│   │   │   ├── service/       # Business logic
-│   │   │   ├── utils/         # Utilities
-│   │   │   ├── dto/           # Request/response DTOs
-│   │   │   ├── exceptions/    # Global exception handling
-│   │   │   └── KoinoniaDailyApplication.java
-│   │   └── resources/
-│   │       ├── application.properties
-│   │       └── db/migration/  # Flyway migrations (if enabled)
-│   └── test/                  # Unit & integration tests
-├── pom.xml
-└── README.md
+# Run static analysis
+./mvnw spotbugs:check
 
+# Generate coverage report (JaCoCo)
+./mvnw verify
+```
 
----
-
-🚀 Getting Started
-
-Prerequisites
-
-Java 25
-
-Maven 3.9+
-
-PostgreSQL
-
-
-
----
-
-🔧 Environment Configuration
-
-Create a application-local.yml (or use environment variables):
-
-spring:
-  datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/koinoniadaily}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
-
-jwt:
-  secret: ${JWT_SECRET:your-secret-key}
-  expiration: 86400000
-
-> ⚠️ Never commit secrets. Use environment variables in production.
-
-
-
+## 📄 License
+This project is private and intended for internal use within the Koinonia Daily ecosystem.
 
 ---
-
-▶️ Run the Application
-
-mvn spring-boot:run
-
-Or:
-
-mvn clean package
-java -jar target/*.jar
-
-The server will start on:
-
-<http://localhost:8080>
-
-
----
-
-🔐 Authentication & Security
-
-JWT-based authentication
-
-Stateless REST APIs
-
-Role-based access control (RBAC)
-
-Protected routes using Spring Security filters
-
-
-Common roles:
-
-USER
-
-ADMIN
-
-
-
----
-
-📡 API Conventions
-
-Base path: /api/v1
-
-JSON request/response format
-
-Uses ResponseEntity<>
-
-Pagination via Pageable
-
-
-Example:
-
-GET /api/v1/users?page=0&size=20
-
-
----
-
-🧪 Testing
-
-Run all tests:
-
-mvn test
-
-CI runs:
-
-Unit tests
-
-Integration tests with PostgreSQL service
-
-
-
----
-
-🧰 CI/CD
-
-GitHub Actions is used for:
-
-Build & test on PRs (develop, main)
-
-Static analysis (CodeQL)
-
-Dependency scanning (Dependabot)
-
-
-
----
-
-🛠️ Common Maven Commands
-
-mvn clean
-mvn test
-mvn package
-mvn spring-boot:run
-
-
----
-
-🧠 Design Principles
-
-Layered architecture (Controller → Service → Repository)
-
-DTO-based API contracts
-
-Explicit transaction boundaries (@Transactional)
-
-Global exception handling
-
-Minimal magic, explicit configuration
-
-
-
----
-
-📌 Notes
-
-This backend is optimized for low-to-moderate traffic
-
-Designed for single-server deployment
-
-Suitable for EC2, Fly.io, Railway, or Docker-based hosting
-
-
-
----
-
-📄 License
-
-This project is private and intended for internal use.
-
-
----
-
-✝️ Project Vision
-
-Koinonia Daily exists to deliver devotionals, sermons, and spiritual resources in a simple, reliable, and secure way.
-
-> "And let us consider one another to provoke unto love and to good works." – Hebrews 10:24
+✝️ *Building technology to advance the Kingdom.*
