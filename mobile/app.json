@@ -8,7 +8,10 @@
     "scheme": "koinoniadaily",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "platforms": ["android", "ios"],
+    "platforms": [
+      "android",
+      "ios"
+    ],
     "splash": {
       "image": "./assets/images/logo.png",
       "resizeMode": "contain",
@@ -44,7 +47,8 @@
       ],
       "expo-secure-store",
       "@sentry/react-native",
-      "expo-font"
+      "expo-font",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
