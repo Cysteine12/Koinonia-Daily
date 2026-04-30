@@ -73,7 +73,7 @@ This layer evolves over time by feedback loops
 
 ##### Database Schema
 
-```
+```sql
 CREATE TABLE teaching_chunks (
   id BIGSERIAL PRIMARY KEY,
   teaching_id BIGINT NOT NULL REFERENCES teachings(id) ON DELETE CASCADE,
@@ -98,19 +98,19 @@ CREATE TABLE teaching_chunks (
 );
 ```
 -- HNSW index for fast vector search
-```
+```sql
 CREATE INDEX teaching_chunks_embedding_idx 
   ON teaching_chunks 
   USING hnsw (embedding vector_cosine_ops);
 ```
 
 -- Index for teaching lookup
-```
+```sql
 CREATE INDEX teaching_chunks_teaching_id_idx 
   ON teaching_chunks(teaching_id);
 ```
 2. Update teachings table
-```
+```sql
 ALTER TABLE teachings 
   ADD COLUMN embedding_status VARCHAR(20) DEFAULT 'pending',
   ADD COLUMN embedding_triggered_at TIMESTAMP,
@@ -159,14 +159,14 @@ If embedding fails:
 #### LangChain4j Integration Points
 Components to Use
 1. Document Splitter:
-```
+```java
 	DocumentSplitter splitter = DocumentSplitters.recursive(
 	  1000,  // chunk size in tokens
 	  200    // overlap
 	);
 ```
 2. Embedding Model:
-```
+```java
 	EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
 	  .apiKey(System.getenv("OPENAI_API_KEY"))
 	  .modelName("text-embedding-3-small")
@@ -183,7 +183,7 @@ Trade-off: LangChain4j's PgVectorEmbeddingStore vs Custom Implementation
 #### Semantic Chunking with Markdown Awareness
 Instead of arbitrary token limits, use structure-aware chunking:
 // LangChain4j configuration
-```
+```java
 DocumentSplitter splitter = DocumentSplitters.recursive(
   1200,  // max chunk size in tokens
   150,   // overlap tokens
@@ -217,7 +217,7 @@ DocumentSplitter splitter = DocumentSplitters.recursive(
 - Both chunks tagged with same section title: "Power of the Holy Spirit"
 
 ###### **Embedding Status Enum**
-```
+```java
 package org.eni.koinoniadaily.modules.teaching;
 
 public enum EmbeddingStatus {
@@ -228,7 +228,7 @@ public enum EmbeddingStatus {
 }
 ```
 ###### **Updated Teaching Entity**
-```
+```java
 @Entity
 @Table(name = "teachings")
 public class Teaching extends BaseEntity {
@@ -245,7 +245,7 @@ public class Teaching extends BaseEntity {
 }
 ```
 ###### **Updated Transcript Entity**
-```
+```java
 @Entity
 @Table(name = "transcripts")
 public class Transcript extends BaseEntity {
@@ -263,7 +263,7 @@ public class Transcript extends BaseEntity {
 }
 ```
 ###### **TeachingChunk Entity**
-```
+```java
 package org.eni.koinoniadaily.modules.teaching;
 
 import org.eni.koinoniadaily.entity.BaseEntity;
@@ -307,7 +307,7 @@ public class TeachingChunk extends BaseEntity {
 
 ###### Embedding Pipeline with Markdown Parsing
 **Markdown Metadata Extraction**
-```
+```java
 @Service
 @RequiredArgsConstructor
 public class ChunkingService {
@@ -384,7 +384,7 @@ public class ChunkingService {
 ```
 ###### **Admin Embedding Interface**
 Controller Endpoints
-```
+```java
 @RestController
 @RequestMapping("/api/admin/embeddings")
 @PreAuthorize("hasAuthority('ADMIN')")
@@ -435,7 +435,7 @@ public class EmbeddingAdminController {
 ```
 
 ###### **Response DTOs**
-```
+```java
 @Data
 @Builder
 public class EmbeddingStatusResponse {
@@ -449,7 +449,7 @@ public class EmbeddingStatusResponse {
 }
 ```
 
-```
+```java
 @Data
 @Builder
 public class EmbeddingQueueItem {
@@ -462,7 +462,7 @@ public class EmbeddingQueueItem {
 ```
 
 ###### **Async Embedding Service**
-```
+```java
 @Service
 @RequiredArgsConstructor
 public class EmbeddingService {

@@ -10,7 +10,7 @@ At its core, this search implementation consists of three main components:
 ## The Foundation: PostgreSQL Extensions
 The magic starts with three PostgreSQL extensions that transform a standard database into a powerful search platform:
 
-```
+```sql
 CREATE EXTENSION IF NOT EXISTS vector;
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 ```
@@ -21,7 +21,7 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm;
 ## Database Schema Design
 The schema elegantly separates documents from their searchable chunks:
 
-```
+```sql
 CREATE TABLE document (
     id          serial primary key,
     source_type TEXT,
@@ -52,7 +52,7 @@ Each document is split into overlapping chunks, with each chunk containing:
 - Automatic Index Maintenance with Triggers
 - PostgreSQL triggers automatically maintain search indexes whenever data changes:
 
-```
+```sql
 CREATE OR REPLACE FUNCTION chunk_tsv_trigger()
     RETURNS TRIGGER AS
 $$
@@ -72,7 +72,7 @@ This ensures the full-text search vector stays synchronized with the text conten
 ## Document Chunking Strategy
 The chunking algorithm is deceptively simple but highly effective:
 
-```
+```java
 private List<String> chunk(String text, int tokensPerChunk, double overlap) {
     if (text == null || text.isBlank()) {
         return List.of();
@@ -98,7 +98,7 @@ private List<String> chunk(String text, int tokensPerChunk, double overlap) {
 ## The Ingestion Pipeline
 When a document is indexed, the system performs several operations atomically:
 
-```
+```java
 Document ingest(String title, String fullText, Map<String, Object> metadata) {
     // Combine title and text for better search context
     fullText = title + " " + fullText;
@@ -166,7 +166,7 @@ The real power lies in the hybrid search strategy that combines three complement
 
 ### Phase 1: Hybrid Vector + Full-Text Search
 
-```
+```java
 var sql = """
     WITH fts AS (
         SELECT id, ts_rank(tsv, plainto_tsquery('english', ?)) AS fts_score
@@ -197,7 +197,7 @@ The <=> operator is pgvector's cosine distance operator. Converting it to simila
 ### Phase 2: Fuzzy Fallback Search
 When the hybrid search returns no results (perhaps due to typos or terminology mismatches), the system falls back to trigram fuzzy matching:
 
-```
+```java
 if (results.isEmpty()) {
     var fuzzySql = """
         SELECT document_id, id, text,
@@ -231,7 +231,7 @@ This fuzzy search:
 ## Metadata Filtering
 The system supports filtering by metadata using PostgreSQL's JSONB containment operator:
 
-```
+```java
 var metadataSql = hasMetadata ?
     """
         JOIN document d ON dc.document_id = d.id
@@ -243,7 +243,7 @@ var metadataSql = hasMetadata ?
 ## Domain Integration: The Service Layer
 The JdbcSearchService bridges the low-level index with domain entities:
 
-```
+```java
 @Override
 public <T extends Searchable> void index(T searchable) {
     var searchableId = searchable.searchableId();
@@ -271,7 +271,7 @@ public <T extends Searchable> void index(T searchable) {
 ## Search Result Assembly
 When searching, the service reconstructs domain objects from index hits:
 
-```
+```java
 @Override
 public Collection<RankedSearchResult> search(String query, Map<String, Object> metadata) {
     var results = new LinkedHashSet<RankedSearchResult>();
@@ -307,7 +307,7 @@ The deduplication step ensures that when multiple chunks from the same document 
 ## Event-Driven Indexing
 The system integrates with Spring Modulith for reactive indexing:
 
-```
+```java
 @ApplicationModuleListener
 void indexForSearchOnTranscriptCompletion(TranscriptRecordedEvent event) {
     var aClazz = (Class<? extends Transcribable>) event.type();
@@ -325,7 +325,7 @@ When a transcript is recorded, the entity is automatically indexed for search—
 The implementation includes several thoughtful optimizations:
 
 #### Caching Strategy
-```
+```java
 Index(JdbcClient jdbc, EmbeddingModel embeddingModel, ...,
       Cache documentsCache, Cache documentChunksCache) {
     this.documentsCache = documentsCache;
@@ -333,7 +333,7 @@ Index(JdbcClient jdbc, EmbeddingModel embeddingModel, ...,
 }
 ```
 
-```
+```java
 protected List<DocumentChunk> documentChunks(Long documentId) {
     return this.documentChunksCache.get(documentId, () ->
         jdbcClient
@@ -348,17 +348,17 @@ Caches reduce database hits for frequently accessed documents and chunks.
 
 #### Database Indexes
 -- **Full-text search index**
-```
+```sql
 CREATE INDEX idx_document_chunk_tsv ON document_chunk USING GIN (tsv);
 
 ```
 -- **Trigram search index**
-```
+```sql
 CREATE INDEX idx_document_chunk_text_trgm ON document_chunk USING GIN (text gin_trgm_ops);
 ```
 
 -- **Metadata filtering index**
-```
+```sql
 CREATE INDEX idx_document_metadata ON document USING GIN (metadata);
 ```
 GIN (Generalized Inverted Index) indexes make text search and JSONB queries blazingly fast.
