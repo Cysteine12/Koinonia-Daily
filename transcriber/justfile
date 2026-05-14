@@ -1,0 +1,23 @@
+set shell := ["bash", "-cu"]
+
+venv:
+    python3 -m venv venv
+
+install:
+    . venv/bin/activate && \
+    pip install --upgrade pip && \
+    pip install faster-whisper
+
+freeze:
+    . venv/bin/activate && \
+    pip freeze > requirements.txt
+
+transcribe:
+    . venv/bin/activate && \
+    python transcriber.py
+
+clean:
+    rm -rf venv __pycache__
+
+deactivate:
+    . deactivate
