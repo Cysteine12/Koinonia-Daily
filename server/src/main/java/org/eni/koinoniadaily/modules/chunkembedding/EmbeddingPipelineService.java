@@ -57,7 +57,7 @@ public class EmbeddingPipelineService {
           this.saveEmbeddingsAndUpdateChunksStatus(chunks, embeddings);
         } catch (RuntimeException ex) {
 
-          log.info("Embedding failed for teaching chunk batch ranging {}",
+          log.error("Embedding failed for teaching chunk batch ranging {}",
               chunks.stream()
                   .map(BaseEntity::getId)
                   .toList());

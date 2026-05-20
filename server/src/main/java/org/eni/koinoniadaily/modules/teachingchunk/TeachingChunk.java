@@ -20,6 +20,7 @@ import org.eni.koinoniadaily.entity.BaseEntity;
 import org.eni.koinoniadaily.modules.chunkembedding.ChunkEmbedding;
 import org.eni.koinoniadaily.modules.teaching.Teaching;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -54,5 +55,5 @@ public class TeachingChunk extends BaseEntity {
   private EmbeddingStatus embeddingStatus = EmbeddingStatus.PENDING;
 
   @OneToMany(mappedBy = "teachingChunk", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<ChunkEmbedding> chunkEmbeddings;
+  private List<ChunkEmbedding> chunkEmbeddings = new ArrayList<>();
 }
