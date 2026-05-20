@@ -22,6 +22,12 @@ CREATE TABLE teaching_chunks (
       CHECK (embedding_status IN ('PENDING', 'PROCESSING', 'EMBEDDED', 'FAILED'))
 );
 
+CREATE INDEX idx_teaching_chunks_teaching_id
+  ON teaching_chunks(teaching_id);
+
+CREATE INDEX idx_teaching_chunks_tsv
+  ON teaching_chunks USING GIN (tsv);
+
 CREATE OR REPLACE FUNCTION chunk_tsv_trigger()
     RETURNS TRIGGER AS
 $$
@@ -35,6 +41,3 @@ CREATE TRIGGER chunk_tsv_update
     BEFORE INSERT OR UPDATE ON teaching_chunks
     FOR EACH ROW
 EXECUTE PROCEDURE chunk_tsv_trigger();
-
-CREATE INDEX idx_teaching_chunks_teaching_id
-  ON teaching_chunks(teaching_id);

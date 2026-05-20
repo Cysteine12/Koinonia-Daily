@@ -54,7 +54,7 @@ public class EmbeddingPipelineService {
           List<float[]> embeddings = embeddingModelProvider.embed(chunkContents);
 
           this.saveEmbeddingsAndUpdateChunksStatus(chunks, embeddings);
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
 
           log.info("Embedding failed for teaching chunk batch ranging {}",
               chunks.stream()
@@ -79,13 +79,13 @@ public class EmbeddingPipelineService {
       teachingRepository.save(teaching);
 
       log.info("Embedding Pipeline completed for teaching {}", job.teachingId());
-    } catch (Exception ex) {
+    } catch (RuntimeException ex) {
 
       log.error("Catastrophic failure in embedding pipeline for teaching {}", job.teachingId(), ex);
 
       try {
         teachingRepository.updateStatus(job.teachingId(), TeachingStatus.FAILED);
-      } catch (Exception e) {
+      } catch (RuntimeException e) {
         log.error("Double-fault: Could not even mark teaching as FAILED", e);
       }
     }
@@ -108,7 +108,7 @@ public class EmbeddingPipelineService {
   }
 
   @Transactional
-  private void saveEmbeddingsAndUpdateChunksStatus(
+  public void saveEmbeddingsAndUpdateChunksStatus(
       List<TeachingChunk> chunks, List<float[]> embeddings
   ) {
 
@@ -118,7 +118,7 @@ public class EmbeddingPipelineService {
 
       TeachingChunk chunk = chunks.get(j);
 
-      ChunkEmbedding embedding = toEntity(embeddings.get(j), chunk);
+      ChunkEmbedding embedding = this.toEntity(embeddings.get(j), chunk);
 
       chunk.setChunkEmbedding(embedding);
       chunk.setEmbeddingStatus(EmbeddingStatus.EMBEDDED);

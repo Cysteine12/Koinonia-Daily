@@ -8,7 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Builder;
@@ -51,6 +51,6 @@ public class TeachingChunk extends BaseEntity {
   @Builder.Default
   private EmbeddingStatus embeddingStatus = EmbeddingStatus.PENDING;
 
-  @OneToOne(mappedBy = "teachingChunk", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "teachingChunk", cascade = CascadeType.ALL, orphanRemoval = true)
   private ChunkEmbedding chunkEmbedding;
 }

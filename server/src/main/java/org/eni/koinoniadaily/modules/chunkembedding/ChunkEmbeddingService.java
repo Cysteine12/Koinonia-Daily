@@ -24,12 +24,20 @@ public class ChunkEmbeddingService {
 
   public void triggerEmbedding(ChunkEmbeddingRequest request) {
 
-    log.info("Embedding trigger initiated for teaching: {}", request.getTeachingIds().toString());
+    log.info("Embedding trigger initiated for teachings: {}", request.getTeachingIds());
 
     List<Teaching> teachings = teachingRepository.findAllById(request.getTeachingIds());
 
+    if (teachings.size() != request.getTeachingIds().size()) {
+      log.error("Embedding trigger failed due to invalid id for teachings: {}", request.getTeachingIds());
+
+      throw new ValidationException("Invalid teaching id supplied. Try again");
+    }
+
     for (Teaching teaching : teachings) {
       if (teaching.getStatus() == TeachingStatus.PENDING) {
+        log.error("Embedding trigger failed with un-chunked teaching for teachings: {}", request.getTeachingIds());
+
         throw new ValidationException("Teaching with id " + teaching.getId() + " has not been chunked");
       }
     }
@@ -38,6 +46,8 @@ public class ChunkEmbeddingService {
       try {
         embeddingJobDispatcher.dispatch(new EmbeddingJob(teaching.getId()));
       } catch(RejectedExecutionException ex) {
+        log.error("Embedding trigger rejected with queue saturation for teachings: {}", request.getTeachingIds());
+
         throw new ValidationException("EMBEDDING_REJECTED", "Queue saturated. Retry later");
       }
     }

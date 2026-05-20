@@ -24,9 +24,8 @@ public class LocalEmbeddingDispatcher implements EmbeddingJobDispatcher {
 
     try {
       handler.handle(job);
-    } catch (Exception ex) {
-      log.warn("Async embedding execution failed", ex);
-      throw new RuntimeException(ex);
+    } catch (Throwable ex) {
+      log.error("Async embedding execution failed for teaching {}", job.teachingId(), ex);
     }
   }
 }

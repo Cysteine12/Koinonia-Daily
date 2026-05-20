@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
@@ -30,7 +30,7 @@ import org.hibernate.type.SqlTypes;
 public class ChunkEmbedding extends BaseEntity {
 
   @JoinColumn(name = "teaching_chunk_id", nullable = false)
-  @OneToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   private TeachingChunk teachingChunk;
 
   @Column(nullable = false, length = 100)
