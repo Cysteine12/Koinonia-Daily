@@ -16,7 +16,6 @@ import org.eni.koinoniadaily.modules.teachingchunk.TeachingChunkRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -27,7 +26,6 @@ public class EmbeddingPipelineService {
 
   private final TeachingRepository teachingRepository;
   private final TeachingChunkRepository teachingChunkRepository;
-  private final ChunkEmbeddingRepository chunkEmbeddingRepository;
   private final EmbeddingModelProvider embeddingModelProvider;
   private final TransactionTemplate transactionTemplate;
 
@@ -35,14 +33,14 @@ public class EmbeddingPipelineService {
 
     log.info("Embedding Pipeline started for teaching {}", job.teachingId());
 
-    Teaching teaching = this.findByIdAndMarkAsEmbedding(job.teachingId());
+    Teaching teaching = this.claimTeachingForEmbedding(job.teachingId());
 
-    teachingChunkRepository.resetFailedChunks(job.teachingId());
+    teachingChunkRepository.resetFailedChunks(teaching.getId());
 
     try {
       while (true) {
         List<TeachingChunk> chunks = teachingChunkRepository.claimNextPendingChunks(
-            job.teachingId(),
+            teaching.getId(),
             embeddingModelProvider.getBatchSize()
         );
 
@@ -63,7 +61,7 @@ public class EmbeddingPipelineService {
           log.error("Embedding failed for teaching chunk batch ranging {}",
               chunks.stream()
                   .map(BaseEntity::getId)
-                  .toList());
+                  .toList(), ex);
 
           for (TeachingChunk teachingChunk : chunks) {
 
@@ -73,14 +71,7 @@ public class EmbeddingPipelineService {
         }
       }
 
-      boolean hasAnyNonEmbeddedChunks = teachingChunkRepository.existsByTeachingIdAndEmbeddingStatusNot(
-          teaching.getId(),
-          EmbeddingStatus.EMBEDDED
-      );
-
-
-      teaching.setStatus(hasAnyNonEmbeddedChunks ? TeachingStatus.FAILED : TeachingStatus.EMBEDDED);
-      teachingRepository.save(teaching);
+      teachingRepository.finalizeEmbeddingStatus(teaching.getId());
 
       log.info("Embedding Pipeline completed for teaching {}", job.teachingId());
     } catch (RuntimeException ex) {
@@ -95,7 +86,7 @@ public class EmbeddingPipelineService {
     }
   }
 
-  private Teaching findByIdAndMarkAsEmbedding(Long id) {
+  private Teaching claimTeachingForEmbedding(Long id) {
 
     Teaching teaching = teachingRepository.findById(id)
         .orElseThrow(() -> new NotFoundException("Teaching not found"));
@@ -115,8 +106,6 @@ public class EmbeddingPipelineService {
       List<TeachingChunk> chunks, List<float[]> embeddings
   ) {
 
-    List<ChunkEmbedding> chunkEmbeddings = new ArrayList<>();
-
     for (int j = 0; j < chunks.size(); j++) {
 
       TeachingChunk chunk = chunks.get(j);
@@ -127,14 +116,12 @@ public class EmbeddingPipelineService {
           chunk.getChunkEmbeddings().stream(),
           Stream.of(embedding)
       ).toList();
+
       chunk.setChunkEmbeddings(list);
       chunk.setEmbeddingStatus(EmbeddingStatus.EMBEDDED);
-
-      chunkEmbeddings.add(embedding);
     }
 
-    chunkEmbeddingRepository.saveAll(chunkEmbeddings);
-
+    // Cascading will persist new chunks automatically
     teachingChunkRepository.saveAll(chunks);
   }
 

@@ -36,4 +36,22 @@ public interface TeachingRepository extends JpaRepository<Teaching, Long> {
   @Transactional
   @Query("UPDATE Teaching t SET t.status = :status WHERE t.id = :id")
   void updateStatus(@Param("id") Long id, @Param("status") TeachingStatus status);
+
+  @Modifying
+  @Query(value = """
+      UPDATE teachings t
+      SET status =
+        CASE
+          WHEN EXISTS (
+            SELECT 1
+            FROM teaching_chunks tc
+            WHERE tc.teaching_id = t.id
+            AND tc.embedding_status != 'EMBEDDED'
+          )
+          THEN 'FAILED'
+          ELSE 'EMBEDDED'
+        END
+      WHERE t.id = :id
+      """, nativeQuery = true)
+  void finalizeEmbeddingStatus(@Param("id") Long id);
 }

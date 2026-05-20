@@ -1,6 +1,5 @@
 package org.eni.koinoniadaily.modules.teachingchunk;
 
-import org.eni.koinoniadaily.modules.teaching.TeachingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
