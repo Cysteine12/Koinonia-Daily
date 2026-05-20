@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -120,7 +121,11 @@ public class EmbeddingPipelineService {
 
       ChunkEmbedding embedding = this.toEntity(embeddings.get(j), chunk);
 
-      chunk.setChunkEmbedding(embedding);
+      List<ChunkEmbedding> list = Stream.concat(
+          chunk.getChunkEmbeddings().stream(),
+          Stream.of(embedding)
+      ).toList();
+      chunk.setChunkEmbeddings(list);
       chunk.setEmbeddingStatus(EmbeddingStatus.EMBEDDED);
 
       chunkEmbeddings.add(embedding);

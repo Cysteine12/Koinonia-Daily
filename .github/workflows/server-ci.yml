@@ -27,7 +27,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:17
+        image: pgvector/pgvector:pg17
         env:
           POSTGRES_DB: koinonia_daily
           POSTGRES_USER: test
@@ -41,6 +41,20 @@ jobs:
           --health-retries 5
     
     steps:
+    - name: Enable PostgreSQL extensions (vector & pg_trgm)
+      run: |
+        PGPASSWORD=test psql \
+          -h localhost \
+          -U test \
+          -d koinonia_daily \
+          -c "CREATE EXTENSION IF NOT EXISTS vector;"
+
+        PGPASSWORD=test psql \
+          -h localhost \
+          -U test \
+          -d koinonia_daily \
+          -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+
     - name: Checkout code
       uses: actions/checkout@v4
       

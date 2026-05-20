@@ -20,6 +20,8 @@ import org.eni.koinoniadaily.entity.BaseEntity;
 import org.eni.koinoniadaily.modules.chunkembedding.ChunkEmbedding;
 import org.eni.koinoniadaily.modules.teaching.Teaching;
 
+import java.util.List;
+
 @Entity
 @Table(name = "teaching_chunks", uniqueConstraints = {
     @UniqueConstraint(name = "teaching_id_chunk_index_unique", columnNames = {"teaching_id", "chunk_index"})
@@ -52,5 +54,5 @@ public class TeachingChunk extends BaseEntity {
   private EmbeddingStatus embeddingStatus = EmbeddingStatus.PENDING;
 
   @OneToMany(mappedBy = "teachingChunk", cascade = CascadeType.ALL, orphanRemoval = true)
-  private ChunkEmbedding chunkEmbedding;
+  private List<ChunkEmbedding> chunkEmbeddings;
 }
