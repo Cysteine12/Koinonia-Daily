@@ -86,9 +86,16 @@ public class AppProperties {
   @Data
   public static class Embedding {
 
+    @Positive(message = "Embedding max chunk token must be > 0")
     private int maxChunkToken = 1200;
 
+    @PositiveOrZero(message = "Embedding overlap token must be >= 0")
     private int overlapToken = 150;
+
+    @AssertTrue(message = "Embedding overlap token must be smaller than max chunk token")
+    public boolean isTokenWindowValid() {
+      return overlapToken < maxChunkToken;
+    }
 
     @Valid
     private Queue queue = new Queue();

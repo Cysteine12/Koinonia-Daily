@@ -44,7 +44,7 @@ public class TeachingChunk extends BaseEntity {
   private String sectionTitle;
 
   @Column(nullable = true)
-  private int startOffset;
+  private Integer startOffset;
 
   @Column(nullable = false, length = 20)
   @Enumerated(value = EnumType.STRING)

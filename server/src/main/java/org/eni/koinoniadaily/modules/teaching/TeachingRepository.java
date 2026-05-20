@@ -2,7 +2,6 @@ package org.eni.koinoniadaily.modules.teaching;
 
 import java.util.List;
 
-import aj.org.objectweb.asm.commons.Remapper;
 import org.eni.koinoniadaily.modules.teaching.projection.TeachingWithoutMessageProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

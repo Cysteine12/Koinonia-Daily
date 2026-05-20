@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@ConditionalOnProperty(name = "app.embedding.model.provider", havingValue = "text-embedding-3-small", matchIfMissing = true)
+@ConditionalOnProperty(name = "app.embedding.model.provider", havingValue = "text-embedding-3-small")
 @Qualifier("text-embedding-3-small")
 @RequiredArgsConstructor
 public class TextEmbedding3SmallEmbeddingModelProvider implements EmbeddingModelProvider {
@@ -31,6 +31,14 @@ public class TextEmbedding3SmallEmbeddingModelProvider implements EmbeddingModel
   }
 
   @Override
+  @Retryable(
+      includes = Exception.class,
+      maxRetries = 2,
+      delay = 1000,
+      multiplier = 2,
+      maxDelay = 5000,
+      jitter = 500
+  )
   public float[] embed(String text) {
     return embeddingModel.embed(text);
   }

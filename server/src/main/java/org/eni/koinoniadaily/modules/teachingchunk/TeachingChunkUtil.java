@@ -1,5 +1,6 @@
 package org.eni.koinoniadaily.modules.teachingchunk;
 
+import jakarta.validation.constraints.NotNull;
 import org.eni.koinoniadaily.config.AppProperties;
 import org.eni.koinoniadaily.modules.teachingchunk.dto.ChunkCandidate;
 import org.eni.koinoniadaily.modules.teachingchunk.dto.MarkdownSection;
@@ -27,7 +28,7 @@ public class TeachingChunkUtil {
     this.overlapChars = appProperties.getEmbedding().getOverlapToken() * 4;
   }
 
-  public List<ChunkCandidate> chunk(String markdown) {
+  public List<ChunkCandidate> chunk(@NotNull String markdown) {
 
     // 1. Split into sections
     List<MarkdownSection> sections = split(markdown);

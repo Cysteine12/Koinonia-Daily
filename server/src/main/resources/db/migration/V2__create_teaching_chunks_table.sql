@@ -5,10 +5,11 @@ CREATE TABLE teaching_chunks (
   -- Chunk content
   chunk_index       INT NOT NULL,-- Order within teaching
   content           TEXT NOT NULL,
+  tsv               TSVECTOR,
 
   -- Metadata for search results display
   section_title     VARCHAR(100),
-  startOffset       INT,
+  start_offset      INT,
 
   embedding_status  VARCHAR(20) DEFAULT 'PENDING',
 

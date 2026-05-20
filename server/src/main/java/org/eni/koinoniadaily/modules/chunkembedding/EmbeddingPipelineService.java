@@ -93,17 +93,18 @@ public class EmbeddingPipelineService {
 
   private Teaching findByIdAndMarkAsEmbedding(Long id) {
 
+    Teaching teaching = teachingRepository.findById(id)
+        .orElseThrow(() -> new NotFoundException("Teaching not found"));
+
     int updatedRows = teachingRepository.markAsEmbedding(id);
 
-    // GUARD: If rows == 0, it means it was already 'EMBEDDING' (or didn't exist)
+    // GUARD: If rows == 0, it means it was already 'EMBEDDING'
     if (updatedRows == 0) {
       log.warn("Teaching {} is already being processed. Skipping.", id);
       throw new ValidationException("Teaching is already being processed");
     }
 
-
-    return teachingRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException("Teaching not found"));
+    return teaching;
   }
 
   @Transactional

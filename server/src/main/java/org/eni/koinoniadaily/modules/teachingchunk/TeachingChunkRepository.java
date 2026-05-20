@@ -13,9 +13,8 @@ import java.util.List;
 @Repository
 public interface TeachingChunkRepository extends JpaRepository<TeachingChunk,Long> {
 
-    @Modifying
-    @Transactional
-    @Query(value = """
+  @Transactional
+  @Query(value = """
       UPDATE teaching_chunks
       SET embedding_status = 'PROCESSING',
         updated_at = NOW()
@@ -33,21 +32,21 @@ public interface TeachingChunkRepository extends JpaRepository<TeachingChunk,Lon
       )
       RETURNING *;
       """, nativeQuery = true)
-    List<TeachingChunk> claimNextPendingChunks(
-        @Param("teachingId") Long teachingId,
-        @Param("limit") int limit
-    );
+  List<TeachingChunk> claimNextPendingChunks(
+      @Param("teachingId") Long teachingId,
+      @Param("limit") int limit
+  );
 
-    boolean existsByTeachingIdAndEmbeddingStatusNot(Long id, EmbeddingStatus embeddingStatus);
+  boolean existsByTeachingIdAndEmbeddingStatusNot(Long teachingId, EmbeddingStatus embeddingStatus);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE TeachingChunk t SET t.embeddingStatus = 'PENDING' " +
-        "WHERE t.teaching.id = :teachingId AND t.embeddingStatus = 'FAILED'")
-    void resetFailedChunks(@Param("teachingId") Long teachingId);
+  @Modifying
+  @Transactional
+  @Query("UPDATE TeachingChunk t SET t.embeddingStatus = 'PENDING' " +
+      "WHERE t.teaching.id = :teachingId AND t.embeddingStatus = 'FAILED'")
+  void resetFailedChunks(@Param("teachingId") Long teachingId);
 
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM TeachingChunk tc WHERE tc.teaching.id = :teachingId")
-    void deleteByTeachingId(@Param("teachingId") Long teachingId);
+  @Modifying
+  @Transactional
+  @Query("DELETE FROM TeachingChunk tc WHERE tc.teaching.id = :teachingId")
+  void deleteByTeachingId(@Param("teachingId") Long teachingId);
 }

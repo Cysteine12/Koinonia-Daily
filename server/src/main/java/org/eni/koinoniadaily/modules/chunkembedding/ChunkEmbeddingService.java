@@ -12,6 +12,7 @@ import org.eni.koinoniadaily.modules.teaching.TeachingStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +34,14 @@ public class ChunkEmbeddingService {
       }
     }
 
-    for (Long teachingId : request.getTeachingIds()) {
-      embeddingJobDispatcher.dispatch(new EmbeddingJob(teachingId));
+    for (Teaching teaching : teachings) {
+      try {
+        embeddingJobDispatcher.dispatch(new EmbeddingJob(teaching.getId()));
+      } catch(RejectedExecutionException ex) {
+        throw new ValidationException("EMBEDDING_REJECTED", "Queue saturated. Retry later");
+      }
     }
 
-    log.info("Embedding trigger successful for teaching: {}", request.getTeachingIds().toString());
+    log.info("Embedding trigger successful for teachings: {}", teachings.stream().map(Teaching::getId).toList());
   }
 }

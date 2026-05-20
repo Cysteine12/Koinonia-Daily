@@ -27,7 +27,7 @@ public class AsyncConfig {
     executor.setAwaitTerminationSeconds(60);
 
     executor.setRejectedExecutionHandler(
-        new ThreadPoolExecutor.CallerRunsPolicy()
+        new ThreadPoolExecutor.AbortPolicy()
     );
 
     executor.initialize();

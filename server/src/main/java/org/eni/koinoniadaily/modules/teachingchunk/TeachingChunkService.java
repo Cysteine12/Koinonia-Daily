@@ -32,7 +32,7 @@ public class TeachingChunkService {
     Teaching teaching = teachingRepository.findById(request.getTeachingId())
         .orElseThrow(() -> new NotFoundException("Teaching not found"));
 
-    if (teaching.getStatus() == TeachingStatus.CHUNKED || teaching.getStatus() == TeachingStatus.EMBEDDED) {
+    if (teaching.getStatus() != TeachingStatus.PENDING) {
       throw new ValidationException("Teaching already chunked");
     }
 
@@ -42,6 +42,10 @@ public class TeachingChunkService {
         chunkCandidates.stream()
             .map(chunkCandidate -> teachingChunkMapper.candidateToEntity(chunkCandidate, teaching))
             .toList();
+
+    if (chunks.isEmpty()) {
+      throw new ValidationException("Chunks empty. Chunking failed to process");
+    }
 
     teachingChunkRepository.saveAll(chunks);
 
@@ -59,6 +63,10 @@ public class TeachingChunkService {
 
     Teaching teaching = teachingRepository.findById(request.getTeachingId())
         .orElseThrow(() -> new NotFoundException("Teaching not found"));
+
+    if (teaching.getStatus() == TeachingStatus.EMBEDDING) {
+      throw new ValidationException("Teaching currently undergoing embedding");
+    }
 
     // 1. Generate new chunks first (fail-fast before deletion)
     List<ChunkCandidate> candidates = teachingChunkUtil.chunk(teaching.getMessage());

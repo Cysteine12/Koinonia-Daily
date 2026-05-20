@@ -33,7 +33,7 @@ public class ChunkEmbedding extends BaseEntity {
   @OneToOne(fetch = FetchType.LAZY)
   private TeachingChunk teachingChunk;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 100)
   private String model;
 
   @Column(nullable = false, columnDefinition = "vector(1536)")
