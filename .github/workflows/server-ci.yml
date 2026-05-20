@@ -41,13 +41,13 @@ jobs:
           --health-retries 5
     
     steps:
-    - name: Enable PostgreSQL extensions (vector & pg_trgm)
+    - name: Enable Postgres extensions (vector & pg_trgm)
       working-directory: .
       run: |
         PGPASSWORD=test psql -h localhost -U test -d koinonia_daily <<EOF
           CREATE EXTENSION IF NOT EXISTS vector;
           CREATE EXTENSION IF NOT EXISTS pg_trgm;
-          EOF
+        EOF
 
     - name: Checkout code
       uses: actions/checkout@v4
