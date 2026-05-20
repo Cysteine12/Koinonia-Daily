@@ -4,25 +4,27 @@ The **Koinonia Daily Server** is a robust, high-performance backend built with *
 
 ## 🚀 Tech Stack
 
--   **Language:** Java 25 (OpenJDK)
--   **Framework:** Spring Boot 4.0.5
--   **Security:** Spring Security with JWT (jjwt)
--   **Database:** PostgreSQL (Production/Dev), H2 (Testing)
--   **Migrations:** Flyway
--   **Storage & Messaging:** AWS S3 (File Storage), AWS SES (Email Services)
--   **Observability:** Sentry (Error tracking), Spring Boot Actuator
--   **Resilience:** Bucket4j (Rate Limiting), Caffeine (Caching)
--   **Build & Quality:** Maven, Lombok, Checkstyle (Google Style), SpotBugs, JaCoCo
+- **Language:** Java 25 (OpenJDK)
+- **Framework:** Spring Boot 4.0.5
+- **Security:** Spring Security with JWT (jjwt)
+- **Database:** PostgreSQL with `pgvector` for Semantic Search
+- **Migrations:** Flyway
+- **AI/ML:** Spring AI (OpenAI Embeddings)
+- **Storage & Messaging:** AWS S3 (File Storage), AWS SES (Email Services)
+- **Observability:** Sentry (Error tracking), Spring Boot Actuator
+- **Resilience:** Bucket4j (Rate Limiting), Resilience4j, Caffeine (Caching)
+- **Build & Quality:** Maven, Lombok, Checkstyle, SpotBugs, JaCoCo
 
 ## 📂 Architecture
 
-The project follows a **Modular Layered Architecture**. Each feature is encapsulated within its own module under `org.eni.koinoniadaily.modules`, promoting high cohesion and low coupling.
+The project follows a **Modular Layered Architecture** with a specialized **Asynchronous Embedding Pipeline** for processing spiritual content.
 
 ### Project Structure
--   `config/`: Application-wide configurations (Security, JWT, S3, Rate Limiting).
--   `modules/`: Feature-specific modules (Auth, Teaching, Series, Collection, etc.).
-    -   Each module contains its own: `Controller`, `Service`, `Repository`, `Entity`, and `DTOs`.
--   `infrastructure/`: External integrations (AWS, Email).
+-   `config/`: Application-wide configurations (Security, JWT, S3, Rate Limiting, Async).
+-   `modules/`: Feature-specific modules.
+    -   `chunkembedding/`: Manages vector embeddings and semantic search logic.
+    -   `teaching/`: Manages spiritual teachings and their lifecycle.
+-   `infrastructure/`: External integrations (AWS, OpenAI, Embedding Dispatchers).
 -   `exceptions/`: Global exception handling and custom error types.
 -   `utils/`: Shared utilities and standard API response wrappers.
 

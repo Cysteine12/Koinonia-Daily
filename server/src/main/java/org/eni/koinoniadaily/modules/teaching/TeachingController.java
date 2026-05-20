@@ -1,5 +1,6 @@
 package org.eni.koinoniadaily.modules.teaching;
 
+import jakarta.validation.constraints.*;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingPageResponse;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingRequest;
 import org.eni.koinoniadaily.modules.teaching.dto.TeachingResponse;
@@ -20,10 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -40,6 +37,17 @@ public class TeachingController {
       @RequestParam(defaultValue = "50") @Positive @Max(100) int size
   ) {
     PageResponse<TeachingPageResponse> response = teachingService.getTeachings(page, size);
+
+    return ResponseEntity.ok(SuccessResponse.data(response));
+  }
+
+  @GetMapping("/status/{status}")
+  public ResponseEntity<SuccessResponse<PageResponse<TeachingPageResponse>>> getTeachingsByStatus(
+      @PathVariable @NotNull TeachingStatus status,
+      @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+      @RequestParam(defaultValue = "50") @Positive @Max(100) int size
+  ) {
+    PageResponse<TeachingPageResponse> response = teachingService.getTeachingsByStatus(status, page, size);
 
     return ResponseEntity.ok(SuccessResponse.data(response));
   }

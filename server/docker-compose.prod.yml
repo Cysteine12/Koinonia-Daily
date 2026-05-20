@@ -2,14 +2,15 @@ services:
   app:
     build:
       context: .
-      target: development
+      target: runtime
+
     container_name: koinonia-daily-server
+
     ports:
       - "8080:8080"
-    volumes:
-      - .:/app
-      - m2_cache:/root/.m2
+
     environment:
+      - SPRING_PROFILES_ACTIVE=prod
       - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
@@ -22,29 +23,10 @@ services:
       - AWS_SECRET_KEY=${AWS_SECRET_KEY}
       - AWS_REGION=${AWS_REGION}
       - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - APP_EMBEDDING_QUEUE_PROVIDER=${APP_EMBEDDING_QUEUE_PROVIDER}
+      - APP_EMBEDDING_MODEL_PROVIDER=${APP_EMBEDDING_MODEL_PROVIDER}
       - SENTRY_DSN=${SENTRY_DSN}
       - SEEDER_USER_PASSWORD=${SEEDER_USER_PASSWORD}
-    depends_on:
-      postgres:
-        condition: service_healthy
 
-  postgres:
-    image: postgres:17
-    container_name: koinonia-daily-db
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  postgres_data:
-  m2_cache:
+    restart: unless-stopped

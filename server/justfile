@@ -1,0 +1,43 @@
+default:
+    just --list
+
+## Build Docker image
+build:
+    docker compose -f docker-compose.dev.yml build
+
+## Start stack
+start:
+    docker compose -p koinonia-daily-stack -f docker-compose.dev.yml up -d
+
+## Stop and remove stack
+stop:
+    docker compose -p koinonia-daily-stack -f docker-compose.dev.yml down
+
+## Restart stack (with clean rebuild)
+restart:
+    docker compose -p koinonia-daily-stack -f docker-compose.dev.yml down
+    rm -rf target
+    mvn clean package -Dmaven.test.skip=true -q
+    docker compose -p koinonia-daily-stack -f docker-compose.dev.yml build --no-cache
+    docker compose -p koinonia-daily-stack -f docker-compose.dev.yml up -d
+
+## View logs
+logs:
+    docker compose -p koinonia-daily-stack -f docker-compose.dev.yml logs -f
+
+## Check stack status
+status:
+    docker compose -p koinonia-daily-stack -f docker-compose.dev.yml ps
+
+## Clean everything (volumes, containers)
+clean:
+    docker compose -p koinonia-daily-stack -f docker-compose.dev.yml down -v
+
+# ===================================================================================================================
+# Show service URLs
+# ===================================================================================================================
+
+urls:
+    @echo "🌐 Service URLs:"
+    @echo "  Application:    http://localhost:8080"
+    @echo "  Health Check:   http://localhost:8080/actuator/health"

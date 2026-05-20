@@ -24,6 +24,7 @@ public class TeachingMapper {
             .type(teaching.getType())
             .tags(teaching.getTags())
             .seriesPart(teaching.getSeriesPart())
+            .status(teaching.getStatus())
             .taughtAt(teaching.getTaughtAt())
             .createdAt(teaching.getCreatedAt())
             .updatedAt(teaching.getUpdatedAt())
@@ -52,6 +53,7 @@ public class TeachingMapper {
             .tags(teaching.getTags())
             .series(series)
             .seriesPart(teaching.getSeriesPart())
+            .status(teaching.getStatus())
             .taughtAt(teaching.getTaughtAt())
             .createdAt(teaching.getCreatedAt())
             .updatedAt(teaching.getUpdatedAt())
@@ -72,6 +74,7 @@ public class TeachingMapper {
             .tags(dto.getTags())
             .series(series)
             .seriesPart(dto.getSeriesPart())
+            .status(TeachingStatus.PENDING)
             .taughtAt(dto.getTaughtAt())
             .build();
   }
@@ -89,6 +92,7 @@ public class TeachingMapper {
     teaching.setTags(dto.getTags());
     teaching.setSeries(series);
     teaching.setSeriesPart(dto.getSeriesPart());
+    teaching.setStatus(TeachingStatus.PENDING);
     teaching.setTaughtAt(dto.getTaughtAt());
 
     return teaching;
