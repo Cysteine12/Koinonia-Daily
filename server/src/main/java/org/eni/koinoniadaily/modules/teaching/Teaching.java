@@ -79,6 +79,11 @@ public class Teaching extends BaseEntity {
   @Column(nullable = false)
   private Instant taughtAt;
 
+  @Column(nullable = false, length = 20)
+  @Enumerated(value = EnumType.STRING)
+  @Builder.Default
+  private TeachingStatus status = TeachingStatus.PENDING;
+
   @ManyToMany(mappedBy = "teachings")
   @Builder.Default
   private List<Collection> collections = new ArrayList<>();

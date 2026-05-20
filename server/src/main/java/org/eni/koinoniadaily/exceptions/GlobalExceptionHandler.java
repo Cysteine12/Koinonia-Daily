@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
                                           (existing, replacement) -> existing + ";" + replacement
                                       ));
 
-    return buildResponse(request, "Validation failed", HttpStatus.UNPROCESSABLE_ENTITY, "VALIDATION_ERROR", errors);
+    return buildResponse(request, "Validation failed", HttpStatus.UNPROCESSABLE_CONTENT, "VALIDATION_ERROR", errors);
   }
 
   // Handle runtime validation errors
@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
     return buildResponse(request, ex.getMessage(), HttpStatus.BAD_REQUEST, ex.getCode());
   }
 
-  // Handle bad credentials error (for login,..)
+  // Handle bad credentials error (for login,...)
   @ExceptionHandler(BadCredentialsException.class)
   public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
 

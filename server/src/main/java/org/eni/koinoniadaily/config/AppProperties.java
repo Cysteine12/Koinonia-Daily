@@ -27,10 +27,6 @@ public class AppProperties {
 
   @Valid
   private Email email = new Email();
-  @Valid
-  private Aws aws = new Aws();
-  @Valid
-  private Mailtrap mailtrap = new Mailtrap();
 
   @Data
   public static class Email {
@@ -42,6 +38,9 @@ public class AppProperties {
     @NotBlank(message = "Email 'from' address not set in env")
     private String from;
   }
+
+  @Valid
+  private Aws aws = new Aws();
 
   @Data
   public static class Aws {
@@ -59,6 +58,9 @@ public class AppProperties {
     private String s3BucketName;
   }
 
+  @Valid
+  private Mailtrap mailtrap = new Mailtrap();
+
   @Data
   public static class Mailtrap {
 
@@ -73,5 +75,40 @@ public class AppProperties {
 
     @NotBlank(message = "Mailtrap password not set in env")
     private String password;
+  }
+
+  @NotBlank(message = "OPEN AI api key not set in env")
+  private String openaiApiKey;
+
+  @Valid
+  private Embedding embedding = new Embedding();
+
+  @Data
+  public static class Embedding {
+
+    private int maxChunkToken = 1200;
+
+    private int overlapToken = 150;
+
+    @Valid
+    private Queue queue = new Queue();
+
+    @Data
+    public static class Queue {
+
+      @NotBlank(message = "Embedding queue provider not set in env")
+      @Pattern(regexp = "local|sqs", message = "Embedding queue provider must be 'local' or 'sqs'")
+      private String provider;
+    }
+
+    @Valid
+    private Model model = new Model();
+
+    @Data
+    public static class Model {
+
+      @NotBlank(message = "Embedding model provider not set in env")
+      private String provider;
+    }
   }
 }

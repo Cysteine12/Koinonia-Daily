@@ -2,6 +2,7 @@ package org.eni.koinoniadaily.modules.teaching.dto;
 
 import java.time.Instant;
 
+import org.eni.koinoniadaily.modules.teaching.TeachingStatus;
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 
 import lombok.Builder;
@@ -30,6 +31,8 @@ public class TeachingPageResponse {
   private String tags;
 
   private Integer seriesPart;
+
+  private TeachingStatus status;
 
   private Instant taughtAt;
   

@@ -5,24 +5,26 @@ Koinonia Daily is a Spring Boot-based backend for a Christian devotional applica
 
 ### Core Technologies
 - **Runtime:** Java 25 (OpenJDK)
-- **Framework:** Spring Boot 3.5.10 (Spring Web, Spring Security, Spring Data JPA, Spring Mail)
-- **Database:** PostgreSQL (with H2 for testing and Flyway for migrations)
+- **Framework:** Spring Boot 4.0.5 (Spring Web, Spring Security, Spring Data JPA, Spring AI, Spring Mail)
+- **Database:** PostgreSQL with `pgvector` (H2 for testing, Flyway for migrations)
 - **Authentication:** JWT-based (jjwt), Stateless session management
 - **Integrations:** 
+    - **OpenAI:** For text embeddings and semantic search.
     - **AWS S3:** For file storage and management.
     - **AWS SES / Mailtrap:** For email services.
     - **Sentry:** For error tracking and performance monitoring.
-    - **Bucket4j & Caffeine:** For rate limiting and caching.
-- **Code Quality:** Lombok, Checkstyle (Google Style), SpotBugs, JaCoCo (Coverage).
+    - **Bucket4j & Resilience4j:** For rate limiting and resilience.
+- **Code Quality:** Lombok, Checkstyle, SpotBugs, JaCoCo.
 
 ## Architecture & Design
-The project follows a **Modular Layered Architecture**. Each feature is encapsulated within its own module under `org.eni.koinoniadaily.modules`.
+The project follows a **Modular Layered Architecture** with an **Asynchronous Embedding Pipeline** for content processing.
 
 ### Package Structure
-- `config/`: Application-wide configurations (Security, JWT, Rate Limiting, S3, Logging).
-- `modules/`: Feature-specific modules (e.g., `auth`, `account`, `teaching`, `series`, `collection`).
-    - Each module typically contains its own `Controller`, `Service`, `Repository`, `Entity`, and `DTO`s.
-- `infrastructure/`: External service integrations (Email, Cloud Providers).
+- `config/`: Application-wide configurations (Security, JWT, Rate Limiting, S3, Async, OpenAI).
+- `modules/`: Feature-specific modules.
+    - `chunkembedding/`: Vector embeddings and semantic search.
+    - `teaching/`, `auth/`, `account/`, `series/`, `collection/`.
+- `infrastructure/`: External service integrations (Email, Cloud Providers, AI).
 - `exceptions/`: Centralized exception handling via `GlobalExceptionHandler`.
 - `utils/`: Common utilities and standard API response envelopes.
 - `entity/`: Shared base entities (e.g., `BaseEntity`).
