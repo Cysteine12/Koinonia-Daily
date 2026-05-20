@@ -42,18 +42,12 @@ jobs:
     
     steps:
     - name: Enable PostgreSQL extensions (vector & pg_trgm)
+      working-directory: .
       run: |
-        PGPASSWORD=test psql \
-          -h localhost \
-          -U test \
-          -d koinonia_daily \
-          -c "CREATE EXTENSION IF NOT EXISTS vector;"
-
-        PGPASSWORD=test psql \
-          -h localhost \
-          -U test \
-          -d koinonia_daily \
-          -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+        PGPASSWORD=test psql -h localhost -U test -d koinonia_daily <<EOF
+          CREATE EXTENSION IF NOT EXISTS vector;
+          CREATE EXTENSION IF NOT EXISTS pg_trgm;
+          EOF
 
     - name: Checkout code
       uses: actions/checkout@v4
