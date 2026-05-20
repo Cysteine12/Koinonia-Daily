@@ -14,7 +14,7 @@ import org.eni.koinoniadaily.modules.teachingchunk.EmbeddingStatus;
 import org.eni.koinoniadaily.modules.teachingchunk.TeachingChunk;
 import org.eni.koinoniadaily.modules.teachingchunk.TeachingChunkRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ public class EmbeddingPipelineService {
   private final TeachingChunkRepository teachingChunkRepository;
   private final ChunkEmbeddingRepository chunkEmbeddingRepository;
   private final EmbeddingModelProvider embeddingModelProvider;
+  private final TransactionTemplate transactionTemplate;
 
   public void process(EmbeddingJob job) {
 
@@ -54,7 +55,9 @@ public class EmbeddingPipelineService {
 
           List<float[]> embeddings = embeddingModelProvider.embed(chunkContents);
 
-          this.saveEmbeddingsAndUpdateChunksStatus(chunks, embeddings);
+          transactionTemplate.executeWithoutResult(_ ->
+              this.saveEmbeddingsAndUpdateChunksStatus(chunks, embeddings)
+          );
         } catch (RuntimeException ex) {
 
           log.error("Embedding failed for teaching chunk batch ranging {}",
@@ -108,8 +111,7 @@ public class EmbeddingPipelineService {
     return teaching;
   }
 
-  @Transactional
-  public void saveEmbeddingsAndUpdateChunksStatus(
+  private void saveEmbeddingsAndUpdateChunksStatus(
       List<TeachingChunk> chunks, List<float[]> embeddings
   ) {
 

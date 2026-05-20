@@ -21,7 +21,6 @@ public class LocalEmbeddingDispatcher implements EmbeddingJobDispatcher {
   @Async("embeddingExecutor")
   @Override
   public void dispatch(EmbeddingJob job) {
-
     try {
       handler.handle(job);
     } catch (Throwable ex) {

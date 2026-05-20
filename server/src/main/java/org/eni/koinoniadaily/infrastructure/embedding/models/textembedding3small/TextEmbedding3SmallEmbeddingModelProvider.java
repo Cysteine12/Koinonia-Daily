@@ -53,6 +53,7 @@ public class TextEmbedding3SmallEmbeddingModelProvider implements EmbeddingModel
       jitter = 500
   )
   public List<float[]> embed(List<String> texts) {
+
     EmbeddingResponse response = embeddingModel.embedForResponse(texts);
 
     return response.getResults()
