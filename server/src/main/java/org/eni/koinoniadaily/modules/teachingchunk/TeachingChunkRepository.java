@@ -36,8 +36,6 @@ public interface TeachingChunkRepository extends JpaRepository<TeachingChunk,Lon
       @Param("limit") int limit
   );
 
-  boolean existsByTeachingIdAndEmbeddingStatusNot(Long teachingId, EmbeddingStatus embeddingStatus);
-
   @Modifying
   @Transactional
   @Query("UPDATE TeachingChunk t SET t.embeddingStatus = 'PENDING' " +
