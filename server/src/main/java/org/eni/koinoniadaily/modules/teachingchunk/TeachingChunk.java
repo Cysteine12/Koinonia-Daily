@@ -55,5 +55,6 @@ public class TeachingChunk extends BaseEntity {
   private EmbeddingStatus embeddingStatus = EmbeddingStatus.PENDING;
 
   @OneToMany(mappedBy = "teachingChunk", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
   private List<ChunkEmbedding> chunkEmbeddings = new ArrayList<>();
 }
