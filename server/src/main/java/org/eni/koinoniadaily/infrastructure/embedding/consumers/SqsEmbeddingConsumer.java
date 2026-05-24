@@ -3,7 +3,6 @@ package org.eni.koinoniadaily.infrastructure.embedding.consumers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eni.koinoniadaily.config.AppProperties;
-import org.eni.koinoniadaily.exceptions.EmbeddingException;
 import org.eni.koinoniadaily.infrastructure.embedding.EmbeddingJobHandler;
 import org.eni.koinoniadaily.infrastructure.embedding.dto.EmbeddingJob;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,6 +13,7 @@ import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
 import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
+import software.amazon.awssdk.services.sqs.model.SqsException;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.Duration;
@@ -85,7 +85,8 @@ public class SqsEmbeddingConsumer implements SchedulingConfigurer {
       this.deleteMessage(message, workerId);
 
       log.info("SQS worker-{} message processed and deleted for teaching {}", workerId, job.teachingId());
-    } catch (EmbeddingException ex) {
+
+    } catch (Exception ex) {
       log.error("SQS worker-{} failed to process message {}, It will become visible again after visibility timeout.",
           workerId,
           message.messageId(), ex);
@@ -100,7 +101,8 @@ public class SqsEmbeddingConsumer implements SchedulingConfigurer {
           .build();
 
       sqsClient.deleteMessage(request);
-    } catch (EmbeddingException ex) {
+
+    } catch (SqsException ex) {
       log.debug("SQS worker-{} failed to delete message {} after successful processing. Possible redelivery.",
           workerId,
           message.messageId(), ex);

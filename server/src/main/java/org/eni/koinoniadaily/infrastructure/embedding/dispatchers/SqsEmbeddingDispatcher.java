@@ -3,6 +3,7 @@ package org.eni.koinoniadaily.infrastructure.embedding.dispatchers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eni.koinoniadaily.config.AppProperties;
+import org.eni.koinoniadaily.exceptions.EmbeddingException;
 import org.eni.koinoniadaily.exceptions.ValidationException;
 import org.eni.koinoniadaily.infrastructure.embedding.dto.EmbeddingJob;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,7 +40,7 @@ public class SqsEmbeddingDispatcher implements EmbeddingJobDispatcher {
 
     } catch (RuntimeException ex) {
       log.error("SQS embedding job dispatch failed for teaching {}", job.teachingId(), ex);
-      throw new ValidationException("EMBEDDING_DISPATCH_FAILED", "Failed to dispatch embedding job to queue");
+      throw new EmbeddingException("Failed to dispatch SQS embedding job to queue", ex);
     }
   }
 }

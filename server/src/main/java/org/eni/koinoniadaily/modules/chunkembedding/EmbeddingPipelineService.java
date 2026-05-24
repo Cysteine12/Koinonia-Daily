@@ -84,7 +84,7 @@ public class EmbeddingPipelineService {
       } catch (RuntimeException e) {
         log.error("Double-fault: Could not even mark teaching as FAILED", e);
       }
-      throw new EmbeddingException("Embedding pipeline failed");
+      throw new EmbeddingException("Embedding pipeline failed", ex);
     }
   }
 

@@ -47,7 +47,7 @@ public class AsyncConfig {
 
     ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
 
-    scheduler.setPoolSize(noOfWorkers);
+    scheduler.setPoolSize(noOfWorkers + 2);
     scheduler.setThreadNamePrefix("sqs-worker-");
     scheduler.setWaitForTasksToCompleteOnShutdown(true);
     scheduler.setAwaitTerminationSeconds(120);

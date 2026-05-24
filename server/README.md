@@ -90,7 +90,3 @@ This project is private and intended for internal use within the Koinonia Daily 
 
 ---
 ✝️ *Building technology to advance the Kingdom.*
-internal use within the Koinonia Daily ecosystem.
-
----
-✝️ *Building technology to advance the Kingdom.*
