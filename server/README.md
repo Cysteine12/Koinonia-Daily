@@ -10,7 +10,7 @@ The **Koinonia Daily Server** is a robust, high-performance backend built with *
 - **Database:** PostgreSQL with `pgvector` for Semantic Search
 - **Migrations:** Flyway
 - **AI/ML:** Spring AI (OpenAI Embeddings)
-- **Storage & Messaging:** AWS S3 (File Storage), AWS SES (Email Services)
+- **Storage & Messaging:** AWS S3 (File Storage), AWS SQS (Message Queuing), AWS SES (Email Services)
 - **Observability:** Sentry (Error tracking), Spring Boot Actuator
 - **Resilience:** Bucket4j (Rate Limiting), Resilience4j, Caffeine (Caching)
 - **Build & Quality:** Maven, Lombok, Checkstyle, SpotBugs, JaCoCo
@@ -87,6 +87,10 @@ We maintain high code quality through automated checks:
 
 ## 📄 License
 This project is private and intended for internal use within the Koinonia Daily ecosystem.
+
+---
+✝️ *Building technology to advance the Kingdom.*
+internal use within the Koinonia Daily ecosystem.
 
 ---
 ✝️ *Building technology to advance the Kingdom.*
