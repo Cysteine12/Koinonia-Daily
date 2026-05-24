@@ -103,13 +103,6 @@ public class GlobalExceptionHandler {
     return buildResponse(request, "Unable to send email at the moment. Please try again later.", HttpStatus.SERVICE_UNAVAILABLE, "EMAIL_FAILED");
   }
 
-  // Handle embedding exceptions
-  @ExceptionHandler(EmbeddingException.class)
-  public ResponseEntity<ErrorResponse> handleEmbeddingException(EmbeddingException ex, WebRequest request) {
-
-    return buildResponse(request, ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE, "EMBEDDING_FAILED");
-  }
-
   // Handle all other exceptions (catch-all)
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, WebRequest request) {

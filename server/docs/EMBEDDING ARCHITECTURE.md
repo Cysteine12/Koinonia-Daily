@@ -27,13 +27,11 @@ The transformation from raw audio to searchable vector space follows a strict pi
 
 ## 3. Pipeline Architecture
 
-### 3.1 Asynchronous Processing & Queueing
-To handle the high latency of LLM API calls and ensure system responsiveness, the embedding process is decoupled from the main request/response cycle via a provider-based dispatcher system.
+### 3.1 Asynchronous Processing
+To handle the high latency of LLM API calls and ensure system responsiveness, the embedding process is decoupled from the main request/response cycle.
 
--   **`EmbeddingJobDispatcher`:** Strategy interface for orchestrating the start of an embedding task.
--   **`LocalEmbeddingDispatcher`:** (Development) Utilizes Spring's `@Async` capabilities to execute jobs in background threads within the same JVM.
--   **`SqsEmbeddingDispatcher`:** (Production) Pushes embedding jobs to an AWS SQS queue for distributed processing.
--   **`SqsEmbeddingConsumer`:** A dedicated worker that polls SQS for jobs and triggers the processing logic.
+-   **`EmbeddingJobDispatcher`:** Orchestrates the start of an embedding task.
+-   **`LocalEmbeddingDispatcher`:** Utilizes Spring's `@Async` capabilities to execute jobs in background threads.
 -   **`EmbeddingPipelineService`:** The core engine that manages the batching, API interaction, and state persistence.
 
 ### 3.2 State Management
