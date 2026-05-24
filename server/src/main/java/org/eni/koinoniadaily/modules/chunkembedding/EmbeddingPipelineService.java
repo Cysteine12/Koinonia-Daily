@@ -3,6 +3,7 @@ package org.eni.koinoniadaily.modules.chunkembedding;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eni.koinoniadaily.entity.BaseEntity;
+import org.eni.koinoniadaily.exceptions.EmbeddingException;
 import org.eni.koinoniadaily.exceptions.NotFoundException;
 import org.eni.koinoniadaily.exceptions.ValidationException;
 import org.eni.koinoniadaily.infrastructure.embedding.dto.EmbeddingJob;
@@ -31,7 +32,7 @@ public class EmbeddingPipelineService {
 
   public void process(EmbeddingJob job) {
 
-    log.info("Embedding Pipeline started for teaching {}", job.teachingId());
+    log.info("Embedding pipeline started for teaching {}", job.teachingId());
 
     Teaching teaching = this.claimTeachingForEmbedding(job.teachingId());
 
@@ -73,7 +74,7 @@ public class EmbeddingPipelineService {
 
       teachingRepository.finalizeEmbeddingStatus(teaching.getId());
 
-      log.info("Embedding Pipeline completed for teaching {}", job.teachingId());
+      log.info("Embedding pipeline completed for teaching {}", job.teachingId());
     } catch (RuntimeException ex) {
 
       log.error("Catastrophic failure in embedding pipeline for teaching {}", job.teachingId(), ex);
@@ -83,6 +84,7 @@ public class EmbeddingPipelineService {
       } catch (RuntimeException e) {
         log.error("Double-fault: Could not even mark teaching as FAILED", e);
       }
+      throw new EmbeddingException("Embedding pipeline failed", ex);
     }
   }
 
