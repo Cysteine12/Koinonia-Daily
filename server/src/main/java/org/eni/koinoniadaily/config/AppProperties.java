@@ -56,6 +56,22 @@ public class AppProperties {
 
     @NotBlank(message = "AWS S3 bucket name not set in env")
     private String s3BucketName;
+
+    @Valid
+    private Sqs sqs = new Sqs();
+  }
+
+  @Data
+  public static class Sqs {
+
+    @NotBlank(message = "AWS SQS queue URL not set in env")
+    private String queueUrl;
+
+    @Positive(message = "AWS SQS visibility timeout must be > 0")
+    private int visibilityTimeoutSeconds = 15 * 60;
+
+    @Positive(message = "AWS SQS worker count must be > 0")
+    private int workerCount = 2;
   }
 
   @Valid
