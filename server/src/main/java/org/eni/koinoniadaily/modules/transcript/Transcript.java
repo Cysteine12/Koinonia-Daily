@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class Transcript extends BaseEntity {
 
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, length = 60)
   private String title;
 
   @Lob

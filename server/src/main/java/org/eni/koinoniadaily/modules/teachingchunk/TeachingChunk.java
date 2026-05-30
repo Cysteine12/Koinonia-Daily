@@ -43,6 +43,9 @@ public class TeachingChunk extends BaseEntity {
   @Column(nullable = false, columnDefinition = "text")
   private String content;
 
+  @Column(nullable = false, length = 60)
+  private String teachingTitle;
+
   @Column(nullable = true, length = 100)
   private String sectionTitle;
 

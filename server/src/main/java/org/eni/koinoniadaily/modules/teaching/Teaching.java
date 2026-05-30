@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Teaching extends BaseEntity {
   
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, length = 60)
   private String title;
   
   @Column(nullable = false, length = 255)
