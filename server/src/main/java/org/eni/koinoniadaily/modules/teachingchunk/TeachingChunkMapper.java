@@ -12,6 +12,7 @@ public class TeachingChunkMapper {
     return TeachingChunk.builder()
         .teaching(teaching)
         .chunkIndex(candidate.chunkIndex())
+        .teachingTitle(teaching.getTitle())
         .sectionTitle(candidate.sectionTitle())
         .content(candidate.content())
         .embeddingStatus(EmbeddingStatus.PENDING)

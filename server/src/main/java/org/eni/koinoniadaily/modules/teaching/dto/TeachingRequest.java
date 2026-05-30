@@ -2,6 +2,7 @@ package org.eni.koinoniadaily.modules.teaching.dto;
 
 import java.time.Instant;
 
+import jakarta.validation.constraints.Size;
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 import org.hibernate.validator.constraints.URL;
 
@@ -15,6 +16,7 @@ import lombok.Setter;
 public class TeachingRequest {
 
   @NotBlank(message = "Title is required")
+  @Size(max = 60, message = "Title cannot exceed 60 characters")
   private String title;
   
   @NotBlank(message = "Scriptural references are required (semi-colon-separated)")
