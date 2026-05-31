@@ -8,13 +8,16 @@ public class ChunkEmbeddingUtil {
 
   public String buildChunkText(TeachingChunk chunk) {
 
-    return """
-        Title: %s
-        
-        Section: %s
-        
-        Content:
-        %s
-        """.formatted(chunk.getTeachingTitle(), chunk.getSectionTitle(), chunk.getContent());
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("Title: ").append(chunk.getTeachingTitle()).append("\n\n");
+
+    if (chunk.getSectionTitle() != null && !chunk.getSectionTitle().isBlank()) {
+      sb.append("Section: ").append(chunk.getSectionTitle()).append("\n\n");
+    }
+
+    sb.append("Content:\n").append(chunk.getContent());
+
+    return sb.toString();
   }
 }

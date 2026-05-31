@@ -56,7 +56,9 @@ public class SearchService {
         .type(result.getType())
         .taughtAt(result.getTaughtAt())
         .score(result.getScore())
-        .matchSources(Arrays.asList(result.getMatchSources().split(",")))
+        .matchSources(result.getMatchSources() != null
+            ? Arrays.asList(result.getMatchSources().split(","))
+            : List.of())
         .build();
   }
 }

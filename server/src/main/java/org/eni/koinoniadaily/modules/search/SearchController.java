@@ -27,7 +27,7 @@ public class SearchController {
   @GetMapping
   public ResponseEntity<SuccessResponse<List<SearchResponse>>> search(
       @RequestParam @NotBlank String query,
-      @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+      @RequestParam(defaultValue = "0") @PositiveOrZero @Max(20) int page,
       @RequestParam(defaultValue = "50") @Positive @Max(100) int size,
       @RequestParam(defaultValue = "false") boolean semantic
   ) {

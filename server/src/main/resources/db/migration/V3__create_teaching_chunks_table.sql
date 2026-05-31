@@ -8,7 +8,7 @@ CREATE TABLE teaching_chunks (
   tsv               TSVECTOR,
 
   -- Metadata for search results display
-  teaching_title    VARCHAR(60),
+  teaching_title    VARCHAR(60) NOT NULL,
   section_title     VARCHAR(100),
   start_offset      INT,
 

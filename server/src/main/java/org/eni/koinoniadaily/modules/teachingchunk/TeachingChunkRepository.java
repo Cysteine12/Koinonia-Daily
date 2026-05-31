@@ -116,15 +116,15 @@ public interface TeachingChunkRepository extends JpaRepository<TeachingChunk,Lon
               SELECT
                   tc.id AS chunk_id,
                   tc.teaching_id,
-                  similarity(LOWER(t.title), LOWER(:query)) AS title_sim
+                  similarity(t.title, :query) AS title_sim
               FROM teachings t
               JOIN teaching_chunks tc
                 ON tc.teaching_id = t.id
                 AND tc.chunk_index = 0
       
-              WHERE similarity(LOWER(t.title), LOWER(:query)) > 0.3
+              WHERE t.title % :query
       
-              ORDER BY title_sim DESC, t.taught_at DESC
+              ORDER BY similarity(t.title, :query) DESC, t.taught_at DESC
               LIMIT 20
           ) title_inner
       ),
@@ -238,15 +238,15 @@ public interface TeachingChunkRepository extends JpaRepository<TeachingChunk,Lon
               SELECT
                   tc.id AS chunk_id,
                   tc.teaching_id,
-                  similarity(LOWER(t.title), LOWER(:query)) AS title_sim
+                  similarity(t.title, :query) AS title_sim
               FROM teachings t
               JOIN teaching_chunks tc
                 ON tc.teaching_id = t.id
                 AND tc.chunk_index = 0
       
-              WHERE similarity(LOWER(t.title), LOWER(:query)) > 0.3
+              WHERE t.title % :query
       
-              ORDER BY title_sim DESC, t.taught_at DESC
+              ORDER BY similarity(t.title, :query) DESC, t.taught_at DESC
               LIMIT 30
           ) title_inner
       ),
@@ -288,7 +288,7 @@ public interface TeachingChunkRepository extends JpaRepository<TeachingChunk,Lon
           t.taught_at,
       
           (
-            + (1.0 * COALESCE(1.0 / (60 + aggregated.best_lexical_rank), 0))
+            (1.0 * COALESCE(1.0 / (60 + aggregated.best_lexical_rank), 0))
             + (1.4 * COALESCE(1.0 / (60 + aggregated.best_title_rank), 0))
           ) AS score,
       
