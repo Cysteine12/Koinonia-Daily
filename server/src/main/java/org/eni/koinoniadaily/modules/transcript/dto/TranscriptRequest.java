@@ -10,7 +10,7 @@ import lombok.Setter;
 public class TranscriptRequest {
   
   @NotBlank(message = "Title is required")
-  @Size(max = 50, message = "Title cannot exceed 50 characters")
+  @Size(max = 60, message = "Title cannot exceed 60 characters")
   private String title;
 
   @NotBlank(message = "Message is required")

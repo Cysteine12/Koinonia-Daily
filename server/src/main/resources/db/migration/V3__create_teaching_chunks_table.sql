@@ -8,6 +8,7 @@ CREATE TABLE teaching_chunks (
   tsv               TSVECTOR,
 
   -- Metadata for search results display
+  teaching_title    VARCHAR(60) NOT NULL,
   section_title     VARCHAR(100),
   start_offset      INT,
 
@@ -22,17 +23,18 @@ CREATE TABLE teaching_chunks (
       CHECK (embedding_status IN ('PENDING', 'PROCESSING', 'EMBEDDED', 'FAILED'))
 );
 
-CREATE INDEX idx_teaching_chunks_teaching_id
-  ON teaching_chunks(teaching_id);
+CREATE INDEX idx_teaching_chunks_teaching_id ON teaching_chunks(teaching_id);
 
-CREATE INDEX idx_teaching_chunks_tsv
-  ON teaching_chunks USING GIN (tsv);
+CREATE INDEX idx_teaching_chunks_tsv ON teaching_chunks USING GIN (tsv);
 
 CREATE OR REPLACE FUNCTION chunk_tsv_trigger()
     RETURNS TRIGGER AS
 $$
 BEGIN
-    NEW.tsv := to_tsvector('english', NEW.content);
+    NEW.tsv :=
+        set_weight(to_tsvector('english', coalesce(NEW.teaching_title, '')), 'A') ||
+        set_weight(to_tsvector('english', coalesce(NEW.section_title, '')), 'B') ||
+        set_weight(to_tsvector('english', coalesce(NEW.content, '')), 'C');
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

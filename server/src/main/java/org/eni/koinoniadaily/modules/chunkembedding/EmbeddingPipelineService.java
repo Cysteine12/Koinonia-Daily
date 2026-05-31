@@ -27,6 +27,7 @@ public class EmbeddingPipelineService {
 
   private final TeachingRepository teachingRepository;
   private final TeachingChunkRepository teachingChunkRepository;
+  private final ChunkEmbeddingUtil chunkEmbeddingUtil;
   private final EmbeddingModelProvider embeddingModelProvider;
   private final TransactionTemplate transactionTemplate;
 
@@ -50,7 +51,9 @@ public class EmbeddingPipelineService {
         }
 
         try {
-          List<String> chunkContents = chunks.stream().map(TeachingChunk::getContent).toList();
+          List<String> chunkContents = chunks.stream()
+              .map(chunkEmbeddingUtil::buildChunkText)
+              .toList();
 
           List<float[]> embeddings = embeddingModelProvider.embed(chunkContents);
 

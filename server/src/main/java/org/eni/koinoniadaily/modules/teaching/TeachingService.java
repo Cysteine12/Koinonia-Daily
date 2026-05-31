@@ -1,9 +1,5 @@
 package org.eni.koinoniadaily.modules.teaching;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import org.eni.koinoniadaily.exceptions.NotFoundException;
 import org.eni.koinoniadaily.modules.history.HistoryService;
 import org.eni.koinoniadaily.modules.series.Series;
@@ -42,7 +38,6 @@ public class TeachingService {
     return PageResponse.from(teachings);
   }
 
-  @Transactional
   public PageResponse<TeachingPageResponse> getTeachingsByStatus(TeachingStatus status, int page, int size) {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, TAUGHT_AT));
