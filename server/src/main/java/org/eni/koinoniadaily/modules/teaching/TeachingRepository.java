@@ -38,6 +38,7 @@ public interface TeachingRepository extends JpaRepository<Teaching, Long> {
   void updateEmbeddingStatus(@Param("id") Long id, @Param("status") EmbeddingStatus status);
 
   @Modifying
+  @Transactional
   @Query(value = """
       UPDATE teachings t
       SET embedding_status =
