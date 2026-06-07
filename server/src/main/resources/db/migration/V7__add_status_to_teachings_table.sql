@@ -1,0 +1,4 @@
+ALTER TABLE teachings
+  ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'DRAFT',
+  ADD CONSTRAINT teachings_status_check
+    CHECK (status IN ('DRAFT', 'PUBLISHED', 'ARCHIVED'));

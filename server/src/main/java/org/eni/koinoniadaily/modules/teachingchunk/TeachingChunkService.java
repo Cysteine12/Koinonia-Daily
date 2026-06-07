@@ -6,7 +6,7 @@ import org.eni.koinoniadaily.exceptions.NotFoundException;
 import org.eni.koinoniadaily.exceptions.ValidationException;
 import org.eni.koinoniadaily.modules.teaching.Teaching;
 import org.eni.koinoniadaily.modules.teaching.TeachingRepository;
-import org.eni.koinoniadaily.modules.teaching.TeachingStatus;
+import org.eni.koinoniadaily.modules.teaching.EmbeddingStatus;
 import org.eni.koinoniadaily.modules.teachingchunk.dto.ChunkCandidate;
 import org.eni.koinoniadaily.modules.teachingchunk.dto.TeachingChunkRequest;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class TeachingChunkService {
     Teaching teaching = teachingRepository.findById(request.getTeachingId())
         .orElseThrow(() -> new NotFoundException("Teaching not found"));
 
-    if (teaching.getStatus() != TeachingStatus.PENDING) {
+    if (teaching.getEmbeddingStatus() != EmbeddingStatus.PENDING) {
       throw new ValidationException("Teaching already chunked");
     }
 
@@ -49,7 +49,7 @@ public class TeachingChunkService {
 
     teachingChunkRepository.saveAll(chunks);
 
-    teaching.setStatus(TeachingStatus.CHUNKED);
+    teaching.setEmbeddingStatus(EmbeddingStatus.CHUNKED);
     teachingRepository.save(teaching);
 
     log.info("Chunking successful for teaching: {}. Generated {} chunks.",
@@ -64,7 +64,7 @@ public class TeachingChunkService {
     Teaching teaching = teachingRepository.findById(request.getTeachingId())
         .orElseThrow(() -> new NotFoundException("Teaching not found"));
 
-    if (teaching.getStatus() == TeachingStatus.EMBEDDING) {
+    if (teaching.getEmbeddingStatus() == EmbeddingStatus.EMBEDDING) {
       throw new ValidationException("Teaching currently undergoing embedding");
     }
 
@@ -88,7 +88,7 @@ public class TeachingChunkService {
     teachingChunkRepository.saveAll(chunks);
 
     // 5. Update teaching status
-    teaching.setStatus(TeachingStatus.CHUNKED);
+    teaching.setEmbeddingStatus(EmbeddingStatus.CHUNKED);
     teachingRepository.save(teaching);
 
     log.info("Re-chunking successful for teaching: {}. Generated {} chunks.",

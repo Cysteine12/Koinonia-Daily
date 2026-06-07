@@ -2,6 +2,7 @@ package org.eni.koinoniadaily.modules.teaching.projection;
 
 import java.time.Instant;
 
+import org.eni.koinoniadaily.modules.teaching.EmbeddingStatus;
 import org.eni.koinoniadaily.modules.teaching.TeachingStatus;
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 
@@ -28,6 +29,8 @@ public interface TeachingWithoutMessageProjection {
   Integer getSeriesPart();
 
   TeachingStatus getStatus();
+
+  EmbeddingStatus getEmbeddingStatus();
 
   Instant getTaughtAt();
   

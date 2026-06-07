@@ -41,13 +41,14 @@ public class TeachingController {
     return ResponseEntity.ok(SuccessResponse.data(response));
   }
 
-  @GetMapping("/status/{status}")
-  public ResponseEntity<SuccessResponse<PageResponse<TeachingPageResponse>>> getTeachingsByStatus(
-      @PathVariable @NotNull TeachingStatus status,
+  @GetMapping("/embedding-status/{status}")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity<SuccessResponse<PageResponse<TeachingPageResponse>>> getTeachingsByEmbeddingStatus(
+      @PathVariable @NotNull EmbeddingStatus status,
       @RequestParam(defaultValue = "0") @PositiveOrZero int page,
       @RequestParam(defaultValue = "50") @Positive @Max(100) int size
   ) {
-    PageResponse<TeachingPageResponse> response = teachingService.getTeachingsByStatus(status, page, size);
+    PageResponse<TeachingPageResponse> response = teachingService.getTeachingsByEmbeddingStatus(status, page, size);
 
     return ResponseEntity.ok(SuccessResponse.data(response));
   }

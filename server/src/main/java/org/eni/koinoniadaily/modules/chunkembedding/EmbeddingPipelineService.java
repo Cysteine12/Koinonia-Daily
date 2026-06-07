@@ -10,7 +10,6 @@ import org.eni.koinoniadaily.infrastructure.embedding.dto.EmbeddingJob;
 import org.eni.koinoniadaily.infrastructure.embedding.models.EmbeddingModelProvider;
 import org.eni.koinoniadaily.modules.teaching.Teaching;
 import org.eni.koinoniadaily.modules.teaching.TeachingRepository;
-import org.eni.koinoniadaily.modules.teaching.TeachingStatus;
 import org.eni.koinoniadaily.modules.teachingchunk.EmbeddingStatus;
 import org.eni.koinoniadaily.modules.teachingchunk.TeachingChunk;
 import org.eni.koinoniadaily.modules.teachingchunk.TeachingChunkRepository;
@@ -83,7 +82,10 @@ public class EmbeddingPipelineService {
       log.error("Catastrophic failure in embedding pipeline for teaching {}", job.teachingId(), ex);
 
       try {
-        teachingRepository.updateStatus(job.teachingId(), TeachingStatus.FAILED);
+        teachingRepository.updateEmbeddingStatus(
+            job.teachingId(),
+            org.eni.koinoniadaily.modules.teaching.EmbeddingStatus.FAILED
+        );
       } catch (RuntimeException e) {
         log.error("Double-fault: Could not even mark teaching as FAILED", e);
       }

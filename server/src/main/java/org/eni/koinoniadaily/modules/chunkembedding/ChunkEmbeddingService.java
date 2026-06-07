@@ -8,7 +8,7 @@ import org.eni.koinoniadaily.infrastructure.embedding.dto.EmbeddingJob;
 import org.eni.koinoniadaily.modules.chunkembedding.dto.ChunkEmbeddingRequest;
 import org.eni.koinoniadaily.modules.teaching.Teaching;
 import org.eni.koinoniadaily.modules.teaching.TeachingRepository;
-import org.eni.koinoniadaily.modules.teaching.TeachingStatus;
+import org.eni.koinoniadaily.modules.teaching.EmbeddingStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class ChunkEmbeddingService {
     }
 
     for (Teaching teaching : teachings) {
-      if (teaching.getStatus() == TeachingStatus.PENDING) {
+      if (teaching.getEmbeddingStatus() == EmbeddingStatus.PENDING) {
         log.error("Embedding trigger failed with un-chunked teaching for teachings: {}", request.getTeachingIds());
 
         throw new ValidationException("Teaching with id " + teaching.getId() + " has not been chunked");

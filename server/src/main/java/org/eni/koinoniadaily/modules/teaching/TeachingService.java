@@ -38,11 +38,11 @@ public class TeachingService {
     return PageResponse.from(teachings);
   }
 
-  public PageResponse<TeachingPageResponse> getTeachingsByStatus(TeachingStatus status, int page, int size) {
+  public PageResponse<TeachingPageResponse> getTeachingsByEmbeddingStatus(EmbeddingStatus status, int page, int size) {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, TAUGHT_AT));
 
-    Page<TeachingPageResponse> teachings = teachingRepository.findAllByStatus(status, pageable)
+    Page<TeachingPageResponse> teachings = teachingRepository.findAllByEmbeddingStatus(status, pageable)
         .map(teachingMapper::toDto);
 
     return PageResponse.from(teachings);

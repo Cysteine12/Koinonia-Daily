@@ -3,6 +3,7 @@ package org.eni.koinoniadaily.modules.teaching.dto;
 import java.time.Instant;
 
 import org.eni.koinoniadaily.modules.series.dto.SeriesSummary;
+import org.eni.koinoniadaily.modules.teaching.EmbeddingStatus;
 import org.eni.koinoniadaily.modules.teaching.TeachingStatus;
 import org.eni.koinoniadaily.modules.teaching.TeachingType;
 
@@ -38,6 +39,8 @@ public class TeachingResponse {
   private Integer seriesPart;
 
   private TeachingStatus status;
+
+  private EmbeddingStatus embeddingStatus;
 
   private Instant taughtAt;
   
