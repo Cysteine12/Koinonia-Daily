@@ -95,7 +95,6 @@ public class TeachingMapper {
     teaching.setTags(dto.getTags());
     teaching.setSeries(series);
     teaching.setSeriesPart(dto.getSeriesPart());
-    teaching.setEmbeddingStatus(EmbeddingStatus.PENDING);
     teaching.setTaughtAt(dto.getTaughtAt());
 
   }
