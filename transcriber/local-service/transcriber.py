@@ -4,8 +4,8 @@ from pathlib import Path
 from faster_whisper import WhisperModel
 from tqdm import tqdm
 
-INPUT_DIR = Path("/input")
-OUTPUT_DIR = Path("/output")
+INPUT_DIR = Path("/inputs")
+OUTPUT_DIR = Path("/outputs")
 
 MODEL_SIZE = "base"
 
