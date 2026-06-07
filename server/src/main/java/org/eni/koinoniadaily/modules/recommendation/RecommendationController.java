@@ -21,7 +21,7 @@ import java.util.List;
 @Validated
 public class RecommendationController {
 
-  public final RecommendationService recommendationService;
+  private final RecommendationService recommendationService;
 
   @GetMapping("/{teachingId}")
   public ResponseEntity<SuccessResponse<List<RecommendationResponse>>> getRecommendations(

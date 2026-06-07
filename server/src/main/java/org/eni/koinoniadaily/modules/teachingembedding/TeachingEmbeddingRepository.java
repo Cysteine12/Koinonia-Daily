@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface TeachingEmbeddingRepository extends JpaRepository<TeachingEmbedding, Long> {
 
-  Optional<TeachingEmbedding> findByTeachingId(Long teachingId);
+  Optional<TeachingEmbedding> findByTeachingIdAndModel(Long teachingId, String model);
 
   @Query(value = """
       SELECT
@@ -28,9 +28,9 @@ public interface TeachingEmbeddingRepository extends JpaRepository<TeachingEmbed
         te.embedding <=> CAST(:teaching_embedding AS vector) AS score
       FROM teaching_embeddings te
       
-      JOIN teachings t ON t.id = :te.teaching_id
+      JOIN teachings t ON t.id = te.teaching_id
       WHERE te.teaching_id != :teaching_id
-      AND model = :model
+      AND te.model = :model
       
       ORDER BY score
       LIMIT :size

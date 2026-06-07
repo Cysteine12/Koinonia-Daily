@@ -2,6 +2,7 @@ package org.eni.koinoniadaily.modules.recommendation;
 
 import lombok.RequiredArgsConstructor;
 import org.eni.koinoniadaily.exceptions.NotFoundException;
+import org.eni.koinoniadaily.infrastructure.embedding.models.EmbeddingModelProvider;
 import org.eni.koinoniadaily.modules.recommendation.dto.RecommendationResponse;
 import org.eni.koinoniadaily.modules.recommendation.projection.RecommendationResult;
 import org.eni.koinoniadaily.modules.teachingembedding.TeachingEmbedding;
@@ -15,11 +16,15 @@ import java.util.List;
 public class RecommendationService {
 
   private final TeachingEmbeddingRepository teachingEmbeddingRepository;
+  private final EmbeddingModelProvider embeddingModelProvider;
 
 
   public List<RecommendationResponse> getRecommendations(Long teachingId, int size) {
 
-    TeachingEmbedding teachingEmbedding = teachingEmbeddingRepository.findByTeachingId(teachingId)
+    TeachingEmbedding teachingEmbedding = teachingEmbeddingRepository.findByTeachingIdAndModel(
+        teachingId,
+        embeddingModelProvider.getName()
+        )
         .orElseThrow(() -> new NotFoundException("Teaching embedding not found"));
 
     List<RecommendationResult> similarTeachings = teachingEmbeddingRepository.getSimilarTeachings(

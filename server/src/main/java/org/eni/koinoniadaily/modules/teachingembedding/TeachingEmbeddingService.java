@@ -8,17 +8,19 @@ import org.eni.koinoniadaily.modules.teaching.Teaching;
 import org.eni.koinoniadaily.modules.teaching.TeachingRepository;
 import org.eni.koinoniadaily.modules.teachingembedding.dto.TeachingEmbeddingRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class TeachingEmbeddingService {
 
-  public final TeachingEmbeddingRepository teachingEmbeddingRepository;
+  private final TeachingEmbeddingRepository teachingEmbeddingRepository;
   private final TeachingEmbeddingUtil teachingEmbeddingUtil;
-  public final EmbeddingModelProvider embeddingModelProvider;
-  public final TeachingRepository teachingRepository;
+  private final EmbeddingModelProvider embeddingModelProvider;
+  private final TeachingRepository teachingRepository;
 
+  @Transactional
   public void triggerEmbedding (TeachingEmbeddingRequest request) {
 
     Teaching teaching = teachingRepository.findById(request.getTeachingId())
@@ -27,16 +29,15 @@ public class TeachingEmbeddingService {
     String text = teachingEmbeddingUtil.buildChunkText(teaching);
 
     float[] embedding = embeddingModelProvider.embed(text);
+    String model = embeddingModelProvider.getName();
 
-    teachingEmbeddingRepository.save(toEntity(teaching, embedding));
-  }
+    TeachingEmbedding teachingEmbedding = teachingEmbeddingRepository.findByTeachingIdAndModel(teaching.getId(), model)
+        .orElseGet(() -> TeachingEmbedding.builder()
+            .teaching(teaching)
+            .model(model)
+            .build()
+        );
 
-  private TeachingEmbedding toEntity(Teaching teaching, float[] embedding) {
-
-    return TeachingEmbedding.builder()
-        .teaching(teaching)
-        .model(embeddingModelProvider.getName())
-        .embedding(embedding)
-        .build();
+    teachingEmbedding.setEmbedding(embedding);
   }
 }
