@@ -31,6 +31,7 @@ public interface TeachingEmbeddingRepository extends JpaRepository<TeachingEmbed
       JOIN teachings t ON t.id = te.teaching_id
       WHERE te.teaching_id != :teaching_id
       AND te.model = :model
+      AND t.status = 'PUBLISHED'
       
       ORDER BY score
       LIMIT :size
