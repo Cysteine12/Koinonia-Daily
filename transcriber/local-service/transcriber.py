@@ -4,19 +4,12 @@ from pathlib import Path
 from faster_whisper import WhisperModel
 from tqdm import tqdm
 
-INPUT_DIR = Path("/inputs")
-OUTPUT_DIR = Path("/outputs")
+INPUT_DIR = Path("inputs")
+OUTPUT_DIR = Path("outputs")
 
 MODEL_SIZE = "base"
 
-model = WhisperModel(
-    MODEL_SIZE,
-    device="cpu",
-    compute_type="int8"
-)
-
-
-def transcribe_audio(audio_path: Path):
+def transcribe_audio(model: WhisperModel, audio_path: Path):
 
     output_path = OUTPUT_DIR / f"{audio_path.stem}.txt"
 
@@ -43,15 +36,30 @@ def transcribe_audio(audio_path: Path):
 
 def main():
 
-    audio_files = list(INPUT_DIR.glob("*"))
+    audio_extensions = {'.mp3', '.wav', '.m4a', '.flac', '.ogg', '.opus', '.webm'}
+    audio_files = [f for f in INPUT_DIR.glob("*") if f.suffix.lower() in audio_extensions]
+
 
     if not audio_files:
         print("No audio files found.")
         return
+    
+    print(f"Found {len(audio_files)} audio files. Loading model...")
+
+    model = WhisperModel(
+        MODEL_SIZE,
+        device="cpu",
+        compute_type="int8"
+    )
 
     for audio_file in audio_files:
         try:
-            transcribe_audio(audio_file)
+            transcribe_audio(model, audio_file)
+        except (RuntimeError, OSError, ValueError) as e:
+            print(f"Failed: {audio_file.name}: {e}", file=sys.stderr)
+        except KeyboardInterrupt:
+            print("\nTranscription interrupted by user.")
+            sys.exit(1)
         except Exception as e:
             print(f"Failed: {audio_file.name}: {e}")
 

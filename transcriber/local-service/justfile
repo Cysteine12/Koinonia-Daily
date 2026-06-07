@@ -1,19 +1,17 @@
 set shell := ["bash", "-cu"]
 
 venv:
-    python3 -m venv venv
+    python3 -m venv venv && \
+    . venv/bin/activate
 
-install:
-    . venv/bin/activate && \
+install: venv
     pip install --upgrade pip && \
-    pip install faster-whisper
+    pip install -r requirements.txt
 
-freeze:
-    . venv/bin/activate && \
+freeze: venv
     pip freeze > requirements.txt
 
-transcribe:
-    . venv/bin/activate && \
+transcribe: venv
     python transcriber.py
 
 clean:

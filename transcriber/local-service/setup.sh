@@ -6,6 +6,9 @@
 # Exit on error
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 VENV_DIR="venv"
 
 # Create virtual environment if it doesn't exist
