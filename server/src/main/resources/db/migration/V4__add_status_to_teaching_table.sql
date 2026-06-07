@@ -1,4 +1,0 @@
-ALTER TABLE teachings
-  ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
-  ADD CONSTRAINT teachings_status_check
-    CHECK (status IN ('PENDING', 'CHUNKED', 'EMBEDDING', 'EMBEDDED', 'FAILED'));
