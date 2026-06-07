@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # For first-time setup of this script
-# run "chmod +x run.sh"
+# run "chmod +x setup.sh"
 
 # Exit on error
 set -e
 
-VENV_DIR="venv"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 cd "$SCRIPT_DIR"
+
+VENV_DIR="venv"
 
 # Create virtual environment if it doesn't exist
 if [ ! -d "$VENV_DIR" ]; then
@@ -33,19 +33,3 @@ else
       source "$VENV_DIR/bin/activate"
     fi
 fi
-
-# Check if audio file argument is provided
-if [ "$#" -eq 0 ]; then
-    echo "Error: No audio file provided."
-    echo "Usage: ./run.sh <path_to_audio_file>"
-    exit 1
-fi
-
-# Run the transcriber
-echo "Starting transcription for file: $1"
-python transcriber.py "$1"
-
-# Deactivate the virtual environment
-deactivate
-
-echo "Transcription completed."

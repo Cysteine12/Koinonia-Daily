@@ -6,9 +6,9 @@ The **Koinonia Daily Transcriber** is a specialized Python-based service designe
 
 This service is intended to be run **locally** by administrators for mass transcription of audio messages. The workflow is as follows:
 
-1.  **Audio Preparation:** Manually collect audio files (MP3/WAV) to be transcribed.
+1.  **Audio Preparation:** Place audio files (MP3/WAV) into the `inputs/` directory.
 2.  **Transcription:** Use this service to generate text files from the audio.
-3.  **Data Seeding:** The generated transcripts serve as the source material for seeding the application database.
+3.  **Data Seeding:** The generated transcripts in the `outputs/` directory serve as the source material for seeding the application database.
 4.  **Admin Integration:** Currently, transcripts are manually processed. In the future, an admin interface will allow for direct copy-pasting or uploading of these transcripts to create `Transcript` entities in the backend.
 
 ## 🚀 Tech Stack
@@ -27,6 +27,7 @@ Before running the transcriber, ensure you have the following installed:
     -   **macOS:** `brew install ffmpeg`
     -   **Ubuntu/Debian:** `sudo apt update && sudo apt install ffmpeg`
     -   **Windows:** Download from [ffmpeg.org](https://ffmpeg.org/download.html) and add to your PATH.
+3.  **Just (Optional):** A handy command runner. [Installation Guide](https://github.com/casey/just).
 
 ## 📥 Installation
 
@@ -34,27 +35,35 @@ The service includes a helper script to manage the environment and dependencies 
 
 1.  Navigate to the transcriber directory:
     ```bash
-    cd transcriber
+    cd transcriber/local-service
     ```
-2.  Make the run script executable (Linux/macOS):
+2.  Initialize the environment and install dependencies:
     ```bash
-    chmod +x run.sh
+    ./setup.sh
+    ```
+    *Or, if you have `just` installed:*
+    ```bash
+    just install
     ```
 
 ## 📖 Usage
 
-To transcribe an audio file, run the `run.sh` script followed by the path to your audio file.
-
-```bash
-./run.sh path/to/your/sermon.mp3
-```
+1.  Place your audio files (e.g., `.mp3`, `.wav`) in the `inputs/` folder.
+2.  Run the transcription process:
+    ```bash
+    just transcribe
+    ```
+    *If not using `just`, activate the virtual environment and run the script manually:*
+    ```bash
+    source venv/bin/activate
+    python transcriber.py
+    ```
 
 ### What happens under the hood?
-1.  **Environment Check:** Creates a Python virtual environment (`venv`) if it doesn't exist.
-2.  **Dependency Management:** Automatically installs/updates requirements from `requirements.txt`.
-3.  **Model Loading:** Loads the `base` Whisper model into memory.
-4.  **Processing:** Transcribes the audio and provides a progress bar.
-5.  **Output:** Generates a `.txt` file in the same directory with the same name as the audio file (e.g., `sermon.txt`).
+1.  **Environment Check:** Uses the Python virtual environment (`venv`).
+2.  **Model Loading:** Loads the `base` Whisper model into memory.
+3.  **Processing:** Scans the `inputs/` directory, transcribes each file, and provides a progress bar.
+4.  **Output:** Generates a `.txt` file in the `outputs/` directory for each processed audio file.
 
 ## ⚙️ Configuration
 
@@ -65,10 +74,12 @@ The default configuration in `transcriber.py` is tuned for standard hardware:
 
 ## 📂 Project Structure
 
--   `run.sh`: The main entry point script for automated setup and execution.
+-   `justfile`: Command runner configuration for common tasks.
+-   `setup.sh`: Script for automated virtual environment setup.
 -   `transcriber.py`: The core Python logic for transcription.
+-   `inputs/`: Place audio files here.
+-   `outputs/`: Transcribed text files are saved here.
 -   `requirements.txt`: Python library dependencies.
--   `transcribe-demo.py`: A lightweight debug script to test Whisper and FFmpeg connectivity.
 
 ## ⚠️ Troubleshooting
 
