@@ -1,8 +1,8 @@
-[] - Create a TeachingEmbedding entity for single embedding at teaching level for content-based recommendation system
-
-[] - Unwritten rule that updating a teaching title or message needs manual trigger for chunking and embedding.
+[] - Unwritten rule that updating a teaching title or message needs manual trigger for chunking and embedding for search.
+[] - Unwritten rule that updating a teaching title, summary and tags needs manual trigger for embedding for recommendations
+[] - need to build a status tracker for recommendation status for teachings -> teaching_embedding
 
 [] - add /transcripts/trigger { id, model, audioUrl, webhookUrl } - TranscriptionProvider.transcribe(job)
-	add to model { audioUrl, lastTriggeredAt, status: [PENDING, PROCESSING, COMPLETED, FAILED] }
+        add to model { audioUrl, lastTriggeredAt, status: [PENDING, PROCESSING, COMPLETED, FAILED] }
 
 [] - add /transcripts/callback - { id, text } 
