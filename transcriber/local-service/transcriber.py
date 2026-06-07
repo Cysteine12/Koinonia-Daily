@@ -12,6 +12,7 @@ MODEL_SIZE = "base"
 def transcribe_audio(model: WhisperModel, audio_path: Path):
 
     output_path = OUTPUT_DIR / f"{audio_path.stem}.txt"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
     print(f"\nTranscribing: {audio_path.name}")
 
@@ -36,8 +37,12 @@ def transcribe_audio(model: WhisperModel, audio_path: Path):
 
 def main():
 
+    if not INPUT_DIR.exists():
+        print(f"Error: Input directory '{INPUT_DIR}' does not exist.")
+        return
+
     audio_extensions = {'.mp3', '.wav', '.m4a', '.flac', '.ogg', '.opus', '.webm'}
-    audio_files = [f for f in INPUT_DIR.glob("*") if f.suffix.lower() in audio_extensions]
+    audio_files = sorted([f for f in INPUT_DIR.glob("*") if f.suffix.lower() in audio_extensions])
 
 
     if not audio_files:
@@ -61,7 +66,7 @@ def main():
             print("\nTranscription interrupted by user.")
             sys.exit(1)
         except Exception as e:
-            print(f"Failed: {audio_file.name}: {e}")
+            print(f"Failed: {audio_file.name}: {e}", file=sys.stderr)
 
 
 if __name__ == "__main__":
