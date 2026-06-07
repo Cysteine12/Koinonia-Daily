@@ -82,7 +82,12 @@ public class Teaching extends BaseEntity {
   @Column(nullable = false, length = 20)
   @Enumerated(value = EnumType.STRING)
   @Builder.Default
-  private TeachingStatus status = TeachingStatus.PENDING;
+  private TeachingStatus status = TeachingStatus.DRAFT;
+
+  @Column(nullable = false, length = 20)
+  @Enumerated(value = EnumType.STRING)
+  @Builder.Default
+  private EmbeddingStatus embeddingStatus = EmbeddingStatus.PENDING;
 
   @ManyToMany(mappedBy = "teachings")
   @Builder.Default

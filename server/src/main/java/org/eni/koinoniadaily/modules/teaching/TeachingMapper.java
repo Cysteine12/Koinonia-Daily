@@ -14,21 +14,22 @@ public class TeachingMapper {
   public TeachingPageResponse toDto(TeachingWithoutMessageProjection teaching) {
 
     return TeachingPageResponse.builder()
-            .id(teaching.getId())
-            .title(teaching.getTitle())
-            .scripturalReferences(teaching.getScripturalReferences())
-            .summary(teaching.getSummary())
-            .audioUrl(teaching.getAudioUrl())
-            .videoUrl(teaching.getVideoUrl())
-            .thumbnailUrl(teaching.getThumbnailUrl())
-            .type(teaching.getType())
-            .tags(teaching.getTags())
-            .seriesPart(teaching.getSeriesPart())
-            .status(teaching.getStatus())
-            .taughtAt(teaching.getTaughtAt())
-            .createdAt(teaching.getCreatedAt())
-            .updatedAt(teaching.getUpdatedAt())
-            .build();
+        .id(teaching.getId())
+        .title(teaching.getTitle())
+        .scripturalReferences(teaching.getScripturalReferences())
+        .summary(teaching.getSummary())
+        .audioUrl(teaching.getAudioUrl())
+        .videoUrl(teaching.getVideoUrl())
+        .thumbnailUrl(teaching.getThumbnailUrl())
+        .type(teaching.getType())
+        .tags(teaching.getTags())
+        .seriesPart(teaching.getSeriesPart())
+        .status(teaching.getStatus())
+        .embeddingStatus(teaching.getEmbeddingStatus())
+        .taughtAt(teaching.getTaughtAt())
+        .createdAt(teaching.getCreatedAt())
+        .updatedAt(teaching.getUpdatedAt())
+        .build();
   }
 
   public TeachingResponse toDto(Teaching teaching) {
@@ -41,45 +42,47 @@ public class TeachingMapper {
                             : null;
 
     return TeachingResponse.builder()
-            .id(teaching.getId())
-            .title(teaching.getTitle())
-            .scripturalReferences(teaching.getScripturalReferences())
-            .message(teaching.getMessage())
-            .summary(teaching.getSummary())
-            .audioUrl(teaching.getAudioUrl())
-            .videoUrl(teaching.getVideoUrl())
-            .thumbnailUrl(teaching.getThumbnailUrl())
-            .type(teaching.getType())
-            .tags(teaching.getTags())
-            .series(series)
-            .seriesPart(teaching.getSeriesPart())
-            .status(teaching.getStatus())
-            .taughtAt(teaching.getTaughtAt())
-            .createdAt(teaching.getCreatedAt())
-            .updatedAt(teaching.getUpdatedAt())
-            .build();
+        .id(teaching.getId())
+        .title(teaching.getTitle())
+        .scripturalReferences(teaching.getScripturalReferences())
+        .message(teaching.getMessage())
+        .summary(teaching.getSummary())
+        .audioUrl(teaching.getAudioUrl())
+        .videoUrl(teaching.getVideoUrl())
+        .thumbnailUrl(teaching.getThumbnailUrl())
+        .type(teaching.getType())
+        .tags(teaching.getTags())
+        .series(series)
+        .seriesPart(teaching.getSeriesPart())
+        .status(teaching.getStatus())
+        .embeddingStatus(teaching.getEmbeddingStatus())
+        .taughtAt(teaching.getTaughtAt())
+        .createdAt(teaching.getCreatedAt())
+        .updatedAt(teaching.getUpdatedAt())
+        .build();
   }
   
   public Teaching toEntity(TeachingRequest dto, Series series) {
 
     return Teaching.builder()
-            .title(dto.getTitle())
-            .scripturalReferences(dto.getScripturalReferences())
-            .message(dto.getMessage())
-            .summary(dto.getSummary())
-            .audioUrl(dto.getAudioUrl())
-            .videoUrl(dto.getVideoUrl())
-            .thumbnailUrl(dto.getThumbnailUrl())
-            .type(dto.getType())
-            .tags(dto.getTags())
-            .series(series)
-            .seriesPart(dto.getSeriesPart())
-            .status(TeachingStatus.PENDING)
-            .taughtAt(dto.getTaughtAt())
-            .build();
+        .title(dto.getTitle())
+        .scripturalReferences(dto.getScripturalReferences())
+        .message(dto.getMessage())
+        .summary(dto.getSummary())
+        .audioUrl(dto.getAudioUrl())
+        .videoUrl(dto.getVideoUrl())
+        .thumbnailUrl(dto.getThumbnailUrl())
+        .type(dto.getType())
+        .tags(dto.getTags())
+        .series(series)
+        .seriesPart(dto.getSeriesPart())
+        .status(TeachingStatus.DRAFT)
+        .embeddingStatus(EmbeddingStatus.PENDING)
+        .taughtAt(dto.getTaughtAt())
+        .build();
   }
 
-  public Teaching updateToEntity(Teaching teaching, TeachingRequest dto, Series series) {
+  public void updateToEntity(Teaching teaching, TeachingRequest dto, Series series) {
 
     teaching.setTitle(dto.getTitle());
     teaching.setScripturalReferences(dto.getScripturalReferences());
@@ -92,9 +95,8 @@ public class TeachingMapper {
     teaching.setTags(dto.getTags());
     teaching.setSeries(series);
     teaching.setSeriesPart(dto.getSeriesPart());
-    teaching.setStatus(TeachingStatus.PENDING);
+    teaching.setEmbeddingStatus(EmbeddingStatus.PENDING);
     teaching.setTaughtAt(dto.getTaughtAt());
 
-    return teaching;
   }
 }
