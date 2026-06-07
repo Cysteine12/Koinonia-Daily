@@ -14,7 +14,7 @@ CREATE TABLE chunk_embeddings (
   CONSTRAINT teaching_chunk_id_model_unique UNIQUE(teaching_chunk_id, model)
 );
 
-CREATE INDEX chunks_embeddings_embedding
+CREATE INDEX chunk_embeddings_embedding
   ON chunk_embeddings
   USING HNSW (embedding vector_cosine_ops);
 
