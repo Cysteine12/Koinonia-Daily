@@ -20,9 +20,10 @@ A premium, custom-themed spiritual platform for end-users.
 - **Features:** Audio/Video streaming, search, bookmarks, user history, and a custom gold-themed UI.
 
 ### 3. [Transcriber (Service)](./transcriber/README.md)
-A local utility for generating transcripts to seed the application database.
-- **Tech:** Python 3.10+, Faster-Whisper (OpenAI Whisper optimized).
-- **Purpose:** Mass transcription of audio messages for search indexing and textual study.
+A multi-component transcription system supporting local workflows and cloud-based automation.
+- **Services:** Local Transcription (CPU), Modal Cloud Service (Serverless GPU), and Mock Server.
+- **Tech:** Python, Faster-Whisper, Modal, Node.js.
+- **Purpose:** Automated and manual conversion of sermons into text for semantic search and study.
 
 ## 🚀 Quick Start
 
