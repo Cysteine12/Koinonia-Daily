@@ -57,7 +57,7 @@ Use `just` to manage the project:
 {
   "transcriptId": 123,
   "audioUrl": "https://drive.google.com/file/d/...",
-  "callbackUrl": "https://your-backend.com/api/v1/transcriptions/callback"
+  "callbackUrl": "https://your-backend.com/api/v1/transcripts/workflow/callback"
 }
 ```
 
