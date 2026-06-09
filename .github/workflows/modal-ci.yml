@@ -1,0 +1,27 @@
+name: Deploy Modal Transcriber
+
+on:
+  push:
+    branches: ["main", "develop"]
+    paths:
+      - 'transcriber/modal-service/transcriber.py'
+      - ".github/workflows/modal-ci.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Modal
+        run: pip install modal
+
+      - name: Deploy
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+        run: modal deploy transcriber.py
