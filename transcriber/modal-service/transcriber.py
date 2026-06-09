@@ -53,7 +53,7 @@ image = (
         add_python="3.11"
     )
     .pip_install(
-        "faster-whisper==1.1.1",
+        "faster-whisper==1.2.1",
         "gdown==5.2.0",
         "fastapi[standard]",
         "requests==2.32.3",

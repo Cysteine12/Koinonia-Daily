@@ -11,7 +11,7 @@ This server provides a way to test the integration between the Koinonia Daily ba
 - **Trigger Transcription**: An endpoint to simulate the start of a transcription task.
 - **Callback Handling**: A secure endpoint to receive transcription results.
 - **Automated Tunneling**: Integrated ngrok support for local development.
-- **Local Persistence**: Saves received callback data to `callback_data.json` for easy inspection.
+- **Local Persistence**: Saves received callback data to `output/{filename}.json` for easy inspection.
 
 ## Prerequisites
 
@@ -60,12 +60,12 @@ The server will start on port `8000` and automatically establish an ngrok tunnel
 ### `GET /`
 Check if the server is running.
 
-### `POST /api/v1/transcripts/trigger`
+### `POST /api/v1/transcripts/workflow/trigger`
 Triggers the transcription worker.
-- **Body**: `{ "audioUrl": "...", "transcriptId": "..." }`
+- **Body**: `{ "audioUrl": "...", "transcriptId": 123 }`
 - **Action**: Generates a callback URL using the ngrok tunnel and calls the Modal worker.
 
-### `POST /api/v1/transcripts/callback`
+### `POST /api/v1/transcripts/workflow/callback`
 The webhook endpoint where the transcription worker sends results.
 - **Headers**: `X-Callback-Secret` must match your `MODAL_CALLBACK_SECRET`.
 - **Action**: Writes the received JSON body to `output/{filename}.json`.

@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
     res.json({ message: "Mock server is running" });
 });
 
-app.post("/api/v1/transcripts/trigger", async (req, res) => {
+app.post("/api/v1/transcripts/workflow/trigger", async (req, res) => {
     try {
         console.log("Received trigger for transcription");
 
@@ -27,7 +27,7 @@ app.post("/api/v1/transcripts/trigger", async (req, res) => {
         const data = {
             transcriptId: req.body.transcriptId || Math.floor(Math.random() * 1000000),
             audioUrl: req.body.audioUrl,
-            callbackUrl: `${URL}/api/v1/transcripts/callback`
+            callbackUrl: `${URL}/api/v1/transcripts/workflow/callback`
         }
 
         console.log("Triggering worker with data:", data);
@@ -56,7 +56,7 @@ app.post("/api/v1/transcripts/trigger", async (req, res) => {
     }
 });
 
-app.post("/api/v1/transcripts/callback", (req, res) => {
+app.post("/api/v1/transcripts/workflow/callback", (req, res) => {
     console.log("Received callback:");
 
     if (req.headers["content-type"] !== "application/json" || 
