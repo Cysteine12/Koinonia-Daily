@@ -43,6 +43,7 @@ logger.addHandler(handler)
 MODEL_SIZE = "base"
 MODEL_CACHE_DIR = "/root/.cache/huggingface"
 MAX_AUDIO_BYTES = 120 * 1024 * 1024  # 120 MB
+IMAGE_VERSION = "2026-06-11"
 
 # ---------------------------------------------------------------------------
 # Modal image — all packages baked in
@@ -56,8 +57,8 @@ image = (
         "faster-whisper==1.2.1",
         "gdown==5.2.0",
         "fastapi[standard]",
-        "requests==2.32.3",
-    )
+        "requests==2.32.3"
+    ).env({"IMAGE_VERSION": IMAGE_VERSION})
 )
 
 # ---------------------------------------------------------------------------
@@ -121,11 +122,14 @@ def transcribe_worker(transcript_id: int, audio_url: str, callback_url: str) -> 
     Full pipeline: download → validate → transcribe → callback.
     All errors are caught and reported back via callbackUrl.
     """
+    from datetime import datetime, timezone
+
     logger.info(
         "Worker started — transcriptId=%s audioUrl=%s", transcript_id, audio_url
     )
 
     tmp_path: Path | None = None
+    start_time = int(datetime.now(timezone.utc).timestamp() * 1000)
 
     try:
         # --------------------------------------------------------------------
@@ -159,9 +163,17 @@ def transcribe_worker(transcript_id: int, audio_url: str, callback_url: str) -> 
             {
                 "transcriptId": transcript_id,
                 "success": True,
-                "duration": round(duration),
                 "text": text,
-                "filename": tmp_path.name,
+                "metadata": {
+                    "filename": tmp_path.name,
+                    "audio_url": audio_url,
+                    "start_time": start_time,
+                    "end_time": int(datetime.now(timezone.utc).timestamp() * 1000),
+                    "duration": round(duration),
+                    "service": "modal",
+                    "model_size": MODEL_SIZE,
+                    "image_version": IMAGE_VERSION
+                },
             },
         )
         logger.info(
@@ -184,6 +196,15 @@ def transcribe_worker(transcript_id: int, audio_url: str, callback_url: str) -> 
                 "transcriptId": transcript_id,
                 "success": False,
                 "error": str(exc),
+                "metadata": {
+                    "filename": tmp_path.name if tmp_path else None,
+                    "audio_url": audio_url,
+                    "start_time": start_time,
+                    "end_time": int(datetime.now(timezone.utc).timestamp() * 1000),
+                    "service": "modal",
+                    "model_size": MODEL_SIZE,
+                    "image_version": IMAGE_VERSION
+                },
             },
         )
 
