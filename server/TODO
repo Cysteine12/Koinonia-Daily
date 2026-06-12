@@ -5,4 +5,7 @@
 [] - add /transcripts/trigger { id, model, audioUrl, webhookUrl } - TranscriptionProvider.transcribe(job)
         add to model { audioUrl, lastTriggeredAt, status: [PENDING, PROCESSING, COMPLETED, FAILED] }
 
-[] - add /transcripts/callback - { id, text } 
+[] - add /transcripts/callback - { id, text }
+
+[] - add metadata JSON field to /transcribe responses.
+

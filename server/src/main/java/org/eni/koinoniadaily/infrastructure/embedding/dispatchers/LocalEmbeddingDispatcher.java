@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "app.embedding.queue.provider", havingValue = "local", matchIfMissing = true)
 @Qualifier("local")
-public class LocalEmbeddingDispatcher implements EmbeddingJobDispatcher {
+class LocalEmbeddingDispatcher implements EmbeddingJobDispatcher {
 
   private final EmbeddingJobHandler handler;
 

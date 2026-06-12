@@ -20,7 +20,7 @@ import software.amazon.awssdk.services.ses.model.SesException;
 @ConditionalOnProperty(name = "app.email.provider", havingValue = "ses", matchIfMissing = true)
 @Qualifier("ses")
 @RequiredArgsConstructor
-public class SesEmailProvider implements EmailProvider {
+class SesEmailProvider implements EmailProvider {
 
   private final SesClient sesClient;
   private final AppProperties props;

@@ -18,7 +18,7 @@ import tools.jackson.databind.ObjectMapper;
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "app.embedding.queue.provider", havingValue = "sqs")
 @Qualifier("sqs")
-public class SqsEmbeddingDispatcher implements EmbeddingJobDispatcher {
+class SqsEmbeddingDispatcher implements EmbeddingJobDispatcher {
 
   private final SqsClient sqsClient;
   private final AppProperties props;

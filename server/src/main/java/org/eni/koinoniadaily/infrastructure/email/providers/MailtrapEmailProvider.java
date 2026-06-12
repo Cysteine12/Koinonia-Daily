@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(name = "app.email.provider", havingValue = "mailtrap")
 @Qualifier("mailtrap")
 @RequiredArgsConstructor
-public class MailtrapEmailProvider implements EmailProvider {
+class MailtrapEmailProvider implements EmailProvider {
 
   private final JavaMailSender mailSender;
   private final AppProperties props;
