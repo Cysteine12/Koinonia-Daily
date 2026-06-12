@@ -13,6 +13,5 @@ public class TranscriptRequest {
   @Size(max = 60, message = "Title cannot exceed 60 characters")
   private String title;
 
-  @NotBlank(message = "Message is required")
   private String message;
 }

@@ -17,6 +17,9 @@ public class AppProperties {
 
   private int version = 1;
 
+  @NotBlank(message = "App base URL not set in env")
+  private String baseUrl;
+
   @NotBlank(message = "JWT secret not set in env")
   @Size(min = 32, message = "JWT secret must be at least 32 characters")
   private String jwtSecret;
@@ -132,6 +135,33 @@ public class AppProperties {
 
       @NotBlank(message = "Embedding model provider not set in env")
       private String provider;
+    }
+  }
+
+  @Valid
+  private Transcription transcription = new Transcription();
+
+  @Data
+  public static class Transcription {
+
+    @NotBlank(message = "Transcription provider not set in env")
+    @Pattern(regexp = "modal", message = "Transcription provider must be 'modal'")
+    private String provider;
+
+    @Valid
+    private Modal modal = new Modal();
+
+    @Data
+    public static class Modal {
+
+      @NotBlank(message = "Modal transcription URL not set in env")
+      private String url;
+
+      @NotBlank(message = "Modal API key not set in env")
+      private String apiKey;
+
+      @NotBlank(message = "Modal callback secret not set in env")
+      public String callbackSecret;
     }
   }
 }

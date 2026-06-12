@@ -16,7 +16,7 @@ import java.util.List;
 @ConditionalOnProperty(name = "app.embedding.model.provider", havingValue = "text-embedding-3-small")
 @Qualifier("text-embedding-3-small")
 @RequiredArgsConstructor
-public class TextEmbedding3SmallEmbeddingModelProvider implements EmbeddingModelProvider {
+class TextEmbedding3SmallEmbeddingModelProvider implements EmbeddingModelProvider {
 
   private final EmbeddingModel embeddingModel;
 

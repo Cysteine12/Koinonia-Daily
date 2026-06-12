@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnProperty(name = "app.embedding.model.provider", havingValue = "text-embedding-3-small")
 @RequiredArgsConstructor
-public class TextEmbedding3SmallEmbeddingModelConfig {
+class TextEmbedding3SmallEmbeddingModelConfig {
 
   private final AppProperties appProperties;
 

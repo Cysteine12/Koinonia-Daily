@@ -14,6 +14,7 @@ public class TranscriptMapper {
     return TranscriptPageResponse.builder()
             .id(transcript.getId())
             .title(transcript.getTitle())
+            .status(transcript.getStatus())
             .createdAt(transcript.getCreatedAt())
             .updatedAt(transcript.getUpdatedAt())
             .build();
@@ -25,6 +26,8 @@ public class TranscriptMapper {
             .id(transcript.getId())
             .title(transcript.getTitle())
             .message(transcript.getMessage())
+            .status(transcript.getStatus())
+            .metadata(transcript.getMetadata())
             .createdAt(transcript.getCreatedAt())
             .updatedAt(transcript.getUpdatedAt())
             .build();
