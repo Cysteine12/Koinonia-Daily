@@ -4,7 +4,7 @@ install:
     pnpm install
 
 start:
-    node --env-file .env index.js
+    pnpm start
 
 test:
     curl -X POST http://localhost:8000/api/v1/transcripts/workflow/trigger \

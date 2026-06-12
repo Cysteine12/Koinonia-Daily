@@ -66,7 +66,7 @@ app.post("/api/v1/transcripts/workflow/callback", (req, res) => {
         return res.status(400).json({ success: false, message: "Invalid callback" });
     }
 
-    const filename = req.body.filename || `callback_${Date.now()}`;
+    const filename = req.body?.metadata?.filename || `callback_${Date.now()}`;
     const filePath = path.join(OUTPUT_DIR, `${filename}.json`);
 
     fs.writeFileSync(filePath, JSON.stringify(req.body, null, 2));
