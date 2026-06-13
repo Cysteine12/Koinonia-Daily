@@ -6,8 +6,6 @@ import org.eni.koinoniadaily.modules.transcript.dto.TranscriptResponse;
 import org.eni.koinoniadaily.modules.transcript.projection.TranscriptWithoutMessageProjection;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 @Component
 public class TranscriptMapper {
   
@@ -29,7 +27,7 @@ public class TranscriptMapper {
             .title(transcript.getTitle())
             .message(transcript.getMessage())
             .status(transcript.getStatus())
-            .metadata(transcript.getMetadata() == null ? null : Map.copyOf(transcript.getMetadata()))
+            .metadata(transcript.getMetadata())
             .createdAt(transcript.getCreatedAt())
             .updatedAt(transcript.getUpdatedAt())
             .build();
