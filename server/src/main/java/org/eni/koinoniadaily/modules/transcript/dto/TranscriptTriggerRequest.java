@@ -17,7 +17,7 @@ public class TranscriptTriggerRequest {
   @Positive(message = "transcriptId must be greater than zero")
   private Long transcriptId;
 
-  @NotBlank
-  @URL
+  @NotBlank(message ="audioUrl is required")
+  @URL(protocol = "https", message = "audioUrl must be valid https url")
   private String audioUrl;
 }

@@ -1,5 +1,5 @@
 ALTER TABLE transcripts
   ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
-  ADD CONSTRAINT transcripts__status_check
+  ADD CONSTRAINT transcripts_status_check
     CHECK (status IN ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'FAILED')),
   ADD COLUMN metadata JSONB;

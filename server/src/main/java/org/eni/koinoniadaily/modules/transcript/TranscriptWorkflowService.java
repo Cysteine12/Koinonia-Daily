@@ -61,6 +61,8 @@ public class TranscriptWorkflowService {
       transcriptRepository.save(transcript);
 
       log.error("Transcription dispatch failed for transcriptId={}", transcript.getId(), ex);
+
+      throw new ValidationException("TRANSCRIPTION_DISPATCH_FAILED", "Transcription dispatch failed");
     }
 
   }
@@ -79,12 +81,13 @@ public class TranscriptWorkflowService {
 
       transcript.setStatus(TranscriptStatus.FAILED);
       transcript.setMetadata(metadata);
+
+    } else {
+      transcript.setMessage(payload.text());
+      transcript.setStatus(TranscriptStatus.COMPLETED);
+      transcript.setMetadata(payload.metadata());
     }
-
-    transcript.setMessage(payload.text());
-    transcript.setStatus(TranscriptStatus.COMPLETED);
-    transcript.setMetadata(payload.metadata());
-
+    
     transcriptRepository.save(transcript);
 
     log.info("Transcript updated after callback for transcriptId={} status={}",

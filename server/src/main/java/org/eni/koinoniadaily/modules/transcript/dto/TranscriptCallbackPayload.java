@@ -18,5 +18,6 @@ public record TranscriptCallbackPayload (
 
     String error,
 
+    @NotNull
     Map<String, Object> metadata
 ) {}
