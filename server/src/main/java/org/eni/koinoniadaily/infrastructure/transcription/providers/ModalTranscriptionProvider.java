@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -32,6 +33,19 @@ class ModalTranscriptionProvider implements TranscriptionProvider {
         .build();
   }
 
+  @Retryable(
+      includes = Exception.class,
+      maxRetries = 2,
+      delay = 1000,
+      multiplier = 2,
+      maxDelay = 5000,
+      jitter = 500
+  )
+  private RestClient client() {
+    return this.restClient;
+
+  }
+
 
   @Override
   public TranscriptionAck dispatch(TranscriptionJob job) {
@@ -39,7 +53,7 @@ class ModalTranscriptionProvider implements TranscriptionProvider {
     log.info("Dispatching transcription job to Modal — transcriptId={}", job.transcriptId());
 
     try {
-      TranscriptionAck ack = restClient.post()
+      TranscriptionAck ack = this.client().post()
           .uri("/transcribe")
           .contentType(MediaType.APPLICATION_JSON)
           .body(job)

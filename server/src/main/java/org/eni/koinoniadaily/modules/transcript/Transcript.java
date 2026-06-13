@@ -1,6 +1,13 @@
 package org.eni.koinoniadaily.modules.transcript;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import org.eni.koinoniadaily.entity.BaseEntity;
 
@@ -26,8 +33,9 @@ public class Transcript extends BaseEntity {
 
   @Lob
   @Basic(fetch = FetchType.LAZY)
+  @Builder.Default
   @Column(nullable = false, columnDefinition = "text")
-  private String message;
+  private String message = "";
 
   @Column(nullable = false, length = 20)
   @Enumerated(EnumType.STRING)

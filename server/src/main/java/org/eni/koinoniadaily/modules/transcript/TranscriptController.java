@@ -31,6 +31,8 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/api/v1/transcripts")
 @RequiredArgsConstructor
@@ -121,9 +123,12 @@ public class TranscriptController {
       @RequestHeader("x-callback-secret") String callbackSecret,
       @RequestBody @Valid TranscriptCallbackPayload payload
   ) {
-    if (!props.getTranscription().getModal().getCallbackSecret().equals(callbackSecret)) {
+    String expectedSecret = props.getTranscription().getModal().getCallbackSecret();
+
+    if (!Objects.equals(expectedSecret, callbackSecret)) {
       throw new UnauthorizedException("CALLBACK_SECRET_INVALID", "Invalid transcription callback secret");
     }
+
     transcriptWorkflowService.handleCallback(payload);
 
     return ResponseEntity.ok(SuccessResponse.message("Callback processed"));
