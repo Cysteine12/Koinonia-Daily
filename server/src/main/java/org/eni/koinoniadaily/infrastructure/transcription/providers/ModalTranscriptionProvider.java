@@ -27,6 +27,7 @@ class ModalTranscriptionProvider implements TranscriptionProvider {
   public ModalTranscriptionProvider(RestClient.Builder builder, AppProperties props) {
 
     this.restClient = builder
+        .clone()
         .baseUrl(props.getTranscription().getModal().getUrl())
         .defaultHeader("X-Api-Key", props.getTranscription().getModal().getApiKey())
         .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
@@ -67,12 +68,12 @@ class ModalTranscriptionProvider implements TranscriptionProvider {
     } catch (HttpClientErrorException ex) {
 
       if (ex.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-        log.error("Modal rejected request — invalid API key. transcriptId={}", job.transcriptId());
+        log.error("Modal rejected request — invalid API key. transcriptId={}", job.transcriptId(), ex);
         throw new ValidationException("TRANSCRIPTION_AUTH_FAILED", "Transcription provider rejected the request");
       }
 
-      log.error("Modal returned client error {} for transcriptId={}", ex.getStatusCode(), job.transcriptId());
-      throw new ValidationException("TRANSCRIPTION_DISPATCH_FAILED", "Transcription dispatch failed: " + ex.getMessage());
+      log.error("Modal returned client error {} for transcriptId={}", ex.getStatusCode(), job.transcriptId(), ex);
+      throw new ValidationException("TRANSCRIPTION_DISPATCH_FAILED", "Transcription dispatch failed");
 
     }
   }
