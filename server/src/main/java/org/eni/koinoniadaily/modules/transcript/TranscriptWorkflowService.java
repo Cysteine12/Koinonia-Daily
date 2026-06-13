@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -55,13 +56,19 @@ public class TranscriptWorkflowService {
       transcriptionProvider.dispatch(job);
 
       log.info("Transcription dispatched successfully for transcriptId={}", transcript.getId());
-    } catch (Exception ex) {
 
+    } catch (ValidationException ex) {
       transcript.setStatus(TranscriptStatus.FAILED);
       transcriptRepository.save(transcript);
 
       log.error("Transcription dispatch failed for transcriptId={}", transcript.getId(), ex);
+      throw ex;
 
+    } catch (Exception ex) {
+      transcript.setStatus(TranscriptStatus.FAILED);
+      transcriptRepository.save(transcript);
+
+      log.error("Transcription dispatch failed for transcriptId={}", transcript.getId(), ex);
       throw new ValidationException("TRANSCRIPTION_DISPATCH_FAILED", "Transcription dispatch failed");
     }
 
@@ -77,13 +84,13 @@ public class TranscriptWorkflowService {
 
     if (!payload.success()) {
       Map<String, Object> metadata = new HashMap<>(payload.metadata());
-      metadata.put("error", payload.error());
+      metadata.put("error", Objects.requireNonNullElse(payload.error(), ""));
 
       transcript.setStatus(TranscriptStatus.FAILED);
       transcript.setMetadata(metadata);
 
     } else {
-      transcript.setMessage(payload.text());
+      transcript.setMessage(Objects.requireNonNullElse(payload.text(), ""));
       transcript.setStatus(TranscriptStatus.COMPLETED);
       transcript.setMetadata(payload.metadata());
     }
