@@ -33,27 +33,27 @@ class ModalTranscriptionProvider implements TranscriptionProvider {
         .build();
   }
 
+  @Override
   @Retryable(
-      includes = Exception.class,
+      includes = {
+          HttpServerErrorException.class,
+          ResourceAccessException.class
+      },
+      excludes = {
+          ValidationException.class
+      },
       maxRetries = 2,
       delay = 1000,
       multiplier = 2,
       maxDelay = 5000,
       jitter = 500
   )
-  private RestClient client() {
-    return this.restClient;
-
-  }
-
-
-  @Override
   public TranscriptionAck dispatch(TranscriptionJob job) {
 
     log.info("Dispatching transcription job to Modal — transcriptId={}", job.transcriptId());
 
     try {
-      TranscriptionAck ack = this.client().post()
+      TranscriptionAck ack = restClient.post()
           .uri("/transcribe")
           .contentType(MediaType.APPLICATION_JSON)
           .body(job)
@@ -74,15 +74,6 @@ class ModalTranscriptionProvider implements TranscriptionProvider {
       log.error("Modal returned client error {} for transcriptId={}", ex.getStatusCode(), job.transcriptId());
       throw new ValidationException("TRANSCRIPTION_DISPATCH_FAILED", "Transcription dispatch failed: " + ex.getMessage());
 
-    } catch (HttpServerErrorException ex) {
-
-      log.error("Modal returned server error {} for transcriptId={}", ex.getStatusCode(), job.transcriptId());
-      throw new ValidationException("TRANSCRIPTION_PROVIDER_ERROR", "Transcription provider error. Try again later");
-
-    } catch (ResourceAccessException ex) {
-
-      log.error("Could not reach Modal for transcriptId={}", job.transcriptId(), ex);
-      throw new ValidationException("TRANSCRIPTION_UNREACHABLE", "Transcription provider is unreachable. Try again later");
     }
   }
 }
