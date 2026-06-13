@@ -20,4 +20,8 @@ public record TranscriptCallbackPayload (
 
     @NotNull
     Map<String, Object> metadata
-) {}
+) {
+    public TranscriptCallbackPayload {
+        metadata = Map.copyOf(metadata);
+    }
+}
