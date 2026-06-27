@@ -1,8 +1,8 @@
 name: local
 variables:
-  - name: ACCESS_TOKEN
-    value: eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiQUNDRVNTX1RPS0VOIiwic3ViIjoidGVzdHVzZXJAZ21haWwuY29tIiwiaWF0IjoxNzgyNTYwNDk1LCJleHAiOjE3ODI2NDY4OTV9.fWeaOdDbCSPwG0u6RucE_4XuiiKIqyg3yjlyUP06yNk
-  - name: REFRESH_TOKEN
-    value: eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiQUNDRVNTX1RPS0VOIiwic3ViIjoidGVzdHVzZXJAZ21haWwuY29tIiwiaWF0IjoxNzgyNTYwNDk1LCJleHAiOjE3ODI2NDY4OTV9.fWeaOdDbCSPwG0u6RucE_4XuiiKIqyg3yjlyUP06yNk
+  - secret: true
+    name: ACCESS_TOKEN
+  - secret: true
+    name: REFRESH_TOKEN
   - name: baseUrl
     value: http://localhost:8080

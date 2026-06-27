@@ -1,7 +1,7 @@
 info:
   name: file-controller
   type: folder
-  seq: 1
+  seq: 7
 
 request:
   auth: inherit

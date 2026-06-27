@@ -46,8 +46,7 @@ examples:
         type: text
         data: |-
           {
-            "success": false,
-            "message": "",
+            "success": true,
             "data": [
               {
                 "id": 0,

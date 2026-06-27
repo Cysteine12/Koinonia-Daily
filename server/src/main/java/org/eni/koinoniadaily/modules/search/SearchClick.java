@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
     name = "search_clicks", 
     uniqueConstraints = @UniqueConstraint(
         name = "search_clicks_teaching_user_unique",
-        columnNames = {"userId", "teachingId"}
+        columnNames = {"user_id", "teaching_id"}
     )
 )
 @Getter

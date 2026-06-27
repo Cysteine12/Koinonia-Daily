@@ -1,7 +1,7 @@
 info:
   name: history-controller
   type: folder
-  seq: 1
+  seq: 8
 
 request:
   auth: inherit

@@ -1,7 +1,7 @@
 info:
   name: collection-controller
   type: folder
-  seq: 1
+  seq: 6
 
 request:
   auth: inherit

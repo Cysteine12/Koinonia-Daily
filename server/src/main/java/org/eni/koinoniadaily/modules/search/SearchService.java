@@ -21,7 +21,6 @@ import org.eni.koinoniadaily.utils.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +38,6 @@ public class SearchService {
   private final SearchClickRepository searchClickRepository;
   private final CurrentUserProvider currentUserProvider;
   private final UserRepository userRepository;
-  private static final String UPDATED_AT = "updated_at";
-
 
   public List<SearchResponse> search(String query, int page, int limit, boolean semantic) {
 
@@ -78,7 +75,7 @@ public class SearchService {
 
   public PageResponse<SearchClickResponse> getRecentClicks(int page, int size) {
 
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, UPDATED_AT));
+    Pageable pageable = PageRequest.of(page, size);
 
     Long userId = currentUserProvider.getCurrentUserId();
 

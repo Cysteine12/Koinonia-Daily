@@ -44,7 +44,6 @@ examples:
         type: text
         data: |-
           {
-            "success": false,
-            "message": "",
-            "data": ""
+            "success": true,
+            "message": ""
           }

@@ -23,6 +23,7 @@ public interface SearchClickRepository extends JpaRepository<SearchClick, Long> 
 	FROM search_clicks sc
 	JOIN teachings t ON sc.teaching_id = t.id	
 	WHERE sc.user_id = :userId
+	ORDER BY sc.updated_at DESC
         """,
 	countQuery = """
 	SELECT COUNT(*)
