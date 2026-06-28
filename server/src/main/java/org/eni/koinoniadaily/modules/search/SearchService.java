@@ -91,12 +91,7 @@ public class SearchService {
 
     User user = userRepository.getReferenceById(currentUserProvider.getCurrentUserId());
 
-    SearchClick searchClick = searchClickRepository.findByTeachingIdAndUserId(teaching.getId(), user.getId())
-        .orElse(toEntity(teaching, user));
-
-    searchClick.setUpdatedAt(Instant.now());
-
-    searchClickRepository.save(searchClick);
+    searchClickRepository.upsertByTeachingIdAndUserId(teaching.getId(), user.getId(), Instant.now());
   }
 
   private SearchResponse toDto(SearchResult result) {
@@ -138,14 +133,6 @@ public class SearchService {
         .thumbnailUrl(click.getThumbnailUrl())
         .type(click.getType())
         .taughtAt(click.getTaughtAt())
-        .build();
-  }
-
-  private SearchClick toEntity(Teaching teaching, User user) {
-
-    return SearchClick.builder()
-        .teaching(teaching)
-        .user(user)
         .build();
   }
 }
