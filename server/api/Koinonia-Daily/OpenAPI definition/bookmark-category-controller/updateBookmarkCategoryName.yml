@@ -1,0 +1,57 @@
+info:
+  name: updateBookmarkCategoryName
+  type: http
+  seq: 3
+  tags:
+    - bookmark-category-controller
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/api/v1/bookmark-categories/:id/name"
+  params:
+    - name: id
+      value: ""
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 Response
+    description: OK
+    request:
+      url: "{{baseUrl}}/api/v1/bookmark-categories/:id/name"
+      method: PATCH
+      params:
+        - name: id
+          value: ""
+          type: path
+      body:
+        type: json
+        data: |-
+          {
+            "name": ""
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "success": true,
+            "message": ""
+          }

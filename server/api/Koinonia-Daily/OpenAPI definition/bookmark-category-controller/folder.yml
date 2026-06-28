@@ -1,0 +1,7 @@
+info:
+  name: bookmark-category-controller
+  type: folder
+  seq: 3
+
+request:
+  auth: inherit

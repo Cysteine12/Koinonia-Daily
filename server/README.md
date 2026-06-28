@@ -12,21 +12,34 @@ The **Koinonia Daily Server** is a robust, high-performance backend built with *
 - **AI/ML:** Spring AI (OpenAI Embeddings)
 - **Storage & Messaging:** AWS S3 (File Storage), AWS SQS (Message Queuing), AWS SES (Email Services)
 - **Observability:** Sentry (Error tracking), Spring Boot Actuator
-- **Resilience:** Bucket4j (Rate Limiting), Resilience4j, Caffeine (Caching)
+- **Resilience:** Bucket4j (Rate Limiting), Resilience4j, Caffeine (Caching), Spring Retry (Transcription dispatch resilience)
 - **Build & Quality:** Maven, Lombok, Checkstyle, SpotBugs, JaCoCo
 
 ## 📂 Architecture
 
-The project follows a **Modular Layered Architecture** with a specialized **Asynchronous Embedding Pipeline** for processing spiritual content.
+The project follows a **Modular Layered Architecture** with specialized asynchronous pipelines for processing content and metadata.
 
 ### Project Structure
 -   `config/`: Application-wide configurations (Security, JWT, S3, Rate Limiting, Async).
 -   `modules/`: Feature-specific modules.
     -   `chunkembedding/`: Manages vector embeddings and semantic search logic.
+    -   `search/`: Manages search autocomplete suggestions, result clicks, and search history.
     -   `teaching/`: Manages spiritual teachings and their lifecycle.
--   `infrastructure/`: External integrations (AWS, OpenAI, Embedding Dispatchers).
+    -   `transcript/`: Manages transcripts and the asynchronous transcription workflow.
+-   `infrastructure/`: External integrations (AWS, OpenAI, Embedding Dispatchers, Transcription Providers).
 -   `exceptions/`: Global exception handling and custom error types.
 -   `utils/`: Shared utilities and standard API response wrappers.
+
+### 🔄 Asynchronous Transcription Pipeline
+The server orchestrates audio transcription using a decoupled provider model:
+1. **Trigger:** Admins trigger the workflow (`POST /api/v1/transcripts/workflow/trigger`).
+2. **Dispatch:** The server delegates transcription tasks asynchronously to external providers (e.g. `ModalTranscriptionProvider` calling a faster-whisper GPU service).
+3. **Resilience:** Built-in retry mechanism with exponential backoff handles network timeouts or provider server-side issues.
+4. **Callback:** The external service sends transcription results back to `/api/v1/transcripts/workflow/callback` verified with a secret token, updating the database.
+
+### 🔍 Search & Discovery
+- **Autocomplete Suggestions:** Trigram-based fuzzy search using PostgreSQL `pg_trgm` extension.
+- **Search Click History:** Recording user clicks on search results (`/api/v1/search/clicks`) to serve a personalized history feed (`/api/v1/search/recent`).
 
 ## 🛠️ Getting Started
 
@@ -53,11 +66,13 @@ The project follows a **Modular Layered Architecture** with a specialized **Asyn
     ```
     The API will be available at `http://localhost:8080/api/v1`.
 
-## 📚 API Documentation
+## 📚 Documentation
 
-Detailed documentation of all available endpoints, request/response formats, and error codes can be found in:
+Detailed documentation of system components and APIs:
 
 👉 **[API Documentation](docs/api-docs.md)**
+👉 **[Transcription Architecture](docs/TRANSCRIPTION_ARCHITECTURE.md)**
+👉 **[Embedding & Semantic Search Architecture](docs/EMBEDDING%20ARCHITECTURE.md)**
 
 ## 🛡️ Security & Conventions
 

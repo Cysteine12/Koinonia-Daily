@@ -1,0 +1,9 @@
+info:
+  name: OpenAPI definition
+  type: folder
+  seq: 1
+
+request:
+  auth:
+    type: bearer
+    token: "{{ACCESS_TOKEN}}"

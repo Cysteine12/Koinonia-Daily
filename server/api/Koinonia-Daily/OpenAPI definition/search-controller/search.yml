@@ -1,0 +1,80 @@
+info:
+  name: search
+  type: http
+  seq: 2
+  tags:
+    - search-controller
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/v1/search?query=kingdom&page=0&size=50&semantic=false"
+  params:
+    - name: query
+      value: kingdom
+      type: query
+    - name: page
+      value: "0"
+      type: query
+    - name: size
+      value: "50"
+      type: query
+    - name: semantic
+      value: "false"
+      type: query
+  body:
+    type: json
+    data: ""
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 Response
+    description: OK
+    request:
+      url: "{{baseUrl}}/api/v1/search"
+      method: GET
+      params:
+        - name: query
+          value: ""
+          type: query
+        - name: page
+          value: "0"
+          type: query
+        - name: size
+          value: "50"
+          type: query
+        - name: semantic
+          value: "false"
+          type: query
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "success": true,
+            "data": [
+              {
+                "teachingId": 0,
+                "chunkId": 0,
+                "teachingTitle": "",
+                "sectionTitle": "",
+                "content": "",
+                "chunkIndex": 0,
+                "thumbnailUrl": "",
+                "type": "SUNDAY_SERVICE",
+                "taughtAt": "",
+                "score": 0,
+                "matchSources": []
+              }
+            ]
+          }

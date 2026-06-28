@@ -1,0 +1,7 @@
+info:
+  name: teaching-controller
+  type: folder
+  seq: 13
+
+request:
+  auth: inherit

@@ -1,0 +1,8 @@
+name: local
+variables:
+  - secret: true
+    name: ACCESS_TOKEN
+  - secret: true
+    name: REFRESH_TOKEN
+  - name: baseUrl
+    value: http://localhost:8080
