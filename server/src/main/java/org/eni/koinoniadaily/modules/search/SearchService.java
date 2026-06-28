@@ -11,12 +11,9 @@ import org.eni.koinoniadaily.modules.search.dto.SearchResponse;
 import org.eni.koinoniadaily.modules.search.dto.SearchSuggestionResponse;
 import org.eni.koinoniadaily.modules.search.projection.RecentSearchClick;
 import org.eni.koinoniadaily.modules.search.projection.SearchResult;
-import org.eni.koinoniadaily.modules.teaching.Teaching;
 import org.eni.koinoniadaily.modules.teaching.TeachingRepository;
 import org.eni.koinoniadaily.modules.teaching.projection.TeachingTitleSuggestionProjection;
 import org.eni.koinoniadaily.modules.teachingchunk.TeachingChunkRepository;
-import org.eni.koinoniadaily.modules.user.User;
-import org.eni.koinoniadaily.modules.user.UserRepository;
 import org.eni.koinoniadaily.utils.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,7 +34,6 @@ public class SearchService {
   private final TeachingRepository teachingRepository;
   private final SearchClickRepository searchClickRepository;
   private final CurrentUserProvider currentUserProvider;
-  private final UserRepository userRepository;
 
   public List<SearchResponse> search(String query, int page, int limit, boolean semantic) {
 
@@ -90,9 +86,9 @@ public class SearchService {
         throw new NotFoundException("Teaching not found");
     }
 
-    User user = userRepository.getReferenceById(currentUserProvider.getCurrentUserId());
+    Long userId = currentUserProvider.getCurrentUserId();
 
-    searchClickRepository.upsertByTeachingIdAndUserId(request.getTeachingId(), user.getId(), Instant.now());
+    searchClickRepository.upsertByTeachingIdAndUserId(request.getTeachingId(), userId, Instant.now());
   }
 
   private SearchResponse toDto(SearchResult result) {

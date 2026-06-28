@@ -1,7 +1,6 @@
 package org.eni.koinoniadaily.modules.search;
 
 import java.time.Instant;
-import java.util.Optional;
 
 import org.eni.koinoniadaily.modules.search.projection.RecentSearchClick;
 import org.springframework.data.domain.Page;

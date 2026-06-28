@@ -4,6 +4,7 @@ import org.eni.koinoniadaily.entity.BaseEntity;
 import org.eni.koinoniadaily.modules.teaching.Teaching;
 import org.eni.koinoniadaily.modules.user.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -19,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @Table(
     name = "search_clicks", 
     uniqueConstraints = @UniqueConstraint(
-        name = "search_clicks_teaching_user_unique",
+        name = "search_clicks_user_teaching_unique",
         columnNames = {"user_id", "teaching_id"}
     )
 )
@@ -29,11 +30,11 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class SearchClick extends BaseEntity {
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "teaching_id", nullable = false)
   private Teaching teaching;
 }
