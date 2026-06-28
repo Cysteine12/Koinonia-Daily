@@ -40,9 +40,9 @@ public interface SearchClickRepository extends JpaRepository<SearchClick, Long> 
     @Modifying
     @Transactional
     @Query(value = """
-	INSERT INTO search_clicks (teaching_id, user_id)
-	VALUES (:teachingId, :userId)
-	ON CONFLICT (teaching_id, user_id)
+	INSERT INTO search_clicks (user_id, teaching_id, created_at, updated_at)
+	VALUES (:userId, :teachingId, :updatedAt, :updatedAt)
+	ON CONFLICT (user_id, teaching_id)
 	DO UPDATE
 	SET updated_at = :updatedAt
 	""", nativeQuery = true)

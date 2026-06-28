@@ -86,12 +86,13 @@ public class SearchService {
   @Transactional
   public void recordClick(SearchClickRequest request) {
 
-    Teaching teaching = teachingRepository.findById(request.getTeachingId())
-        .orElseThrow(() -> new NotFoundException("Teaching not found"));
+    if(!teachingRepository.existsById(request.getTeachingId())) {
+        throw new NotFoundException("Teaching not found");
+    }
 
     User user = userRepository.getReferenceById(currentUserProvider.getCurrentUserId());
 
-    searchClickRepository.upsertByTeachingIdAndUserId(teaching.getId(), user.getId(), Instant.now());
+    searchClickRepository.upsertByTeachingIdAndUserId(request.getTeachingId(), user.getId(), Instant.now());
   }
 
   private SearchResponse toDto(SearchResult result) {

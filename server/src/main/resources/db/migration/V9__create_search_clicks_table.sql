@@ -10,5 +10,8 @@ CREATE TABLE search_clicks (
   CONSTRAINT search_clicks_user_teaching_unique UNIQUE(user_id, teaching_id)
 );
 
-CREATE INDEX idx_search_clicks_user_id
-  ON search_clicks(user_id);
+CREATE INDEX idx_search_clicks_user_updated_at
+  ON search_clicks(user_id, updated_at DESC);
+
+CREATE INDEX idx_search_clicks_teaching_id
+  ON search_clicks(teaching_id);
