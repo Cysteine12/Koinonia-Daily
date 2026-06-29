@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -60,6 +61,7 @@
     "zustand": "^5.0.10"
   },
   "devDependencies": {
+    "@types/node": "^26.0.1",
     "@types/react": "~19.1.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
