@@ -31,35 +31,39 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
-        cache: npm
-        cache-dependency-path: mobile/package-lock.json
+        node-version: "22"
+        cache: pnpm
+        cache-dependency-path: mobile/pnpm-lock.yaml
 
     - name: Install dependencies
-      run: npm ci
+      run: pnpm install --frozen-lockfile
 
     - name: Typescript check
-      run: npx tsc --noEmit
+      run: pnpm exec tsc --noEmit
 
     - name: Lint
-      run: npx expo lint
+      run: pnpm exec expo lint
 
     - name: Prettier check
-      run: npx prettier --check "**/*.{js,ts,jsx,tsx,json,md}"
+      run: pnpm exec prettier --check "**/*.{js,ts,jsx,tsx,json,md}"
       continue-on-error: true
 
     - name: Expo config validation
-      run: npx expo config --type public
+      run: pnpm exec expo config --type public
 
     - name: Clean Expo internal files
       run: rm -rf .expo
 
     - name: Expo doctor
       run: CI=1 npx expo-doctor
-
   preview:
     name: Run Mobile Preview Build
     runs-on: ubuntu-latest
@@ -78,12 +82,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
-        cache: npm
-        cache-dependency-path: mobile/package-lock.json
+        node-version: "22"
+        cache: pnpm
+        cache-dependency-path: mobile/pnpm-lock.yaml
 
     - name: Setup Expo
       uses: expo/expo-github-action@v8
@@ -91,7 +100,7 @@ jobs:
         expo-token: ${{ secrets.EXPO_TOKEN }}
 
     - name: Install dependencies
-      run: npm ci
+      run: pnpm install --frozen-lockfile
 
     - name: Check OTA safety
       run: |
@@ -100,7 +109,7 @@ jobs:
       continue-on-error: false
 
     - name: Install EAS CLI
-      run: npm install -g eas-cli
+      run: pnpm add -g eas-cli
 
     - name: Publish Expo OTA update
       run: |
@@ -124,12 +133,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
-        cache: npm
-        cache-dependency-path: mobile/package-lock.json
+        node-version: "22"
+        cache: pnpm
+        cache-dependency-path: mobile/pnpm-lock.yaml
 
     - name: Setup Expo
       uses: expo/expo-github-action@v8
@@ -137,7 +151,7 @@ jobs:
         expo-token: ${{ secrets.EXPO_TOKEN }}
 
     - name: Install dependencies
-      run: npm ci
+      run: pnpm install --frozen-lockfile
 
     - name: Check OTA safety
       run: |
@@ -146,7 +160,7 @@ jobs:
       continue-on-error: false
 
     - name: Install EAS CLI
-      run: npm install -g eas-cli
+      run: pnpm add -g eas-cli
 
     - name: Publish Expo OTA update
       run: |
