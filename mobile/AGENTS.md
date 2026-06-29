@@ -35,25 +35,25 @@ Koinonia Daily is a modern React Native application built with the Expo ecosyste
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Start the Expo development server
-npx expo start
+pnpm start
 
 # Run on specific platforms
-npm run android
-npm run ios
+pnpm android
+pnpm ios
 ```
 
 ### Maintenance
 
 ```bash
 # Linting
-npm run lint
+pnpm lint
 
 # Prettier
-npm run prettier:check
-npm run prettier:fix
+pnpm prettier:check
+pnpm prettier:fix
 ```
 
 ## Development Conventions

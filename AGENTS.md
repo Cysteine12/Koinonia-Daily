@@ -14,11 +14,11 @@ Koinonia Daily is a comprehensive platform for spiritual teachings, featuring a 
 ## 🏗️ Building and Running
 
 ### Mobile (`mobile/`)
-Requires Node.js and npm/yarn.
+Requires Node.js and pnpm.
 ```bash
 cd mobile
-npm install
-npx expo start
+pnpm install
+pnpm start
 ```
 *See `mobile/GEMINI.md` for detailed instructions and conventions.*
 
