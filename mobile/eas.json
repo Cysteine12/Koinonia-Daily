@@ -6,18 +6,21 @@
     "development": {
       "distribution": "internal",
       "channel": "development",
-      "developmentClient": true
+      "developmentClient": true,
+      "node": "24.15.0"
     },
     "preview": {
       "distribution": "internal",
       "channel": "preview",
       "android": {
         "buildType": "apk"
-      }
+      },
+      "node": "24.15.0"
     },
     "production": {
       "distribution": "store",
-      "channel": "production"
+      "channel": "production",
+      "node": "24.15.0"
     }
   }
 }
