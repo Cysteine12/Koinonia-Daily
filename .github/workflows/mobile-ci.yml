@@ -17,6 +17,9 @@ concurrency:
   group: mobile-ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   checks:
     name: Run Mobile CI Checks
@@ -28,38 +31,44 @@ jobs:
         working-directory: mobile
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: npm
-        cache-dependency-path: mobile/package-lock.json
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+          cache-dependency-path: mobile/pnpm-lock.yaml
 
-    - name: Typescript check
-      run: npx tsc --noEmit
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: Lint
-      run: npx expo lint
+      - name: Typescript check
+        run: pnpm exec tsc --noEmit
 
-    - name: Prettier check
-      run: npx prettier --check "**/*.{js,ts,jsx,tsx,json,md}"
-      continue-on-error: true
+      - name: Lint
+        run: pnpm exec expo lint
 
-    - name: Expo config validation
-      run: npx expo config --type public
+      - name: Prettier check
+        run: pnpm exec prettier --check "**/*.{js,ts,jsx,tsx,json,md}"
+        continue-on-error: true
 
-    - name: Clean Expo internal files
-      run: rm -rf .expo
+      - name: Expo config validation
+        run: pnpm exec expo config --type public
 
-    - name: Expo doctor
-      run: CI=1 npx expo-doctor
+      - name: Clean Expo internal files
+        run: rm -rf .expo
 
+      - name: Expo doctor
+        run: CI=1 npx expo-doctor
   preview:
     name: Run Mobile Preview Build
     runs-on: ubuntu-latest
@@ -75,36 +84,43 @@ jobs:
       EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: npm
-        cache-dependency-path: mobile/package-lock.json
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
 
-    - name: Setup Expo
-      uses: expo/expo-github-action@v8
-      with:
-        expo-token: ${{ secrets.EXPO_TOKEN }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+          cache-dependency-path: mobile/pnpm-lock.yaml
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-token: ${{ secrets.EXPO_TOKEN }}
 
-    - name: Check OTA safety
-      run: |
-        npx expo prebuild --no-install
-        git diff --exit-code
-      continue-on-error: false
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: Install EAS CLI
-      run: npm install -g eas-cli
+      - name: Check OTA safety
+        run: |
+          pnpm exec expo prebuild --no-install
+          git diff --exit-code
+        continue-on-error: false
 
-    - name: Publish Expo OTA update
-      run: |
-        eas update --branch preview --message "preview: ${{ github.sha }}" --non-interactive
+      - name: Install EAS CLI
+        run: pnpm add -g eas-cli@20.4.0
+
+      - name: Publish Expo OTA update
+        run: |
+          eas update --branch preview --message "preview: ${{ github.sha }}" --non-interactive
 
   production:
     name: Run Mobile Production Build
@@ -121,36 +137,44 @@ jobs:
       EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: npm
-        cache-dependency-path: mobile/package-lock.json
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
 
-    - name: Setup Expo
-      uses: expo/expo-github-action@v8
-      with:
-        expo-token: ${{ secrets.EXPO_TOKEN }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+          cache-dependency-path: mobile/pnpm-lock.yaml
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-token: ${{ secrets.EXPO_TOKEN }}
 
-    - name: Check OTA safety
-      run: |
-        npx expo prebuild --no-install
-        git diff --exit-code
-      continue-on-error: false
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: Install EAS CLI
-      run: npm install -g eas-cli
+      - name: Check OTA safety
+        run: |
+          pnpm exec expo prebuild --no-install
+          git diff --exit-code
+        continue-on-error: false
 
-    - name: Publish Expo OTA update
-      run: |
-        eas update --branch production --message "production: ${{ github.sha }}" --non-interactive --no-wait
+      - name: Install EAS CLI
+        run: pnpm add -g eas-cli@20.4.0
 
-    - name: Build production apps
-      run: eas build --platform all --profile production --non-interactive
+      - name: Publish Expo OTA update
+        run: |
+          eas update --branch production --message "production: ${{ github.sha }}" --non-interactive --no-wait
+
+      - name: Build production apps
+        run: eas build --platform all --profile production --non-interactive
+
