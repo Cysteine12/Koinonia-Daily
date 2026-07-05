@@ -5,7 +5,7 @@ Koinonia Daily is a comprehensive platform for spiritual teachings, featuring a 
 ## Repository Structure
 
 - `mobile/`: React Native (Expo SDK 55) mobile application.
-- `server/`: Spring Boot 4.0.6 (Java 25) backend API.
+- `server/`: Spring Boot 4.1.0 (Java 25) backend API.
 - `transcriber/`: Python-based audio transcription service using `faster-whisper`.
 - `.github/workflows/`: CI/CD pipelines for mobile and server components.
 
