@@ -9,13 +9,13 @@ import { AuthProvider } from '@/features/auth/auth-context';
 import { ThemeProvider } from '@/features/theme-context';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useSplashScreenReady } from '@/hooks/use-splash-screen-ready';
-import Sentry from '@/lib/logger';
+import logger from '@/lib/logger';
 import { useEffect, useRef } from 'react';
 import { Animated, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 void SplashScreen.preventAutoHideAsync().catch((err) => {
-  Sentry.captureException(err);
+  logger.captureException(err);
 });
 
 const queryClient = new QueryClient();
@@ -59,7 +59,7 @@ function Navigation() {
   );
 }
 
-function RootLayout() {
+export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -72,5 +72,3 @@ function RootLayout() {
     </QueryClientProvider>
   );
 }
-
-export default Sentry.wrap(RootLayout);

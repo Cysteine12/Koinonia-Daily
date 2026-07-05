@@ -1,6 +1,6 @@
 # Project Overview: Koinonia Daily
 
-Koinonia Daily is a modern React Native application built with the Expo ecosystem (SDK 55). It serves as a platform for spiritual teachings, featuring audio/video content, collections, and user profiles. The application prioritizes a polished UI with a custom gold-themed aesthetic and supports both light and dark modes.
+Koinonia Daily is a modern React Native application built with the Expo ecosystem (SDK 54). It serves as a platform for spiritual teachings, featuring audio/video content, collections, and user profiles. The application prioritizes a polished UI with a custom gold-themed aesthetic and supports both light and dark modes.
 
 ## Core Technologies
 

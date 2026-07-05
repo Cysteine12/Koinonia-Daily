@@ -10,13 +10,13 @@ This monorepo is divided into three primary components:
 
 ### 1. [Server (Backend)](./server/README.md)
 The central intelligence and API provider for the ecosystem.
-- **Tech:** Java 25, Spring Boot 4.0.6, PostgreSQL (pgvector), AWS S3/SQS/SES.
+- **Tech:** Java 25, Spring Boot 4.0.5, PostgreSQL (pgvector), AWS S3/SQS/SES.
 - **Features:** JWT Authentication, RBAC, Semantic Search (OpenAI Embeddings), Autocomplete Search Suggestions & History, Asynchronous Transcription & Embedding Workflow, Rate Limiting.
 - **Docs:** [API Documentation](./server/docs/api-docs.md), [Embedding Architecture](./server/docs/EMBEDDING%20ARCHITECTURE.md), [Transcription Architecture](./server/docs/TRANSCRIPTION_ARCHITECTURE.md)
 
 ### 2. [Mobile (Frontend)](./mobile/README.md)
 A premium, custom-themed spiritual platform for end-users.
-- **Tech:** React Native (Expo SDK 55), NativeWind v4, Zustand, React Query.
+- **Tech:** React Native (Expo SDK 54), NativeWind v4, Zustand, React Query.
 - **Features:** Audio/Video streaming, search, bookmarks, user history, and a custom gold-themed UI.
 
 ### 3. [Transcriber (Service)](./transcriber/README.md)
