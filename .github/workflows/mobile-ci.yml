@@ -39,7 +39,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 11.9.0
+          version: 10.33.2
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -92,7 +92,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 11.9.0
+          version: 10.33.2
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -120,7 +120,7 @@ jobs:
 
       - name: Publish Expo OTA update
         run: |
-          eas update --branch preview --message "preview: ${{ github.sha }}"
+          eas update --branch preview --message "preview: ${{ github.sha }}" --non-interactive
 
   production:
     name: Run Mobile Production Build
@@ -145,7 +145,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 11.9.0
+          version: 10.33.2
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -173,7 +173,7 @@ jobs:
 
       - name: Publish Expo OTA update
         run: |
-          eas update --branch production --message "production: ${{ github.sha }}" --no-wait
+          eas update --branch production --message "production: ${{ github.sha }}" --non-interactive --no-wait
 
       - name: Build production apps
         run: eas build --platform all --profile production --non-interactive

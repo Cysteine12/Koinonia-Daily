@@ -5,7 +5,7 @@ Koinonia Daily is a Spring Boot-based backend for a Christian devotional applica
 
 ### Core Technologies
 - **Runtime:** Java 25 (OpenJDK)
-- **Framework:** Spring Boot 4.0.6 (Spring Web, Spring Security, Spring Data JPA, Spring AI, Spring Mail)
+- **Framework:** Spring Boot 4.0.5 (Spring Web, Spring Security, Spring Data JPA, Spring AI, Spring Mail)
 - **Database:** PostgreSQL with `pgvector` (H2 for testing, Flyway for migrations)
 - **Authentication:** JWT-based (jjwt), Stateless session management
 - **Integrations:** 
