@@ -1,3 +1,9 @@
-import * as logger from '@sentry/react-native';
+import * as Sentry from '@sentry/react-native';
 
-export default logger;
+Sentry.init({
+    dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+    sendDefaultPii: true,
+    tracesSampleRate: 1.0
+})
+
+export default Sentry;

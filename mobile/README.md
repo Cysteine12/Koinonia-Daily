@@ -1,10 +1,10 @@
 # Koinonia Daily Mobile
 
-Koinonia Daily is a modern React Native application built with the **Expo ecosystem (SDK 54)**. It serves as a spiritual platform for accessing teachings, sermons, and songs by Apostle Joshua Selman and the Koinonia Ministry. The application features a premium, custom gold-themed aesthetic with a focus on high performance and user experience.
+Koinonia Daily is a modern React Native application built with the **Expo ecosystem (SDK 55)**. It serves as a spiritual platform for accessing teachings, sermons, and songs by Apostle Joshua Selman and the Koinonia Ministry. The application features a premium, custom gold-themed aesthetic with a focus on high performance and user experience.
 
 ## 🚀 Tech Stack
 
-- **Framework:** [Expo SDK 54](https://expo.dev/) (React Native)
+- **Framework:** [Expo SDK 55](https://expo.dev/) (React Native)
 - **Routing:** [Expo Router](https://docs.expo.dev/router/introduction/) (File-based routing)
 - **Styling:** [NativeWind v4](https://www.nativewind.dev/) (Tailwind CSS for React Native)
 - **State Management:** [Zustand](https://github.com/pmndrs/zustand) (Client state) & [React Query](https://tanstack.com/query/latest) (Server state)
