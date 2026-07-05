@@ -45,3 +45,4 @@ The following did **not** resolve the issue:
 - Found the fix through searching the expo official discord community.
 
 If you encounter this error while using **Expo + pnpm + Sentry + EAS Build**, ensure `@sentry/cli` is explicitly listed in your `devDependencies`.
+
