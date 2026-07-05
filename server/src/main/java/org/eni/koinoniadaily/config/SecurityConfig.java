@@ -34,7 +34,7 @@ public class SecurityConfig {
             .csrf(customizer -> customizer.disable())
             .authorizeHttpRequests(request -> request
                                     .requestMatchers("/api/v1/auth/profile", "/api/v1/auth/change-password", "/api/v1/auth/logout").authenticated()
-                                    .requestMatchers("/api/v1/auth/**", "/v3/api-docs", "/api/v1/transcripts/workflow/callback").permitAll()
+                                    .requestMatchers("/api/v1/auth/**", "/api/v1/transcripts/workflow/callback", "/actuator/health", "/v3/api-docs").permitAll()
                                     .anyRequest().authenticated())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
