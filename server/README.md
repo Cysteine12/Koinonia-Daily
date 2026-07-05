@@ -1,11 +1,11 @@
 # Koinonia Daily Server
 
-The **Koinonia Daily Server** is a robust, high-performance backend built with **Spring Boot 4.0.5** and **Java 25**. It serves as the central intelligence for the Koinonia Daily ecosystem, providing secure RESTful APIs for the mobile application and managing spiritual resources including teachings, transcripts, and multimedia assets.
+The **Koinonia Daily Server** is a robust, high-performance backend built with **Spring Boot 4.1.0** and **Java 25**. It serves as the central intelligence for the Koinonia Daily ecosystem, providing secure RESTful APIs for the mobile application and managing spiritual resources including teachings, transcripts, and multimedia assets.
 
 ## 🚀 Tech Stack
 
 - **Language:** Java 25 (OpenJDK)
-- **Framework:** Spring Boot 4.0.5
+- **Framework:** Spring Boot 4.1.0
 - **Security:** Spring Security with JWT (jjwt)
 - **Database:** PostgreSQL with `pgvector` for Semantic Search
 - **Migrations:** Flyway
