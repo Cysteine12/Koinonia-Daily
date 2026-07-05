@@ -25,7 +25,9 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const systemColorScheme = useRNColorScheme();
   const [themeMode, setThemeModeState] = useState<ThemeMode>('auto');
 
-  const resolvedTheme = themeMode === 'auto' ? (systemColorScheme ?? 'dark') : themeMode;
+  const sCS = systemColorScheme === 'unspecified' ? undefined : systemColorScheme;
+
+  const resolvedTheme = themeMode === 'auto' ? (sCS ?? 'dark') : themeMode;
   const { overlayStyle } = useOverlayOpacity(resolvedTheme);
 
   const [isReady, setIsReady] = useState(false);
