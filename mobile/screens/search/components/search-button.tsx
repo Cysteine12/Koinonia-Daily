@@ -8,7 +8,7 @@ export default function SearchButton({ toggleSearchState }: { toggleSearchState:
 
   return (
     <OpacityPressable
-      onPress={toggleSearchState}
+      onPressIn={toggleSearchState}
       activeOpacity={0.5}
       activeScale={1}
       duration={0}
