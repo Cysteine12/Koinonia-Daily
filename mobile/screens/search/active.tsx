@@ -4,12 +4,13 @@ import Tag from '@/components/ui/tag';
 import { FontSize } from '@/constants';
 import type { TeachingType } from '@/features/teaching';
 import { useAppTheme } from '@/hooks/use-app-theme';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, Switch } from 'react-native';
 import RecentSearchList from './components/recent-search-list';
 import SearchBox from './components/search-box';
 import SearchResultList from './components/search-result-list';
 import { recentSearchesData, searchResultsData } from './data';
+import SearchSuggestionList from './components/search-suggestion-list';
 
 interface SearchActiveScreenProps {
   toggleSearchState: () => void;
@@ -24,6 +25,8 @@ export type SearchResult = {
   searchTag: string;
 };
 
+type ActiveState = 'RECENT' | 'SUGGESTION' | 'SUBMITTED';
+
 const searchTags = [
   { text: 'All', type: 'ALL' },
   { text: 'Sunday Service', type: 'SUNDAY_SERVICE' },
@@ -34,16 +37,27 @@ const searchTags = [
 
 export default function SearchActiveScreen({ toggleSearchState }: SearchActiveScreenProps) {
   const { color } = useAppTheme();
+  const [activeState, setActiveState] = useState<ActiveState>('RECENT');
   const [searchQuery, setSearchQuery] = useState('');
   const [fullSearch, setFullSearch] = useState(false);
   const [selectedSearchTag, setSelectedSearchTag] = useState<TeachingType | 'ALL'>('ALL');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   const recentSearches = recentSearchesData;
+  const searchSuggestions = recentSearchesData;
 
   const handleSearch = () => {
+    setActiveState('SUBMITTED');
     setSearchResults(searchResultsData);
   };
+
+  useEffect(() => {
+    if (searchQuery.length === 0) {
+      setActiveState('RECENT');
+    } else {
+      setActiveState('SUGGESTION');
+    }
+  }, [searchQuery])
 
   return (
     <Screen
@@ -102,8 +116,10 @@ export default function SearchActiveScreen({ toggleSearchState }: SearchActiveSc
       </View>
 
       <View className="my-3 mx-4">
-        {searchResults.length > 0 ? (
+        {activeState === 'SUBMITTED' ? (
           <SearchResultList searchQuery={searchQuery} searchResults={searchResults} />
+        ) : activeState === 'SUGGESTION' ? (
+          <SearchSuggestionList searchSuggestions={searchSuggestions} />
         ) : (
           <RecentSearchList recentSearches={recentSearches} />
         )}

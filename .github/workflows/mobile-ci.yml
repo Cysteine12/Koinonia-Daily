@@ -44,7 +44,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "24.15.0"
           cache: pnpm
           cache-dependency-path: mobile/pnpm-lock.yaml
 
@@ -97,14 +97,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "24.15.0"
           cache: pnpm
           cache-dependency-path: mobile/pnpm-lock.yaml
 
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
-          expo-token: ${{ secrets.EXPO_TOKEN }}
+          token: ${{ secrets.EXPO_TOKEN }}
           eas-version: 20.4.0
 
       - name: Install dependencies
@@ -148,14 +148,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "24.15.0"
           cache: pnpm
           cache-dependency-path: mobile/pnpm-lock.yaml
 
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
-          expo-token: ${{ secrets.EXPO_TOKEN }}
+          token: ${{ secrets.EXPO_TOKEN }}
           eas-version: 20.4.0
 
       - name: Install dependencies

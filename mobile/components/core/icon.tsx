@@ -46,6 +46,7 @@ const MAPPING = {
   'book.outline': { name: 'book-outline', family: 'Ionicons' },
   'check.circle.outline': { name: 'check-circle-outline', family: 'MaterialIcons' },
   flame: { name: 'flame', family: 'Ionicons' },
+  'menu.horizontal': { name: 'ellipsis-horizontal', family: 'Ionicons' },
 } satisfies IconMapping;
 
 export type IconSymbolName = keyof typeof MAPPING;
