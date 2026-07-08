@@ -80,9 +80,6 @@ jobs:
       run:
         working-directory: mobile
 
-    env:
-      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -101,14 +98,14 @@ jobs:
           cache: pnpm
           cache-dependency-path: mobile/pnpm-lock.yaml
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
           token: ${{ secrets.EXPO_TOKEN }}
           eas-version: 20.4.0
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
 
       - name: Check OTA safety
         run: |
@@ -131,9 +128,6 @@ jobs:
       run:
         working-directory: mobile
 
-    env:
-      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -152,14 +146,14 @@ jobs:
           cache: pnpm
           cache-dependency-path: mobile/pnpm-lock.yaml
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
           token: ${{ secrets.EXPO_TOKEN }}
           eas-version: 20.4.0
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
 
       - name: Check OTA safety
         run: |
