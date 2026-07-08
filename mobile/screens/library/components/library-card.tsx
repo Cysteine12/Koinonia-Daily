@@ -2,19 +2,22 @@ import { View, Text, Icon, type IconSymbolName } from '@/components/core';
 import OpacityPressable from '@/components/ui/opacity-pressable';
 import { FontFamily, FontSize } from '@/constants';
 import { hexToRgba } from '@/lib/utils';
+import { useRouter, type Href } from 'expo-router';
 
 interface LibraryCardProps {
   icon: IconSymbolName;
   title: string;
   label: string;
   color: string;
+  link: Href;
 }
 
-export default function LibraryCard({ icon, label, title, color }: LibraryCardProps) {
+export default function LibraryCard({ icon, label, title, color, link }: LibraryCardProps) {
+  const router = useRouter();
 
   return (
     <OpacityPressable
-      onPress={() => {}}
+      onPress={() => router.push(link)}
       activeOpacity={0.4}
       className="flex-1 justify-center rounded-xl border p-4"
       style={{
@@ -32,5 +35,5 @@ export default function LibraryCard({ icon, label, title, color }: LibraryCardPr
         {label}
       </Text>
     </OpacityPressable>
-  )
+  );
 }
