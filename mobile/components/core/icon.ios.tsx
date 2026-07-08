@@ -32,6 +32,11 @@ const MAPPING: Record<IconSymbolName, SymbolViewProps['name']> = {
   'check.circle.outline': 'checkmark.circle',
   flame: 'flame',
   'menu.horizontal': 'ellipsis',
+  'calendar.outline': 'calendar',
+  series: 'list.bullet.rectangle',
+  folder: 'folder',
+  'bookmark.outline': 'bookmark',
+  'download.outline': 'arrow.down.circle',
 };
 
 export function Icon({

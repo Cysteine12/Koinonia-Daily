@@ -1,15 +1,14 @@
 import { useAppTheme } from '@/hooks/use-app-theme';
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import type { SymbolWeight } from 'expo-symbols';
 import type { ComponentProps } from 'react';
 import type { OpaqueColorValue, StyleProp, TextStyle } from 'react-native';
 
-type IconFamily = 'MaterialIcons' | 'Ionicons' | 'FontAwesome';
+type IconFamily = 'MaterialIcons' | 'Ionicons'; 
 
 type IconFamilyMap = {
   MaterialIcons: typeof MaterialIcons;
   Ionicons: typeof Ionicons;
-  FontAwesome: typeof FontAwesome;
 };
 
 type IconMappingEntry = {
@@ -26,8 +25,8 @@ const MAPPING = {
   'home.outline': { name: 'home-outline', family: 'Ionicons' },
   search: { name: 'search-sharp', family: 'Ionicons' },
   'search.outline': { name: 'search-outline', family: 'Ionicons' },
-  library: { name: 'book', family: 'FontAwesome' },
-  'library.outline': { name: 'book', family: 'FontAwesome' },
+  library: { name: 'library', family: 'Ionicons' },
+  'library.outline': { name: 'library-outline', family: 'Ionicons' },
   activity: { name: 'trending-up', family: 'MaterialIcons' },
   'activity.outline': { name: 'trending-up', family: 'MaterialIcons' },
   profile: { name: 'person', family: 'Ionicons' },
@@ -47,6 +46,11 @@ const MAPPING = {
   'check.circle.outline': { name: 'check-circle-outline', family: 'MaterialIcons' },
   flame: { name: 'flame', family: 'Ionicons' },
   'menu.horizontal': { name: 'ellipsis-horizontal', family: 'Ionicons' },
+  'calendar.outline': { name: 'calendar-outline', family: 'Ionicons' },
+  series: { name: 'playlist-play', family: 'MaterialIcons' },
+  folder: { name: 'folder-open-outline', family: 'Ionicons' },
+  'bookmark.outline': { name: 'bookmark-outline', family: 'Ionicons' },
+  'download.outline': { name: 'download-outline', family: 'Ionicons' },
 } satisfies IconMapping;
 
 export type IconSymbolName = keyof typeof MAPPING;
@@ -81,8 +85,6 @@ export function Icon({
   switch (MAPPING[name]['family']) {
     case 'Ionicons':
       return <Ionicons color={color} size={size} name={MAPPING[name].name} style={style} className={className} />;
-    case 'FontAwesome':
-      return <FontAwesome color={color} size={size} name={MAPPING[name].name} style={style} className={className} />;
     case 'MaterialIcons':
     default:
       return <MaterialIcons color={color} size={size} name={MAPPING[name].name} style={style} className={className} />;
