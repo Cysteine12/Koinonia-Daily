@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import { Animated, Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native';
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 interface OpacityPressableProps extends PressableProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
@@ -64,7 +66,9 @@ export default function OpacityPressable({
   };
 
   return (
-    <Pressable
+    <AnimatedPressable
+      className={className}
+      style={[style, { transform: [{ scale }], opacity }]}
       onPressIn={(e) => {
         animateIn();
         onPressIn?.(e);
@@ -75,9 +79,7 @@ export default function OpacityPressable({
       }}
       {...rest}
     >
-      <Animated.View className={className} style={[style, { transform: [{ scale }], opacity }]}>
-        {children}
-      </Animated.View>
-    </Pressable>
+      {children}
+    </AnimatedPressable>
   );
 }

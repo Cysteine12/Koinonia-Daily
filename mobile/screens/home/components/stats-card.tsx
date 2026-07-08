@@ -16,7 +16,7 @@ export default function StatsCard({ icon, title, subtitle, tagColor, iconColor }
 
   return (
     <View
-      className="flex-1 justify-center items-center w-max rounded-xl border"
+      className="flex-1 justify-center items-center rounded-xl border"
       style={{
         backgroundColor: color.cardBackground,
         borderColor: color.cardBorder,
