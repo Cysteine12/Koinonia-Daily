@@ -1,10 +1,5 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import LibraryScreen from '@/screens/library';
 
 export default function LibraryRoute() {
-  return (
-    <View>
-      <Text>LibraryRoute</Text>
-    </View>
-  );
+  return <LibraryScreen />
 }
