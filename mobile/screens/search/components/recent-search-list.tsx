@@ -2,13 +2,14 @@ import { View, type ImageSourcePropType } from '@/components/core';
 import React from 'react';
 import RecentSearchCard from './recent-search-card';
 import SectionTitle from './section-title';
+import type { TeachingType } from '@/features/teaching';
 
 interface RecentSearchListProps {
   recentSearches: {
     id: string;
     title: string;
     thumbnailUrl: ImageSourcePropType;
-    type: string;
+    type: TeachingType;
     createdAt: string;
   }[];
 }

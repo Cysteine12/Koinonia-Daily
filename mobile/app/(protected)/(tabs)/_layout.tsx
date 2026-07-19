@@ -1,23 +1,11 @@
-import { router, Tabs } from 'expo-router';
-import React, { useEffect } from 'react';
+import { Tabs } from 'expo-router';
 
 import { Icon } from '@/components/core';
 import { HapticTab } from '@/components/haptic-tab';
 import { Colors, FontSize } from '@/constants';
-import { useAuth } from '@/features/auth/auth-context';
 import type { SearchStateType } from '@/screens/search/hooks/use-search-state';
 
 export default function TabLayout() {
-  const { isAuthenticated } = useAuth();
-
-  useEffect(() => {
-    if (!isAuthenticated) router.replace('/login');
-  }, [isAuthenticated]);
-
-  if (!isAuthenticated) {
-    return null;
-  }
-
   return (
     <Tabs
       screenOptions={{

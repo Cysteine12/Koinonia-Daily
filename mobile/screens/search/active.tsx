@@ -5,12 +5,13 @@ import { FontSize } from '@/constants';
 import type { TeachingType } from '@/features/teaching';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useEffect, useState } from 'react';
-import { ScrollView, Switch } from 'react-native';
+import { FlatList, Switch, type ImageSourcePropType } from 'react-native';
 import RecentSearchList from './components/recent-search-list';
 import SearchBox from './components/search-box';
 import SearchResultList from './components/search-result-list';
 import { recentSearchesData, searchResultsData } from './data';
 import SearchSuggestionList from './components/search-suggestion-list';
+import { TEACHING_TYPE_TAGS } from '@/features/teaching/types';
 
 interface SearchActiveScreenProps {
   toggleSearchState: () => void;
@@ -20,20 +21,12 @@ export type SearchResult = {
   id: string;
   title: string;
   text: string;
-  thumbnailUrl: any;
-  type: string;
+  thumbnailUrl: ImageSourcePropType;
+  type: TeachingType;
   searchTag: string;
 };
 
 type ActiveState = 'RECENT' | 'SUGGESTION' | 'SUBMITTED';
-
-const searchTags = [
-  { text: 'All', type: 'ALL' },
-  { text: 'Sunday Service', type: 'SUNDAY_SERVICE' },
-  { text: 'Conference', type: 'CONFERENCE' },
-  { text: 'External Ministration', type: 'EXTERNAL_MINISTRATION' },
-  { text: 'Special Service', type: 'SPECIAL_SERVICE' },
-] as const satisfies readonly { text: string; type: TeachingType | 'ALL' }[];
 
 export default function SearchActiveScreen({ toggleSearchState }: SearchActiveScreenProps) {
   const { color } = useAppTheme();
@@ -57,7 +50,7 @@ export default function SearchActiveScreen({ toggleSearchState }: SearchActiveSc
     } else {
       setActiveState('SUGGESTION');
     }
-  }, [searchQuery])
+  }, [searchQuery]);
 
   return (
     <Screen
@@ -77,14 +70,15 @@ export default function SearchActiveScreen({ toggleSearchState }: SearchActiveSc
       />
 
       <View>
-        <ScrollView
-          contentContainerClassName="my-2 px-4"
+        <FlatList
           horizontal={true}
           showsHorizontalScrollIndicator={false}
+          contentContainerClassName="my-2 px-4"
           keyboardShouldPersistTaps="always"
-        >
-          {searchTags.map((item) => (
-            <OpacityPressable key={item.type} activeScale={1} onPress={() => setSelectedSearchTag(item.type)}>
+          data={TEACHING_TYPE_TAGS}
+          keyExtractor={(item) => item.type}
+          renderItem={({ item }) => (
+            <OpacityPressable activeScale={1} onPress={() => setSelectedSearchTag(item.type)}>
               <Tag
                 text={item.text}
                 color={selectedSearchTag === item.type ? color.goldBorder : color.border}
@@ -94,8 +88,8 @@ export default function SearchActiveScreen({ toggleSearchState }: SearchActiveSc
                 className="mr-2 py-1 px-3 rounded-xl"
               />
             </OpacityPressable>
-          ))}
-        </ScrollView>
+          )}
+        />
       </View>
 
       <View

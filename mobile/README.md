@@ -87,9 +87,11 @@ pnpm prettier:fix
 ## 🔐 Environment Variables
 
 Create a `.env` file based on `.env.sample`:
+
 ```env
 EXPO_PUBLIC_API_URL=https://your-api-url.com/api/v1
 ```
 
 ---
+
 Built with ❤️ for Koinonia Daily.

@@ -16,7 +16,7 @@ export default function CollectionCard({ id, thumbnailUrl, title, total }: Colle
   const { color } = useAppTheme();
 
   return (
-    <ScalePressable onPress={() => router.push('/(tabs)/home')}>
+    <ScalePressable onPress={() => router.push('/home')}>
       <View
         className="relative mr-2 w-32 h-40 border rounded-xl"
         style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}

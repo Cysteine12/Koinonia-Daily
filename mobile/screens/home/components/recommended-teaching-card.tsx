@@ -1,6 +1,7 @@
 import { Image, type ImageSourcePropType, Text, View } from '@/components/core';
 import ScalePressable from '@/components/ui/scale-pressable';
 import { Colors, FontFamily, FontSize } from '@/constants';
+import { getTeachingTypeText, type TeachingType } from '@/features/teaching';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
 
@@ -8,7 +9,7 @@ interface RecommendedTeachingCardProps {
   id: number;
   thumbnailUrl: ImageSourcePropType;
   title: string;
-  type: string;
+  type: TeachingType;
 }
 
 export default function RecommendedTeachingCard({ id, thumbnailUrl, title, type }: RecommendedTeachingCardProps) {
@@ -16,7 +17,7 @@ export default function RecommendedTeachingCard({ id, thumbnailUrl, title, type 
   const { color } = useAppTheme();
 
   return (
-    <ScalePressable onPress={() => router.push('/(tabs)/home')}>
+    <ScalePressable onPress={() => router.push('/home')}>
       <View
         className="flex-row mr-2 w-64 border rounded-xl"
         style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}
@@ -39,7 +40,7 @@ export default function RecommendedTeachingCard({ id, thumbnailUrl, title, type 
             {title}
           </Text>
           <Text variant="label" size={FontSize.xs} className="mt-auto">
-            {type}
+            {getTeachingTypeText(type)}
           </Text>
         </View>
       </View>

@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import '../global.css';
 
-import { AuthProvider } from '@/features/auth/auth-context';
+import { AuthProvider } from '@/features/auth/context';
 import { ThemeProvider } from '@/features/theme-context';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useSplashScreenReady } from '@/hooks/use-splash-screen-ready';
@@ -53,7 +53,7 @@ function Navigation() {
   return (
     <Stack>
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(protected)" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );

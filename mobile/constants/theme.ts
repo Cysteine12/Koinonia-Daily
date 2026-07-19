@@ -16,15 +16,16 @@ const tintColorDark = '#fff';
 export const Colors = {
   light: {
     text: '#0F0D0A',
-    textMuted: '#9A8F84',
+    textMuted: '#71717A',
     goldText: 'hsl(45 71% 36%)',
     goldTextMuted: '#F5EBCA',
     background: '#fff',
     containerBackground: 'hsl(0 0% 95%)',
     secondaryBackground: 'hsl(0 0% 95%)',
+    inputBackground: '#F4F5F7',
     cardBackground: 'hsl(0 0% 100%)',
     cardBorder: '#E8E0D4',
-    border: '#E5E7EB',
+    border: '#D1D5DB',
     goldBorder: 'hsl(45 60% 44%)',
     input: 'hsl(0 0% 89.8%)',
     tint: tintColorLight,
@@ -34,12 +35,13 @@ export const Colors = {
   } as const,
   dark: {
     text: '#F2EBE0',
-    textMuted: '#7A7068',
+    textMuted: '#A1A1AA',
     goldText: 'hsl(48 70% 60%)',
     goldTextMuted: 'rgba(196, 154, 60, 0.15)',
     background: '#151718',
     containerBackground: 'hsl(0 0% 5%)',
     secondaryBackground: 'hsl(0 0% 0%)',
+    inputBackground: '#1E1E1E',
     cardBackground: 'hsl(0 0% 3.9%)',
     cardBorder: '#2A2720',
     border: '#2D2D2D',
@@ -59,6 +61,10 @@ export const Colors = {
   tabBackground: '#0A0906',
   cardOverlay: 'rgba(0, 0, 0, 0.5)',
   purple: '#6A5CA3',
+  series: '#8B5CF6',
+  collections: '#F59E0B',
+  bookmarks: '#EC4899',
+  downloads: '#06B6D4',
 } as const;
 
 export const Fonts = Platform.select({

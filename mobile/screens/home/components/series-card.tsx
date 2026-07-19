@@ -17,7 +17,7 @@ export default function SeriesCard({ id, thumbnailUrl, title, description, total
   const { color } = useAppTheme();
 
   return (
-    <ScalePressable onPress={() => router.push('/(tabs)/home')}>
+    <ScalePressable onPress={() => router.push('/home')}>
       <View
         className="mr-2 w-48 border rounded-xl"
         style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}

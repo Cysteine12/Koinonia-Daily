@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
 import { Icon } from '../core';
 
-export default function BackButton({ className }: { className?: string }) {
+export default function BackButton({ className, size = 36 }: { className?: string; size?: number }) {
   const { color } = useAppTheme();
   const router = useRouter();
 
@@ -16,7 +16,7 @@ export default function BackButton({ className }: { className?: string }) {
       className={cn('self-start p-2 rounded-full items-center justify-center bg-transparent border', className)}
       style={{ borderColor: color.border, backgroundColor: color.cardBackground }}
     >
-      <Icon name="chevron.left" size={36} color={color.text} />
+      <Icon name="chevron.left" size={size} color={color.text} />
     </TouchableOpacity>
   );
 }

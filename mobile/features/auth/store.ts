@@ -6,11 +6,9 @@ type AuthState = {
   setCredentials: (credentials: LoginSchema | null) => void;
 };
 
-export const useAuthStore = create<AuthState>()(
-  (set) => ({
-    credentials: null,
-    setCredentials: (credentials: LoginSchema | null) => {
-      set({ credentials });
-    },
-  })
-);
+export const useAuthStore = create<AuthState>()((set) => ({
+  credentials: null,
+  setCredentials: (credentials: LoginSchema | null) => {
+    set({ credentials });
+  },
+}));

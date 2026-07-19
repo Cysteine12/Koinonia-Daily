@@ -18,10 +18,11 @@ type BottomSheetProps = {
   title?: string;
   onClose: () => void;
   children: React.ReactNode;
+  footer?: React.ReactNode;
   maxHeight?: number;
 };
 
-const BottomSheet = ({ visible, title, onClose, children, maxHeight = 0.6 }: BottomSheetProps) => {
+const BottomSheet = ({ visible, title, onClose, children, footer, maxHeight = 0.6 }: BottomSheetProps) => {
   const { color } = useAppTheme();
   const { height: SCREEN_HEIGHT } = useWindowDimensions();
   const sheetHeightRatio = maxHeight > 0 && maxHeight <= 1 ? maxHeight : 0.6;
@@ -112,10 +113,14 @@ const BottomSheet = ({ visible, title, onClose, children, maxHeight = 0.6 }: Bot
           {/* Options */}
           <ScrollView
             showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="always"
             contentContainerStyle={[styles.contentContainer, { maxHeight: SCREEN_HEIGHT * sheetHeightRatio - 10 }]}
           >
             {children}
           </ScrollView>
+
+          {/* Footer */}
+          {footer && <View style={styles.footer}>{footer}</View>}
         </Animated.View>
       </View>
     </Modal>
@@ -153,6 +158,9 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     gap: 2,
+  },
+  footer: {
+    paddingTop: 12,
   },
 });
 

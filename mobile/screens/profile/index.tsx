@@ -1,9 +1,7 @@
 import { Button } from '@/components/reusables/ui/button';
 import { Text } from '@/components/reusables/ui/text';
 import { ThemedView } from '@/components/themed-view';
-import { useAuth } from '@/features/auth/auth-context';
-import { useLogout } from '@/features/auth/hook';
-import { TokenType } from '@/features/auth/types';
+import { useAuth, useLogout, TokenType } from '@/features/auth';
 import { getSecure } from '@/lib/storage';
 
 const Profile = () => {

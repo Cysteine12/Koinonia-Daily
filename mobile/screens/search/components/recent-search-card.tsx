@@ -1,6 +1,7 @@
 import { Icon, Image, type ImageSourcePropType, Text, View } from '@/components/core';
 import OpacityPressable from '@/components/ui/opacity-pressable';
 import { FontFamily, FontSize } from '@/constants';
+import { getTeachingTypeText, type TeachingType } from '@/features/teaching';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
 
@@ -8,7 +9,7 @@ interface RecentSearchCardProps {
   id: string;
   title: string;
   thumbnailUrl: ImageSourcePropType;
-  type: string;
+  type: TeachingType;
   createdAt: string;
   onCancel: () => void;
 }
@@ -18,7 +19,7 @@ export default function RecentSearchCard({ id, title, thumbnailUrl, type, create
   const { color } = useAppTheme();
 
   return (
-    <OpacityPressable onPress={() => router.push('/(tabs)/search?searchState=ACTIVE')} className="my-2">
+    <OpacityPressable onPress={() => router.push('/search?searchState=ACTIVE')} className="my-2">
       <View className="flex flex-row rounded-sm w-full">
         <View>
           <Image source={thumbnailUrl} className="size-12 rounded-md" />
@@ -42,7 +43,7 @@ export default function RecentSearchCard({ id, title, thumbnailUrl, type, create
               •
             </Text>
             <Text className="uppercase" size={FontSize.xs} style={{ color: color.textMuted }}>
-              {type}
+              {getTeachingTypeText(type)}
             </Text>
           </View>
         </View>

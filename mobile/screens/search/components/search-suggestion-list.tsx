@@ -2,13 +2,14 @@ import { View, type ImageSourcePropType } from '@/components/core';
 import React from 'react';
 import SearchSuggestionCard from './search-suggestion-card';
 import SectionTitle from './section-title';
+import type { TeachingType } from '@/features/teaching';
 
 interface SearchSuggestionListProps {
   searchSuggestions: {
     id: string;
     title: string;
     thumbnailUrl: ImageSourcePropType;
-    type: string;
+    type: TeachingType;
     createdAt: string;
   }[];
 }

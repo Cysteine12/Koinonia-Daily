@@ -4,7 +4,7 @@ import type { SymbolWeight } from 'expo-symbols';
 import type { ComponentProps } from 'react';
 import type { OpaqueColorValue, StyleProp, TextStyle } from 'react-native';
 
-type IconFamily = 'MaterialIcons' | 'Ionicons'; 
+type IconFamily = 'MaterialIcons' | 'Ionicons';
 
 type IconFamilyMap = {
   MaterialIcons: typeof MaterialIcons;
@@ -33,6 +33,8 @@ const MAPPING = {
   'profile.outline': { name: 'person-outline', family: 'Ionicons' },
   'chevron.left': { name: 'chevron-back', family: 'Ionicons' },
   'chevron.right': { name: 'chevron-forward', family: 'Ionicons' },
+  'chevron.up': { name: 'chevron-up', family: 'Ionicons' },
+  'chevron.down': { name: 'chevron-down', family: 'Ionicons' },
   'arrow.forward': { name: 'arrow-forward', family: 'MaterialIcons' },
   'arrow.backward': { name: 'arrow-back', family: 'MaterialIcons' },
   close: { name: 'close', family: 'Ionicons' },
@@ -51,6 +53,12 @@ const MAPPING = {
   folder: { name: 'folder-open-outline', family: 'Ionicons' },
   'bookmark.outline': { name: 'bookmark-outline', family: 'Ionicons' },
   'download.outline': { name: 'download-outline', family: 'Ionicons' },
+  filter: { name: 'filter', family: 'Ionicons' },
+  list: { name: 'list-sharp', family: 'Ionicons' },
+  grid: { name: 'grid', family: 'Ionicons' },
+  'grid.outline': { name: 'grid-outline', family: 'Ionicons' },
+  'radio.on': { name: 'radio-button-on', family: 'Ionicons' },
+  'radio.off': { name: 'radio-button-off', family: 'Ionicons' },
 } satisfies IconMapping;
 
 export type IconSymbolName = keyof typeof MAPPING;

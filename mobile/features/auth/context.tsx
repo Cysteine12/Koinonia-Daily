@@ -50,15 +50,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       throw new Error('No refresh token available');
     }
 
-    const { data } = await refreshClient.post('/api/auth/refresh-token', {
+    const { data } = await refreshClient.post('/api/v1/auth/refresh-token', {
       refreshToken: refresh,
     });
 
-    setToken(data.accessToken);
-    await saveSecure(TokenType.ACCESS_TOKEN, data.accessToken);
-    await saveSecure(TokenType.REFRESH_TOKEN, data.refreshToken);
+    setToken(data.data.accessToken);
+    await saveSecure(TokenType.ACCESS_TOKEN, data.data.accessToken);
+    await saveSecure(TokenType.REFRESH_TOKEN, data.data.refreshToken);
 
-    return data.accessToken;
+    return data.data.accessToken;
   };
 
   useEffect(() => {

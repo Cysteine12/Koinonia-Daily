@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { useRouter } from 'expo-router';
 import { Alert } from 'react-native';
 import { forgotPassword, login, logout, register, requestOtp, resetPassword, verifyEmail } from './api';
-import { useAuth } from './auth-context';
+import { useAuth } from './context';
 import type {
   ForgotPasswordSchema,
   LoginSchema,

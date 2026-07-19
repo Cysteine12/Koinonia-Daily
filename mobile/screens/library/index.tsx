@@ -1,5 +1,5 @@
 import { Screen, View, Text } from '@/components/core';
-import { FontFamily, FontSize } from '@/constants';
+import { Colors, FontFamily, FontSize } from '@/constants';
 import LibraryCard from './components/library-card';
 import { FlatList } from 'react-native';
 import RecentlyUpdatedCard from './components/recently-updated-card';
@@ -55,7 +55,7 @@ export default function LibraryScreen() {
             title="All Teachings"
             label="Browse everything, filter by type"
             color={'#3B82F6'}
-            link={'/library'}
+            link={'/teachings'}
           />
           <LibraryCard
             icon="calendar.outline"
@@ -106,7 +106,7 @@ export default function LibraryScreen() {
               thumbnailUrl={item.thumbnailUrl}
               title={item.title}
               createdAt={item.createdAt}
-              tagColor={item.type === 'SERIES' ? '#8B5CF6' : '#F59E0B'}
+              tagColor={item.type === 'SERIES' ? Colors.series : Colors.collections}
               type={item.type}
             />
           )}
