@@ -40,11 +40,11 @@ const MAPPING: Record<IconSymbolName, SymbolViewProps['name']> = {
   'bookmark.outline': 'bookmark',
   'download.outline': 'arrow.down.circle',
   filter: 'filemenu.and.pointer.arrow',
-  grid: 'grid',
-  'grid.outline': 'grid',
+  grid: 'square.grid.2x2.fill',
+  'grid.outline': 'square.grid.2x2',
   list: 'list.dash.header.rectangle',
-  'radio.on': 'radio.fill',
-  'radio.off': 'radio',
+  'radio.on': 'circle.fill',
+  'radio.off': 'circle',
 };
 
 export function Icon({

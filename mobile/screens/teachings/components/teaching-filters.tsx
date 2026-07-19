@@ -1,10 +1,9 @@
 import { Icon, Text, View } from '@/components/core';
 import OpacityPressable from '@/components/ui/opacity-pressable';
 import { FontFamily, FontSize } from '@/constants';
-import { useAppSettings } from '@/features/settings-context';
+import { useAppSettings } from '@/features/settings';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import SortButton from './sort-button';
-import { useState } from 'react';
 import FilterButton from './filter-button';
 
 interface TeachingFiltersProp {
@@ -15,6 +14,8 @@ interface TeachingFiltersProp {
   selectedDateRange: [Date | null, Date | null];
   setSelectedDateRange: (dateRanges: [Date | null, Date | null]) => void;
   onFilterSubmit: (filterTags: string[], dateRange: [Date | null, Date | null]) => void;
+  selectedSortType: string;
+  onSortTypeChange: (type: string) => void;
 }
 
 export default function TeachingFilters({
@@ -25,10 +26,11 @@ export default function TeachingFilters({
   selectedDateRange,
   setSelectedDateRange,
   onFilterSubmit,
+  selectedSortType,
+  onSortTypeChange,
 }: TeachingFiltersProp) {
   const { color } = useAppTheme();
   const { settings, setSetting } = useAppSettings();
-  const [selectedSortType, setSelectedSortType] = useState('newest');
 
   const layouts = [
     {
@@ -63,7 +65,7 @@ export default function TeachingFilters({
           onSubmit={onFilterSubmit}
         />
 
-        <SortButton selectedSortType={selectedSortType} setSelectedSortType={setSelectedSortType} />
+        <SortButton selectedSortType={selectedSortType} onSortTypeChange={onSortTypeChange} />
 
         <View
           className="border rounded-lg flex-row items-center ml-1"

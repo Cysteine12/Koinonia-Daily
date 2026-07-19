@@ -10,7 +10,7 @@ interface ScreenProps {
   children: ReactNode;
   scrollable?: boolean;
   keyboard?: boolean;
-  keyboardBehavior?: KeyboardAvoidingView['props']['behavior'];
+  keyboardBehavior?: React.ComponentProps<typeof KeyboardAvoidingView>['behavior'];
   keyboardDismissMode?: 'none' | 'interactive' | 'on-drag';
   keyboardShouldPersistTaps?: boolean | 'handled' | 'always' | 'never';
   edges?: SafeAreaViewProps['edges'];

@@ -100,8 +100,7 @@ export default function FilterButton({
   );
 
   /** Formats a date as "Jan 12, 2025" */
-  const formatDate = (d: Date) =>
-    d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const formatDate = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
   const applyButton = (
     <TouchableOpacity
@@ -126,37 +125,26 @@ export default function FilterButton({
         }}
       >
         <Icon name="filter" size={FontSize.sm} color={isButtonActive ? Colors.goldIcon : color.icon} />
-        <Text weight="semibold" size={FontSize.sm + 2} className="ml-1" style={{ color: color[isButtonActive ? 'goldText' : 'text'] }}>
+        <Text
+          weight="semibold"
+          size={FontSize.sm + 2}
+          className="ml-1"
+          style={{ color: color[isButtonActive ? 'goldText' : 'text'] }}
+        >
           Filters
         </Text>
       </OpacityPressable>
 
-      <BottomSheet
-        visible={isVisible}
-        onClose={() => setVisible(false)}
-        title="Filters"
-        maxHeight={0.72}
-        footer={applyButton}
-      >
+      <BottomSheet visible={isVisible} onClose={() => setVisible(false)} title="Filters" maxHeight={0.72} footer={applyButton}>
         {/* ── Date Range ── */}
-        <Text
-          weight="semibold"
-          size={FontSize.sm + 1}
-          className="mb-3"
-          style={{ color: color.textMuted }}
-        >
+        <Text weight="semibold" size={FontSize.sm + 1} className="mb-3" style={{ color: color.textMuted }}>
           Date Range
         </Text>
 
         <View className="flex-row gap-3 mb-6">
           {/* From */}
           <View className="flex-1">
-            <Text
-              weight="semibold"
-              size={FontSize.sm}
-              className="mb-2"
-              style={{ color: color.text }}
-            >
+            <Text weight="semibold" size={FontSize.sm} className="mb-2" style={{ color: color.text }}>
               From
             </Text>
             <View
@@ -223,12 +211,7 @@ export default function FilterButton({
 
           {/* To */}
           <View className="flex-1">
-            <Text
-              weight="semibold"
-              size={FontSize.sm}
-              className="mb-2"
-              style={{ color: color.text }}
-            >
+            <Text weight="semibold" size={FontSize.sm} className="mb-2" style={{ color: color.text }}>
               To
             </Text>
             <View

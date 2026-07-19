@@ -1,7 +1,7 @@
 import { useScreenOptions } from '@/hooks/use-screen-options';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { useAuth } from '../../features/auth/auth-context';
+import { useAuth } from '@/features/auth';
 
 const GuestLayout = () => {
   const { isAuthenticated } = useAuth();

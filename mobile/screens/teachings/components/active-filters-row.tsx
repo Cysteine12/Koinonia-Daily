@@ -12,8 +12,7 @@ interface ActiveFiltersRowProps {
 }
 
 /** Formats a date as "Jan 12, 2025" */
-const fmt = (d: Date) =>
-  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
 /** Builds a human-readable date range label */
 function buildDateLabel(from: Date | null, to: Date | null): string {
@@ -54,12 +53,7 @@ export default function ActiveFiltersRow({
             style={{ borderColor: color.goldBorder, backgroundColor: color.goldTextMuted }}
           >
             <Icon name="calendar.outline" size={FontSize.xs} color={color.goldText} />
-            <Text
-              size={FontSize.xs}
-              weight="semibold"
-              numberOfLines={1}
-              style={{ color: color.goldText }}
-            >
+            <Text size={FontSize.xs} weight="semibold" numberOfLines={1} style={{ color: color.goldText }}>
               {buildDateLabel(from, to)}
             </Text>
             <TouchableOpacity onPress={onClearDateRange} hitSlop={8}>
@@ -75,12 +69,7 @@ export default function ActiveFiltersRow({
             className="flex-row items-center rounded-full py-1 px-3 mr-1.5 border gap-1"
             style={{ borderColor: color.goldBorder, backgroundColor: color.goldTextMuted }}
           >
-            <Text
-              size={FontSize.xs}
-              weight="semibold"
-              numberOfLines={1}
-              style={{ color: color.goldText }}
-            >
+            <Text size={FontSize.xs} weight="semibold" numberOfLines={1} style={{ color: color.goldText }}>
               {tag}
             </Text>
             <TouchableOpacity onPress={() => onRemoveTag(tag)} hitSlop={8}>

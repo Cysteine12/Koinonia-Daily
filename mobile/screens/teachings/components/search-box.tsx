@@ -46,7 +46,7 @@ export default function SearchBox({ searchQuery, setSearchQuery, handleSearch, s
           maxLength={100}
           placeholder="Search teachings..."
           placeholderTextColor={color.textMuted}
-          className="text-lg rounded-lg h-16 px-2 items-center focus:outline-none leading-5 shadow-sm shadow-black/5"
+          className="text-lg rounded-lg h-full px-2 items-center focus:outline-none leading-5 shadow-sm shadow-black/5"
           style={{ color: color.text }}
         />
       </View>

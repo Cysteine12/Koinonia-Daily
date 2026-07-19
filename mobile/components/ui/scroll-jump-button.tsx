@@ -1,7 +1,6 @@
 import { Icon } from '@/components/core';
 import { FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
-import { type FlatList, type ScrollView } from 'react-native';
 import Animated, { useAnimatedStyle, useScrollOffset, withTiming, type AnimatedRef } from 'react-native-reanimated';
 import OpacityPressable from './opacity-pressable';
 
@@ -15,6 +14,7 @@ export default function ScrollJumpButton({ scrollRef }: ScrollJumpButtonProps) {
   const buttonStyle = useAnimatedStyle(() => {
     return {
       opacity: scrollHandler.value > 800 ? withTiming(1) : withTiming(0),
+      pointerEvents: scrollHandler.value > 800 ? 'auto' : 'none',
     };
   });
 

@@ -7,10 +7,10 @@ import { useState } from 'react';
 
 interface SortButtonProps {
   selectedSortType: string;
-  setSelectedSortType: (type: string) => void;
+  onSortTypeChange: (type: string) => void;
 }
 
-export default function SortButton({ selectedSortType, setSelectedSortType }: SortButtonProps) {
+export default function SortButton({ selectedSortType, onSortTypeChange }: SortButtonProps) {
   const { color } = useAppTheme();
   const [isVisible, setVisible] = useState(false);
   const sorts = [
@@ -54,7 +54,7 @@ export default function SortButton({ selectedSortType, setSelectedSortType }: So
           <OpacityPressable
             key={sort.type}
             onPress={() => {
-              setSelectedSortType(sort.type);
+              onSortTypeChange(sort.type);
               setVisible(false);
             }}
             className="flex-row items-center justify-between my-2.5 pr-2"

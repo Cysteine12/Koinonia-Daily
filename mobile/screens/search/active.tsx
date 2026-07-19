@@ -70,14 +70,15 @@ export default function SearchActiveScreen({ toggleSearchState }: SearchActiveSc
       />
 
       <View>
-        <FlatList 
+        <FlatList
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           contentContainerClassName="my-2 px-4"
           keyboardShouldPersistTaps="always"
           data={TEACHING_TYPE_TAGS}
+          keyExtractor={(item) => item.type}
           renderItem={({ item }) => (
-            <OpacityPressable key={item.type} activeScale={1} onPress={() => setSelectedSearchTag(item.type)}>
+            <OpacityPressable activeScale={1} onPress={() => setSelectedSearchTag(item.type)}>
               <Tag
                 text={item.text}
                 color={selectedSearchTag === item.type ? color.goldBorder : color.border}

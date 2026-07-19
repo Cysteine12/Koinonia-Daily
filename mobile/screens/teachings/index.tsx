@@ -12,7 +12,7 @@ import Tag from '@/components/ui/tag';
 import { teachings } from '../search/data';
 import TeachingFilters from './components/teaching-filters';
 import TeachingCard from './components/teaching-card';
-import { useAppSettings } from '@/features/settings-context';
+import { useAppSettings } from '@/features/settings';
 import ActiveFiltersRow from './components/active-filters-row';
 
 export interface SearchResult {
@@ -30,28 +30,28 @@ export default function TeachingsScreen() {
   const { width: screenWidth } = useWindowDimensions();
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSearchTag, setSelectedSearchTag] = useState<TeachingType | 'ALL'>('ALL');
+  const [selectedTeachingType, setSelectedTeachingType] = useState<TeachingType | 'ALL'>('ALL');
   const [selectedDateRange, setSelectedDateRange] = useState<[Date | null, Date | null]>([null, null]);
   const [selectedFilterTags, setSelectedFilterTags] = useState<string[]>([]);
+  const [selectedSortType, setSelectedSortType] = useState('newest');
 
   // Extract unique tags from all teachings, sorted alphabetically
   const seen = new Set<string>();
-  teachings.forEach((teaching) =>
-    teaching.tags.split(', ').forEach((tag) => seen.add(tag.trim()))
-  );
+  teachings.forEach((teaching) => teaching.tags.split(', ').forEach((tag) => seen.add(tag.trim())));
   const tags = Array.from(seen).sort();
 
-  const handleSearch = () => { };
+  const handleSearch = () => {};
 
-  const handleFilterSubmit = (
-    filterTags: string[],
-    dateRange: [Date | null, Date | null],
-  ) => {
-    // TODO: trigger filtered fetch / local filter with filterTags & dateRange
+  const handleSortSubmit = (type: string) => {
+    setSelectedSortType(type);
+    // TODO: trigger sorted fetch
   };
 
-  const handleRemoveTag = (tag: string) =>
-    setSelectedFilterTags(selectedFilterTags.filter((t) => t !== tag));
+  const handleFilterSubmit = (filterTags: string[], dateRange: [Date | null, Date | null]) => {
+    // TODO: trigger filtered fetch with filterTags & dateRange
+  };
+
+  const handleRemoveTag = (tag: string) => setSelectedFilterTags(selectedFilterTags.filter((t) => t !== tag));
 
   const handleClearDateRange = () => setSelectedDateRange([null, null]);
 
@@ -86,7 +86,7 @@ export default function TeachingsScreen() {
         scrollEnabled={true}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="always"
-        estimatedItemSize={30}
+        estimatedItemSize={120}
         contentInsetAdjustmentBehavior="automatic"
         ListHeaderComponent={
           <>
@@ -95,13 +95,14 @@ export default function TeachingsScreen() {
               showsHorizontalScrollIndicator={false}
               keyboardShouldPersistTaps="always"
               data={TEACHING_TYPE_TAGS}
+              keyExtractor={(item) => item.type}
               renderItem={({ item }) => (
-                <OpacityPressable key={item.type} activeScale={1} onPress={() => setSelectedSearchTag(item.type)}>
+                <OpacityPressable activeScale={1} onPress={() => setSelectedTeachingType(item.type)}>
                   <Tag
                     text={item.text}
-                    color={selectedSearchTag === item.type ? color.goldBorder : color.border}
-                    backgroundColor={selectedSearchTag === item.type ? color.goldBorder : color.cardBorder}
-                    textColor={selectedSearchTag === item.type ? color.background : color.text}
+                    color={selectedTeachingType === item.type ? color.goldBorder : color.border}
+                    backgroundColor={selectedTeachingType === item.type ? color.goldBorder : color.cardBorder}
+                    textColor={selectedTeachingType === item.type ? color.background : color.text}
                     fontSize={FontSize.xs + 2}
                     className="mr-2 py-1 px-3 rounded-xl"
                   />
@@ -117,6 +118,8 @@ export default function TeachingsScreen() {
               selectedDateRange={selectedDateRange}
               setSelectedDateRange={setSelectedDateRange}
               onFilterSubmit={handleFilterSubmit}
+              selectedSortType={selectedSortType}
+              onSortTypeChange={handleSortSubmit}
             />
 
             <ActiveFiltersRow

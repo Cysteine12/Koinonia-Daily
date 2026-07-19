@@ -5,9 +5,8 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import '../global.css';
 
-import { AuthProvider } from '@/features/auth/auth-context';
+import { AuthProvider } from '@/features/auth/context';
 import { ThemeProvider } from '@/features/theme-context';
-import { SettingsProvider } from '@/features/settings-context';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useSplashScreenReady } from '@/hooks/use-splash-screen-ready';
 import Sentry from '@/lib/logger';
@@ -66,9 +65,7 @@ function RootLayout() {
       <AuthProvider>
         <SafeAreaProvider>
           <ThemeProvider>
-            <SettingsProvider>
-              <AppLayout />
-            </SettingsProvider>
+            <AppLayout />
           </ThemeProvider>
         </SafeAreaProvider>
       </AuthProvider>

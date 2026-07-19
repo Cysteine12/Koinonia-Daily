@@ -7,10 +7,7 @@
     "icon": "./assets/images/logo.png",
     "scheme": "koinoniadaily",
     "userInterfaceStyle": "automatic",
-    "platforms": [
-      "android",
-      "ios"
-    ],
+    "platforms": ["android", "ios"],
     "splash": {
       "image": "./assets/images/logo.png",
       "resizeMode": "contain",

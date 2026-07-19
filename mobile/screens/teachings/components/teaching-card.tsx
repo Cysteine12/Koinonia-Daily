@@ -2,7 +2,7 @@ import { Icon, Image, type ImageSourcePropType, Text, View } from '@/components/
 import OpacityPressable from '@/components/ui/opacity-pressable';
 import TeachingTypeLabel from '@/components/ui/teaching-type-label';
 import { Colors, FontFamily, FontSize } from '@/constants';
-import type { APP_SETTINGS_TYPE } from '@/features/settings-context';
+import type { APP_SETTINGS_TYPE } from '@/features/settings';
 import { type TeachingType } from '@/features/teaching';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
