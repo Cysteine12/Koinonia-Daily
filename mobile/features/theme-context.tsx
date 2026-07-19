@@ -73,7 +73,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
             pointerEvents="none"
             style={[
               {
-                ...StyleSheet.absoluteFillObject,
+                ...StyleSheet.absoluteFill,
                 backgroundColor: resolvedTheme === 'dark' ? Colors.dark.containerBackground : Colors.light.containerBackground,
               },
               overlayStyle,

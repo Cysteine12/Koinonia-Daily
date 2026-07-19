@@ -1,6 +1,8 @@
 import { Image, type ImageSourcePropType, Text, View } from '@/components/core';
 import ScalePressable from '@/components/ui/scale-pressable';
+import TeachingTypeLabel from '@/components/ui/teaching-type-label';
 import { FontFamily, FontSize } from '@/constants';
+import { type TeachingType } from '@/features/teaching';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useRouter } from 'expo-router';
 
@@ -9,7 +11,7 @@ interface TrendingCardProps {
   id: string;
   thumbnailUrl: ImageSourcePropType;
   title: string;
-  type: string;
+  type: TeachingType;
   taughtAt: string;
   viewCount: string;
 }
@@ -19,7 +21,7 @@ export default function TrendingCard({ index, id, thumbnailUrl, title, type, tau
   const { color } = useAppTheme();
 
   return (
-    <ScalePressable className="w-full my-1" onPress={() => router.push('/(tabs)/search')}>
+    <ScalePressable className="w-full my-1" onPress={() => router.push('/search')}>
       <View
         className="flex flex-row items-center rounded-2xl border w-full p-2"
         style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}
@@ -38,9 +40,7 @@ export default function TrendingCard({ index, id, thumbnailUrl, title, type, tau
           <Image source={thumbnailUrl} className="size-20 rounded-lg" />
         </View>
         <View className="flex-1 flex-col h-20 p-2">
-          <Text className="uppercase" size={FontSize.xs} style={{ color: color.goldText }}>
-            {type}
-          </Text>
+          <TeachingTypeLabel type={type} />
           <Text
             variant="title"
             numberOfLines={1}

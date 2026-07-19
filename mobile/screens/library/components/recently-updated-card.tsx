@@ -23,13 +23,13 @@ export default function RecentlyUpdatedCard({ id, thumbnailUrl, title, createdAt
   const relativeTime = daysAgo <= 0 ? 'today' : daysAgo === 1 ? 'yesterday' : `${daysAgo} days ago`;
 
   return (
-    <ScalePressable onPress={() => router.push('/(tabs)/library')} className="w-40 mr-3">
+    <ScalePressable onPress={() => router.push('/library')} className="w-40 mr-3">
       <View
         className="relative border rounded-xl"
         style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}
       >
         <Image source={thumbnailUrl} className="object-cover w-40 h-32 rounded-xl" />
-        <View className="absolute top-0 right-0 py-1 rounded-b-xl">
+        <View className="absolute top-0 right-0 py-0.5 rounded-b-xl">
           <Tag color={tagColor} backgroundColor={tagColor} textColor={Colors.dark.text} text={type} className="capitalize" />
         </View>
       </View>

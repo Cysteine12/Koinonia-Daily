@@ -15,7 +15,7 @@ export default function LatestTeachingCard({ id, thumbnailUrl, title, date }: La
   const { color } = useAppTheme();
 
   return (
-    <ScalePressable onPress={() => router.push('/(tabs)/home')}>
+    <ScalePressable onPress={() => router.push('/home')}>
       <View
         className="mr-2 w-44 border rounded-xl"
         style={{ backgroundColor: color.cardBackground, borderColor: color.cardBorder }}

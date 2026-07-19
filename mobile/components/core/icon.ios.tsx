@@ -19,6 +19,8 @@ const MAPPING: Record<IconSymbolName, SymbolViewProps['name']> = {
   'profile.outline': 'person',
   'chevron.left': 'chevron.left',
   'chevron.right': 'chevron.right',
+  'chevron.up': 'chevron.up',
+  'chevron.down': 'chevron.down',
   'arrow.forward': 'arrow.forward',
   'arrow.backward': 'arrow.backward',
   close: 'xmark',
@@ -37,6 +39,12 @@ const MAPPING: Record<IconSymbolName, SymbolViewProps['name']> = {
   folder: 'folder',
   'bookmark.outline': 'bookmark',
   'download.outline': 'arrow.down.circle',
+  filter: 'filemenu.and.pointer.arrow',
+  grid: 'grid',
+  'grid.outline': 'grid',
+  list: 'list.dash.header.rectangle',
+  'radio.on': 'radio.fill',
+  'radio.off': 'radio',
 };
 
 export function Icon({

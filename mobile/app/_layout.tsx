@@ -7,6 +7,7 @@ import '../global.css';
 
 import { AuthProvider } from '@/features/auth/auth-context';
 import { ThemeProvider } from '@/features/theme-context';
+import { SettingsProvider } from '@/features/settings-context';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useSplashScreenReady } from '@/hooks/use-splash-screen-ready';
 import Sentry from '@/lib/logger';
@@ -53,7 +54,7 @@ function Navigation() {
   return (
     <Stack>
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(protected)" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );
@@ -65,7 +66,9 @@ function RootLayout() {
       <AuthProvider>
         <SafeAreaProvider>
           <ThemeProvider>
-            <AppLayout />
+            <SettingsProvider>
+              <AppLayout />
+            </SettingsProvider>
           </ThemeProvider>
         </SafeAreaProvider>
       </AuthProvider>

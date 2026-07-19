@@ -19,7 +19,7 @@ export default function SearchButton({ toggleSearchState }: { toggleSearchState:
     >
       <Icon name="search" size={20} color={color.textMuted} className="mr-2" />
       <Text variant="label" size={FontSize.base}>
-        Search teachings, topics, scriptures, and more
+        Search teachings, topics, quotes, and more
       </Text>
     </OpacityPressable>
   );

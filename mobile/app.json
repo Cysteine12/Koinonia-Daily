@@ -54,7 +54,8 @@
           "project": "koinonia-daily-mobile",
           "organization": "gbengadev"
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true,

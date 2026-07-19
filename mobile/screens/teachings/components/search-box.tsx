@@ -4,17 +4,16 @@ import { FontSize } from '@/constants';
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { useEffect, useRef } from 'react';
 import { TextInput } from 'react-native';
-import type { SearchResult } from '../active';
+import type { SearchResult } from '../index.tsx';
 
 interface SearchBoxProps {
-  onBack: () => void;
   searchQuery: string;
   setSearchQuery: (text: string) => void;
   handleSearch: () => void;
   setSearchResults: (results: SearchResult[]) => void;
 }
 
-export default function SearchBox({ onBack, searchQuery, setSearchQuery, handleSearch, setSearchResults }: SearchBoxProps) {
+export default function SearchBox({ searchQuery, setSearchQuery, handleSearch, setSearchResults }: SearchBoxProps) {
   const { color, theme } = useAppTheme();
   const textInputRef = useRef<TextInput>(null);
 
@@ -25,10 +24,13 @@ export default function SearchBox({ onBack, searchQuery, setSearchQuery, handleS
   }, [searchQuery, setSearchResults]);
 
   return (
-    <View className="flex flex-row items-center h-16 w-full" style={{ backgroundColor: color.border }}>
+    <View
+      className="border rounded-xl py-2 flex flex-row items-center h-12 w-full"
+      style={{ backgroundColor: color.background, borderColor: color.border }}
+    >
       <View>
-        <OpacityPressable onPressIn={onBack} className="p-2 my-auto">
-          <Icon name="arrow.backward" size={FontSize.xl} color={color.text} />
+        <OpacityPressable onPressIn={() => textInputRef.current?.focus()} className="px-2 my-auto">
+          <Icon name="search" size={FontSize.xl} className="border-gray-400" />
         </OpacityPressable>
       </View>
       <View className="flex-1">
@@ -42,8 +44,7 @@ export default function SearchBox({ onBack, searchQuery, setSearchQuery, handleS
           enterKeyHint="search"
           inputMode="search"
           maxLength={100}
-          autoFocus={true}
-          placeholder="Search teachings, topics, quotes and more"
+          placeholder="Search teachings..."
           placeholderTextColor={color.textMuted}
           className="text-lg rounded-lg h-16 px-2 items-center focus:outline-none leading-5 shadow-sm shadow-black/5"
           style={{ color: color.text }}
@@ -56,9 +57,9 @@ export default function SearchBox({ onBack, searchQuery, setSearchQuery, handleS
               textInputRef.current?.focus();
               setSearchQuery('');
             }}
-            className="p-2 my-auto"
+            className="px-2 my-auto"
           >
-            <Icon name="close.circle" size={FontSize.xl} color={color.textMuted} />
+            <Icon name="close.circle" size={FontSize.xl} className="text-gray-400" />
           </OpacityPressable>
         </View>
       )}

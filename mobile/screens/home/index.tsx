@@ -15,7 +15,7 @@ export default function HomeScreen() {
   const lastTeaching = {
     title: 'Worship and Warfare Service: March Edition, 2026',
     thumbnailUrl: require('@/assets/images/p4.jpg'),
-    type: 'Sunday Service',
+    type: 'SUNDAY_SERVICE' as const,
     lastRead: 'Last read 2 days ago • 8 min read',
   };
 
@@ -45,25 +45,25 @@ export default function HomeScreen() {
       id: 1,
       title: 'How Kings Reign: The Power of Spoken Words',
       thumbnailUrl: require('@/assets/images/p1.jpg'),
-      type: 'Conference',
+      type: 'CONFERENCE' as const,
     },
     {
       id: 2,
       title: 'How Kings Reign: The Power of Spoken Words',
       thumbnailUrl: require('@/assets/images/p2.jpg'),
-      type: 'Sunday Service',
+      type: 'SUNDAY_SERVICE' as const,
     },
     {
       id: 3,
       title: 'How Kings Reign: The Power of Spoken Words',
       thumbnailUrl: require('@/assets/images/p3.jpg'),
-      type: 'External Ministration',
+      type: 'EXTERNAL_MINISTRATION' as const,
     },
     {
       id: 4,
       title: 'How Kings Reign: The Power of Spoken Words',
       thumbnailUrl: require('@/assets/images/p4.jpg'),
-      type: 'Conference',
+      type: 'CONFERENCE' as const,
     },
   ];
 
@@ -145,7 +145,7 @@ export default function HomeScreen() {
 
         {/* Latest Teachings Section */}
         <View className="py-4 px-4">
-          <SectionTitle title="Latest Teachings" link={'/(tabs)/home'} />
+          <SectionTitle title="Latest Teachings" link={'/home'} />
 
           <FlatList
             data={recentTeachings}
@@ -155,13 +155,13 @@ export default function HomeScreen() {
             renderItem={({ item }) => (
               <LatestTeachingCard id={item.id} thumbnailUrl={item.thumbnailUrl} title={item.title} date={item.date} />
             )}
-            ListFooterComponent={() => <SeeMoreButton link={'/(tabs)/home'} />}
+            ListFooterComponent={() => <SeeMoreButton link={'/home'} />}
           />
         </View>
 
         {/* Recommendation Section */}
         <View className="py-4 px-4">
-          <SectionTitle title="Recommended For You" link={'/(tabs)/home'} linkTitle="More" />
+          <SectionTitle title="Recommended For You" link={'/home'} linkTitle="More" />
 
           <FlatList
             data={recommendedTeachings}
@@ -171,13 +171,13 @@ export default function HomeScreen() {
             renderItem={({ item }) => (
               <RecommendedTeachingCard id={item.id} thumbnailUrl={item.thumbnailUrl} title={item.title} type={item.type} />
             )}
-            ListFooterComponent={() => <SeeMoreButton link={'/(tabs)/home'} />}
+            ListFooterComponent={() => <SeeMoreButton link={'/home'} />}
           />
         </View>
 
         {/* Collection Section */}
         <View className="py-4 px-4">
-          <SectionTitle title="Collections" link={'/(tabs)/home'} />
+          <SectionTitle title="Collections" link={'/home'} />
 
           <FlatList
             data={collections}
@@ -187,13 +187,13 @@ export default function HomeScreen() {
             renderItem={({ item }) => (
               <CollectionCard id={item.id} thumbnailUrl={item.thumbnailUrl} title={item.title} total={item.total} />
             )}
-            ListFooterComponent={() => <SeeMoreButton link={'/(tabs)/home'} />}
+            ListFooterComponent={() => <SeeMoreButton link={'/home'} />}
           />
         </View>
 
         {/* Series Section */}
         <View className="py-4 px-4">
-          <SectionTitle title="Series" link={'/(tabs)/home'} />
+          <SectionTitle title="Series" link={'/home'} />
 
           <FlatList
             data={series}
@@ -209,7 +209,7 @@ export default function HomeScreen() {
                 total={item.total}
               />
             )}
-            ListFooterComponent={() => <SeeMoreButton link={'/(tabs)/home'} />}
+            ListFooterComponent={() => <SeeMoreButton link={'/home'} />}
           />
         </View>
       </View>
