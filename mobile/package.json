@@ -67,7 +67,7 @@
     "@sentry/cli": "^3.6.0",
     "@types/node": "^24.13.2",
     "@types/react": "~19.2.17",
-    "babel-preset-expo": "^55.0.23",
+    "babel-preset-expo": "^57.0.4",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~55.0.1",
     "prettier": "^3.8.1",
